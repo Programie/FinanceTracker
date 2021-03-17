@@ -16,5 +16,7 @@ class NewsItem
         $item->title = $data["title"];
         $item->url = $data["url"];
         $item->date = new Date($data["date"]);
+
+        return $item;
     }
 }
