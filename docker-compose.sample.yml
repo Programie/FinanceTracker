@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  website:
+    image: finance-tracker
+    build: .
+    ports:
+      - 80:80
+    environment:
+      DATABASE_HOST: my.db.host
+      DATABASE_NAME: finance_tracker
+      DATABASE_USERNAME: finance_tracker
+      DATABASE_PASSWORD: "password-for-user"
+      SMTP_HOST: my.smtp.host
+      SMTP_PORT: 587
+      SMTP_USERNAME: my-smtp-user-name
+      SMTP_PASSWORD: "password-for-user"
+      MAIL_FROM: my-user@mail.host
+      PUSHOVER_TOKEN: my-pushover-token
+      PUSHOVER_SOUND: climb
