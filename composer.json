@@ -1,0 +1,26 @@
+{
+  "name": "programie/finance-tracker",
+  "description": "Track finance data (stocks and crypto currencys)",
+  "type": "project",
+  "require": {
+    "php": "^8.0",
+    "twig/twig": "^3.3",
+    "altorouter/altorouter": "^2.0",
+    "willdurand/negotiation": "^3.0",
+    "ext-pdo": "*",
+    "doctrine/orm": "^2.8",
+    "guzzlehttp/guzzle": "^7.2",
+    "swiftmailer/swiftmailer": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/main/php"
+    }
+  },
+  "authors": [
+    {
+      "name": "Michael Wieland",
+      "email": "git@selfcoders.com"
+    }
+  ]
+}

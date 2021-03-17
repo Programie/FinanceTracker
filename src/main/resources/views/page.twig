@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="content-Language" content="en"/>
+
+        <meta name="listname" content="{{ watchList.name }}"/>
+
+        <title>Watchlist - {{ watchList.name }}</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+
+        <script src="/assets/main.js"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
+            <div class="container-fluid">
+                <span class="navbar-brand">Watchlist</span>
+                <button class="btn btn-primary btn-sm" id="add-entry"><i class="fas fa-plus-square"></i> Add entry</button>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ watchList.name }}</a>
+                        <ul class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">
+                            {% for watchList in watchLists %}
+                                <li><a class="dropdown-item" href="/{{ watchList.name }}">{{ watchList.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container mt-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ISIN</th>
+                        <th>Name</th>
+                        <th>Count</th>
+                        <th>Price</th>
+                        <th>Current price</th>
+                        <th>Difference</th>
+                        <th>Limit</th>
+                        <th>Date</th>
+                        <th>News</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for entry in watchList.entries %}
+                        <tr class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                            <td>{{ entry.isin }}</a></td>
+                            <td>{{ entry.name }}</td>
+                            <td>{{ entry.count }}</td>
+                            <td>{{ entry.price }}<br/>{{ entry.totalPrice }}</td>
+                            <td>{{ entry.currentPrice }}<br/>{{ entry.currentTotalPrice }}</td>
+                            <td>{{ entry.priceDifference}}<br/>{{ entry.totalPriceDifference }}</td>
+                            <td>
+                                {% if entry.limitEnabled %}
+                                    {{ entry.limit }} ({{ entry.limitType }})
+                                {% endif %}
+                            </td>
+                            <td>{{ entry.date.format("Y-m-d") }}</td>
+                            <td>{% if entry.newsEnabled %}<i class="fas fa-check"></i>{% endif %}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-primary edit-entry" title="Edit entry"><i class="fas fa-edit"></i></button>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Add to list"><i class="fas fa-copy"></i></button>
+                                        <ul class="dropdown-menu">
+                                            {% for thisWatchList in watchLists %}
+                                                {% if thisWatchList.name != watchList.name %}
+                                                    <li><a class="dropdown-item" href="/{{ thisWatchList.name }}#{{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <button type="button" class="btn btn-danger delete-entry" title="Delete from list"><i class="fas fa-trash-alt"></i></button>
+                                    {% if entry.notified %}
+                                        <button type="button" class="btn btn-warning reset-notify" title="Reset notification state"><i class="fas fa-bell"></i></button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a class="btn btn-primary" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}" target="_blank">ING</a>
+                                    <a class="btn btn-primary" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}" target="_blank">finanzen.net</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="edit-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3" id="edit-form">
+                            <div class="col-12">
+                                <label for="edit-isin" class="form-label">ISIN</label>
+                                <input type="text" class="form-control" id="edit-isin" disabled/>
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-name" class="form-label">Name</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="edit-name" name="name"/>
+                                    <button class="btn btn-outline-secondary" type="button" id="edit-refresh-name" title="Refresh name"><i class="fas fa-redo"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-count" class="form-label">Count</label>
+                                <input type="number" class="form-control" id="edit-count" name="count" min="1"/>
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-price" class="form-label">Price</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="edit-price" name="price" step="0.01"/>
+                                    <span class="input-group-text">EUR</span>
+                                    <button class="btn btn-outline-secondary" type="button" id="edit-refresh-price" title="Refresh price"><i class="fas fa-redo"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-limit" class="form-label mb-0">Limit</label>
+
+                                <div class="row align-items-center">
+                                    <div class="col-8">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><input class="form-check-input mt-0" type="checkbox" id="edit-limit-enabled" name="limitEnabled"></span>
+                                            <input type="number" class="form-control" id="edit-limit" name="limit" step="0.01"/>
+                                            <span class="input-group-text">EUR</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" id="edit-limit-type-low" name="limitType" value="low">
+                                            <label class="form-check-label" for="edit-limit-type-low">Low</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" id="edit-limit-type-high" name="limitType" value="high">
+                                            <label class="form-check-label" for="edit-limit-type-high">High</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-date" class="form-label">Date</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="edit-date" name="date"/>
+                                    <button class="btn btn-outline-secondary" type="button" id="edit-refresh-date" title="Refresh date"><i class="fas fa-redo"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="edit-news-enabled" name="newsEnabled">
+                                    <label class="form-check-label" for="edit-news-enabled">News</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="edit-entry-save">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="delete-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete entry from list</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure to delete the selected entry?</p>
+                        <dl>
+                            <dt>Watchlist</dt>
+                            <dd>{{ watchList.name }}</dd>
+
+                            <dt>ISIN</dt>
+                            <dd class="isin"></dd>
+
+                            <dt>Name</dt>
+                            <dd class="name"></dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id="delete-entry-confirm">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

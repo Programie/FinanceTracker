@@ -1,0 +1,5 @@
+The following stocks reached their configured limits:
+
+{% for entry in entries %}
+    * {{ entry.name }} ({{ entry.isin }}): {{ entry.currentPrice }} EUR ({{ entry.limitType }})
+{% endfor %}
