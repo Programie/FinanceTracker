@@ -6,6 +6,6 @@ table {
 
 thead {
     position: sticky;
-    top: 50px; /* Don't forget this, required for the stickiness */
+    top: 50px;
     z-index: 1000;
 }
