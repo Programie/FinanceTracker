@@ -61,7 +61,7 @@ class WatchListEntry implements JsonSerializable
     /**
      * @ORM\Column(type="boolean")
      */
-    private bool $notified;
+    private bool $notified = false;
     /**
      * @ORM\OneToOne(targetEntity="State")
      * @ORM\JoinColumn(name="stateId", referencedColumnName="id")
