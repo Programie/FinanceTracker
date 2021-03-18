@@ -145,13 +145,11 @@ class Controller
         $allItems = [];
 
         foreach ($entityManager->getRepository(News::class)->findAll() as $news) {
-            foreach ($news->getItems() as $item) {
-                $allItems[] = $item;
-            }
+            $this->buildNewsList($news, $allItems);
         }
 
-        usort($allItems, function (NewsItem $item1, NewsItem $item2) {
-            return $item2->date->getTimestamp() - $item1->date->getTimestamp();
+        usort($allItems, function ($item1, $item2) {
+            return $item2["date"]->getTimestamp() - $item1["date"]->getTimestamp();
         });
 
         header("Content-Type: application/json");
@@ -169,14 +167,51 @@ class Controller
             return;
         }
 
-        $items = $news->getItems();
+        $allItems = [];
 
-        usort($items, function (NewsItem $item1, NewsItem $item2) {
-            return $item2->date->getTimestamp() - $item1->date->getTimestamp();
+        $this->buildNewsList($news, $allItems);
+
+        usort($allItems, function ($item1, $item2) {
+            return $item2["date"]->getTimestamp() - $item1["date"]->getTimestamp();
         });
 
         header("Content-Type: application/json");
         header("Content-Type: application/json");
-        echo json_encode($items);
+        echo json_encode($allItems);
+    }
+
+    public function getNewsHtmlForEntry(array $params)
+    {
+        $entityManager = Database::getEntityManager();
+
+        $news = $entityManager->getRepository(News::class)->findByIsin($params["isin"]);
+        if ($news === null) {
+            http_response_code(404);
+            return;
+        }
+
+        $allItems = [];
+
+        $this->buildNewsList($news, $allItems);
+
+        usort($allItems, function ($item1, $item2) {
+            return $item2["date"]->getTimestamp() - $item1["date"]->getTimestamp();
+        });
+
+        echo TwigRenderer::render("news", [
+            "news" => $allItems
+        ]);
+    }
+
+    private function buildNewsList(News $news, array &$allItems)
+    {
+        foreach ($news->getItems() as $item) {
+            $allItems[] = [
+                "name" => $news->getName(),
+                "title" => $item->title,
+                "url" => $item->url,
+                "date" => $item->date
+            ];
+        }
     }
 }

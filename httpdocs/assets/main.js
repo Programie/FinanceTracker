@@ -140,6 +140,21 @@ $(function() {
         });
     });
 
+    $(".show-news").click(function() {
+        var isin = $(this).closest(".entry").data("isin");
+
+        $.get({
+            url: `/news/${isin}.html`,
+            success: function(html) {
+                var modal = $("#news-modal");
+
+                modal.find(".modal-body").html(html);
+
+                modal.modal("show");
+            }
+        });
+    });
+
     $("#delete-entry-confirm").click(function() {
         var isin = $("#delete-modal").data("isin");
 

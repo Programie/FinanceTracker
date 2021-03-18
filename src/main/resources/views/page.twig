@@ -60,7 +60,7 @@
                             <td>{{ entry.count }}</td>
                             <td>{{ entry.price }}<br/>{{ entry.totalPrice }}</td>
                             <td>{{ entry.currentPrice }}<br/>{{ entry.currentTotalPrice }}</td>
-                            <td>{{ entry.priceDifference}}<br/>{{ entry.totalPriceDifference }}</td>
+                            <td>{{ entry.priceDifference }}<br/>{{ entry.totalPriceDifference }}</td>
                             <td>
                                 {% if entry.limitEnabled %}
                                     {{ entry.limit }} ({{ entry.limitType }})
@@ -70,6 +70,7 @@
                             <td>{% if entry.newsEnabled %}<i class="fas fa-check"></i>{% endif %}</td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-primary show-news" title="Show news"><i class="fas fa-rss"></i></button>
                                     <button type="button" class="btn btn-primary edit-entry" title="Edit entry"><i class="fas fa-edit"></i></button>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Add to list"><i class="fas fa-copy"></i></button>
@@ -201,6 +202,18 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-danger" id="delete-entry-confirm">Delete</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="news-modal">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">News</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body"></div>
                 </div>
             </div>
         </div>
