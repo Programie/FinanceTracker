@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\models;
 
-use DateTime;
+use com\selfcoders\financetracker\Date;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,7 +27,7 @@ class State
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTime $updated;
+    private Date $updated;
     /**
      * @ORM\Column(type="float")
      */
@@ -82,18 +82,18 @@ class State
     }
 
     /**
-     * @return DateTime
+     * @return Date
      */
-    public function getUpdated(): DateTime
+    public function getUpdated(): Date
     {
         return $this->updated;
     }
 
     /**
-     * @param DateTime $updated
+     * @param Date $updated
      * @return State
      */
-    public function setUpdated(DateTime $updated): State
+    public function setUpdated(Date $updated): State
     {
         $this->updated = $updated;
         return $this;

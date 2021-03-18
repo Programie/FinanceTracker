@@ -1,6 +1,7 @@
 #! /usr/bin/env php
 <?php
 use com\selfcoders\financetracker\Database;
+use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\fetcher\Fetcher;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
@@ -64,6 +65,16 @@ try {
         if ($state === null) {
             $state = new State;
             $state->setIsin($responseData->isin);
+            $previousUpdate = null;
+        } else {
+            $previousUpdate = $state->getUpdated();
+        }
+
+        /**
+         * @var $previousUpdate Date
+         */
+        if ($previousUpdate !== null and $responseData->date !== null and $previousUpdate->format("Y-m-d") !== $responseData->date->format("Y-m-d")) {
+            $state->setDayStartPrice($responseData->price);
         }
 
         $state->setName($responseData->name);
