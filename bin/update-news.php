@@ -12,6 +12,9 @@ use GuzzleHttp\Psr7\Response;
 
 require_once __DIR__ . "/../bootstrap.php";
 
+$maxAge = new Date;
+$maxAge->sub(new DateInterval("P1D"));
+
 $entityManager = Database::getEntityManager();
 
 $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
@@ -42,7 +45,7 @@ foreach ($isinToNames as $isin => $name) {
 
 $pool = new Pool($client, $requests, [
     "concurrency" => 10,
-    "fulfilled" => function (Response $response, string $isin) use ($newsRepository, $isinToNames, $entityManager) {
+    "fulfilled" => function (Response $response, string $isin) use ($newsRepository, $isinToNames, $maxAge, $entityManager) {
         $dom = new DOMDocument;
         $dom->loadXML($response->getBody());
 
@@ -64,12 +67,20 @@ $pool = new Pool($client, $requests, [
         foreach ($xpath->query("/rss/channel/item") as $item) {
             $newsItem = new NewsItem;
 
-            $newsItem->title = $item?->getElementsByTagName("title")?->item(0)?->nodeValue;
-            $newsItem->url = $item?->getElementsByTagName("link")?->item(0)?->nodeValue;
+            $title = $item?->getElementsByTagName("title")?->item(0)?->nodeValue;
+            $url = $item?->getElementsByTagName("link")?->item(0)?->nodeValue;
             $date = $item?->getElementsByTagName("pubDate")?->item(0)?->nodeValue;
 
-            if ($date !== null) {
-                $newsItem->date = new Date($date);
+            if ($title === null or $date === null) {
+                continue;
+            }
+
+            $newsItem->title = $title;
+            $newsItem->url = $url;
+            $newsItem->date = new Date($date);
+
+            if ($newsItem->date < $maxAge) {
+                continue;
             }
 
             $newsItems[] = $newsItem;
