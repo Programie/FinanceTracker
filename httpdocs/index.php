@@ -12,6 +12,8 @@ $router->map(method: "POST", route: "/watchlist/[:name]/[:isin]", target: "updat
 $router->map(method: "POST", route: "/watchlist/[:name]/[:isin]/reset-notified", target: "resetNotified");
 $router->map(method: "DELETE", route: "/watchlist/[:name]/[:isin]", target: "removeEntry");
 $router->map(method: "GET", route: "/isin/[:isin]/current-price", target: "getCurrentPrice");
+$router->map(method:"GET", route: "/news.json", target: "getNews");
+$router->map(method:"GET", route: "/news/[:isin].json", target: "getNewsForEntry");
 
 $match = $router->match();
 

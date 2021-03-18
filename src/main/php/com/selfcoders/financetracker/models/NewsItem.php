@@ -5,9 +5,9 @@ use com\selfcoders\financetracker\Date;
 
 class NewsItem
 {
-    public ?string $title;
+    public string $title;
     public ?string $url;
-    public ?Date $date;
+    public Date $date;
 
     public static function fromArray(array $data): NewsItem
     {
@@ -15,10 +15,7 @@ class NewsItem
 
         $item->title = $data["title"];
         $item->url = $data["url"];
-
-        if ($data["date"] !== null) {
-            $item->date = new Date($data["date"]);
-        }
+        $item->date = new Date($data["date"]);
 
         return $item;
     }

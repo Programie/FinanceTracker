@@ -2,6 +2,8 @@
 namespace com\selfcoders\financetracker;
 
 use com\selfcoders\financetracker\fetcher\Fetcher;
+use com\selfcoders\financetracker\models\News;
+use com\selfcoders\financetracker\models\NewsItem;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
 
@@ -134,5 +136,47 @@ class Controller
 
         $entityManager->persist($watchListEntry);
         $entityManager->flush();
+    }
+
+    public function getNews()
+    {
+        $entityManager = Database::getEntityManager();
+
+        $allItems = [];
+
+        foreach ($entityManager->getRepository(News::class)->findAll() as $news) {
+            foreach ($news->getItems() as $item) {
+                $allItems[] = $item;
+            }
+        }
+
+        usort($allItems, function (NewsItem $item1, NewsItem $item2) {
+            return $item2->date->getTimestamp() - $item1->date->getTimestamp();
+        });
+
+        header("Content-Type: application/json");
+        header("Content-Type: application/json");
+        echo json_encode($allItems);
+    }
+
+    public function getNewsForEntry(array $params)
+    {
+        $entityManager = Database::getEntityManager();
+
+        $news = $entityManager->getRepository(News::class)->findByIsin($params["isin"]);
+        if ($news === null) {
+            http_response_code(404);
+            return;
+        }
+
+        $items = $news->getItems();
+
+        usort($items, function (NewsItem $item1, NewsItem $item2) {
+            return $item2->date->getTimestamp() - $item1->date->getTimestamp();
+        });
+
+        header("Content-Type: application/json");
+        header("Content-Type: application/json");
+        echo json_encode($items);
     }
 }
