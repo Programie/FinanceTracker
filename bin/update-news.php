@@ -1,3 +1,4 @@
+#! /usr/bin/env php
 <?php
 use com\selfcoders\financetracker\Database;
 use com\selfcoders\financetracker\Date;
