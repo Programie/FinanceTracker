@@ -57,16 +57,16 @@
                         <tr class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td>{{ entry.isin }}</a></td>
                             <td>{{ entry.name }}</td>
-                            <td>{{ entry.count }}</td>
-                            <td>{{ entry.price }}<br/>{{ entry.totalPrice }}</td>
-                            <td>{{ entry.currentPrice }}<br/>{{ entry.currentTotalPrice }}</td>
-                            <td>{{ entry.priceDifference }}<br/>{{ entry.totalPriceDifference }}</td>
+                            <td>{{ entry.count|format_number(locale="de") }}</td>
+                            <td>{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
+                            <td>{{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>{{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}</td>
+                            <td>{{ entry.priceDifference|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</td>
                             <td>
                                 {% if entry.limitEnabled %}
-                                    {{ entry.limit }} ({{ entry.limitType }})
+                                    {{ entry.limit|format_currency("EUR", locale="de") }} ({{ entry.limitType }})
                                 {% endif %}
                             </td>
-                            <td>{{ entry.date.format("Y-m-d") }}</td>
+                            <td>{{ entry.date.format("d.m.Y") }}</td>
                             <td>{% if entry.newsEnabled %}<i class="fas fa-check"></i>{% endif %}</td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">

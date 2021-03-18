@@ -2,6 +2,7 @@
 namespace com\selfcoders\financetracker;
 
 use Twig\Environment;
+use Twig\Extra\Intl\IntlExtension;
 use Twig\Loader\FilesystemLoader;
 
 class TwigRenderer
@@ -17,6 +18,7 @@ class TwigRenderer
         $loader = new FilesystemLoader(VIEWS_ROOT);
 
         self::$twig = new Environment($loader);
+        self::$twig->addExtension(new IntlExtension);
 
         return self::$twig;
     }

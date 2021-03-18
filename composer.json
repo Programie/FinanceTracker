@@ -1,14 +1,16 @@
 {
   "name": "programie/finance-tracker",
-  "description": "Track finance data (stocks and crypto currencys)",
+  "description": "Track finance data (stocks and crypto currencies)",
   "type": "project",
   "require": {
     "php": "^8.0",
+    "ext-dom": "*",
+    "ext-intl": "*",
+    "ext-pdo": "*",
     "twig/twig": "^3.3",
+    "twig/intl-extra": "^3.3",
     "altorouter/altorouter": "^2.0",
     "willdurand/negotiation": "^3.0",
-    "ext-dom": "*",
-    "ext-pdo": "*",
     "doctrine/orm": "^2.8",
     "guzzlehttp/guzzle": "^7.2",
     "swiftmailer/swiftmailer": "^6.2"
