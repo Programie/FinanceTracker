@@ -83,7 +83,7 @@ $(function() {
         var isin = $("#edit-isin").val().trim();
 
         $.get({
-            url: `/${listName}/${isin}/current-price`,
+            url: `/isin/${isin}/current-price`,
             success: function(value) {
                 $("#edit-price").val(value);
             }
@@ -105,7 +105,7 @@ $(function() {
         var isin = $("#edit-isin").val();
 
         $.ajax({
-            url: `/${listName}/${isin}`,
+            url: `/watchlist/${listName}/${isin}`,
             method: "POST",
             data: form.serialize(),
             success: function() {
@@ -132,7 +132,7 @@ $(function() {
         var isin = $(this).closest(".entry").data("isin");
 
         $.ajax({
-            url: `/${listName}/${isin}/reset-notified`,
+            url: `/watchlist/${listName}/${isin}/reset-notified`,
             method: "POST",
             success: function() {
                 document.location.reload();
@@ -144,7 +144,7 @@ $(function() {
         var isin = $("#delete-modal").data("isin");
 
         $.ajax({
-            url: `/${listName}/${isin}`,
+            url: `/watchlist/${listName}/${isin}`,
             method: "DELETE",
             success: function() {
                 document.location.reload();

@@ -16,7 +16,7 @@ class Controller
             $watchList = $entityManager->getRepository(WatchList::class)->findAll()[0];
         }
 
-        header(sprintf("Location: /%s", $watchList->getName()));
+        header(sprintf("Location: /watchlist/%s", $watchList->getName()));
     }
 
     public function getContent(array $params)

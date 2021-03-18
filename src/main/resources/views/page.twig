@@ -26,7 +26,7 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ watchList.name }}</a>
                         <ul class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">
                             {% for watchList in watchLists %}
-                                <li><a class="dropdown-item" href="/{{ watchList.name }}">{{ watchList.name }}</a></li>
+                                <li><a class="dropdown-item" href="/watchlist/{{ watchList.name }}">{{ watchList.name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -76,7 +76,7 @@
                                         <ul class="dropdown-menu">
                                             {% for thisWatchList in watchLists %}
                                                 {% if thisWatchList.name != watchList.name %}
-                                                    <li><a class="dropdown-item" href="/{{ thisWatchList.name }}#{{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}</a></li>
+                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#{{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}</a></li>
                                                 {% endif %}
                                             {% endfor %}
                                         </ul>
