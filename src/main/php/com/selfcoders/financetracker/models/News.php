@@ -4,7 +4,7 @@ namespace com\selfcoders\financetracker\models;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="com\selfcoders\financetracker\orm\NewsRepository")
  * @ORM\Table(name="news")
  */
 class News
