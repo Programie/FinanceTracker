@@ -57,13 +57,13 @@
                         <tr class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td>{{ entry.isin }}</a></td>
                             <td>{{ entry.name }}</td>
-                            <td>{{ entry.count|format_number(locale="de") }}</td>
-                            <td>{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
-                            <td>{{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>{{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}</td>
-                            <td>{{ entry.priceDifference|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</td>
-                            <td>
+                            <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
+                            <td class="text-end">{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
+                            <td class="text-end">{{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>{{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}</td>
+                            <td class="text-end">{{ entry.priceDifference|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</td>
+                            <td class="text-end text-nowrap">
                                 {% if entry.limitEnabled %}
-                                    {{ entry.limit|format_currency("EUR", locale="de") }} ({{ entry.limitType }})
+                                    {{ entry.limit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">{{ entry.limitType }}</span>
                                 {% endif %}
                             </td>
                             <td>{{ entry.date.format("d.m.Y") }}</td>
