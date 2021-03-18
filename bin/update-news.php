@@ -38,7 +38,6 @@ $requests = [];
 
 foreach ($isinToNames as $isin => $name) {
     $requests[$isin] = new Request("GET", sprintf("https://news.google.com/rss/search?q=%s&hl=de&gl=DE&ceid=DE:de", $name));
-    break;
 }
 
 $pool = new Pool($client, $requests, [
