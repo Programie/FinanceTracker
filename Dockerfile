@@ -25,5 +25,6 @@ RUN sed -ri -e 's!/var/www/html!/app/httpdocs!g' /etc/apache2/sites-available/*.
 COPY --from=composer /app/vendor /app/vendor
 COPY bootstrap.php /app/bootstrap.php
 COPY cli-config.php /app/cli-config.php
+COPY bin /app/bin
 COPY httpdocs /app/httpdocs
 COPY src /app/src
