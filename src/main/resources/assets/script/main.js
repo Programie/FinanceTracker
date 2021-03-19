@@ -72,6 +72,16 @@ function editEntry(isin, newValues) {
     modal.modal("show");
 }
 
+function highlightEntry(isin) {
+    var tableRow = $(`#isin-${isin}`);
+    tableRow.addClass("highlight");
+
+    var element = tableRow[0] || null;
+    if (element !== null) {
+        element.scrollIntoView();
+    }
+}
+
 $(function() {
     var listName = $("meta[name=listname]").attr("content");
 
@@ -185,15 +195,23 @@ $(function() {
             parameterMap[parameter[0]] = parameter[1];
         }
 
-        if (hash[0] === "edit") {
-            editEntry(parameterMap["isin"] || null, parameterMap);
-        } else if (hash[0].startsWith("isin-")) {
-            var tableRow = $(document.location.hash);
-            tableRow.addClass("highlight");
-            var element = tableRow[0] || null;
-            if (element !== null) {
-                element.scrollIntoView();
-            }
+        var isin = parameterMap["isin"] || null;
+
+        switch (hash[0]) {
+            case "edit":
+                editEntry(isin, parameterMap);
+                break;
+            case "show-or-edit":
+                var tableRow = $(`#isin-${isin}`);
+                if (tableRow.length) {
+                    highlightEntry(isin);
+                } else {
+                    editEntry(isin, parameterMap);
+                }
+                break;
+            case "show":
+                highlightEntry(isin);
+                break;
         }
     }
 });

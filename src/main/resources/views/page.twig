@@ -74,7 +74,7 @@
                                         <ul class="dropdown-menu">
                                             {% for thisWatchList in watchLists %}
                                                 {% if thisWatchList.name != watchList.name %}
-                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#isin-{{ entry.isin }}">{{ thisWatchList.name }}</a></li>
+                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#show&isin={{ entry.isin }}">{{ thisWatchList.name }}</a></li>
                                                 {% endif %}
                                             {% endfor %}
                                         </ul>
