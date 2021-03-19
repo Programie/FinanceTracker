@@ -169,7 +169,6 @@ $(function() {
 
     var hash = document.location.hash.substring(1).split("&").filter(Boolean);
     if (hash.length) {
-        console.log(hash);
         var parameterMap = {};
 
         for (var index = 1; index < hash.length; index++) {
