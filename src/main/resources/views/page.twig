@@ -55,7 +55,7 @@
 
                 <tbody>
                     {% for entry in watchList.entries %}
-                        <tr class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                        <tr id="isin-{{ entry.isin }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td>{{ entry.isin }}</a></td>
                             <td>{{ entry.name }}</td>
                             <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
@@ -72,13 +72,23 @@
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
                                     <button type="button" class="btn btn-primary show-news" title="Show news"><i class="fas fa-rss"></i></button>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Show in list"><i class="fas fa-external-link-alt"></i></button>
+                                        <ul class="dropdown-menu">
+                                            {% for thisWatchList in watchLists %}
+                                                {% if thisWatchList.name != watchList.name %}
+                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#isin-{{ entry.isin }}">{{ thisWatchList.name }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                     <button type="button" class="btn btn-primary edit-entry" title="Edit entry"><i class="fas fa-edit"></i></button>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Add to list"><i class="fas fa-copy"></i></button>
                                         <ul class="dropdown-menu">
                                             {% for thisWatchList in watchLists %}
                                                 {% if thisWatchList.name != watchList.name %}
-                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#{{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}</a></li>
+                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#edit&isin={{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}</a></li>
                                                 {% endif %}
                                             {% endfor %}
                                         </ul>

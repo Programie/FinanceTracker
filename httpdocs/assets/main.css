@@ -9,3 +9,24 @@ thead {
     top: 50px;
     z-index: 1000;
 }
+
+tr.entry {
+    scroll-margin-top: 85px;
+}
+
+.highlight {
+    animation: highlight 5s ease-out;
+    animation-iteration-count: 1;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: #fbf8b2;
+    }
+    50% {
+        background-color: #fbf8b2;
+    }
+    100% {
+        background-color: transparent;
+    }
+}

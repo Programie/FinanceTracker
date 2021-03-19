@@ -178,6 +178,15 @@ $(function() {
             parameterMap[parameter[0]] = parameter[1];
         }
 
-        editEntry(hash[0], parameterMap);
+        if (hash[0] === "edit") {
+            editEntry(parameterMap["isin"] || null, parameterMap);
+        } else if (hash[0].startsWith("isin-")) {
+            var tableRow = $(document.location.hash);
+            tableRow.addClass("highlight");
+            var element = tableRow[0] || null;
+            if (element !== null) {
+                element.scrollIntoView();
+            }
+        }
     }
 });
