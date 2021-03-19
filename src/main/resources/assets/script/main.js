@@ -94,7 +94,14 @@ $(function() {
     });
 
     $("#edit-refresh-name").click(function() {
-        $("#edit-name").val($(this).data("value"));
+        var isin = $("#edit-isin").val().trim();
+
+        $.get({
+            url: `/isin/${isin}/original-name`,
+            success: function(value) {
+                $("#edit-name").val(value);
+            }
+        });
     });
 
     $("#edit-refresh-price").click(function() {

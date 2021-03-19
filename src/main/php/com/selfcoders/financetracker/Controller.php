@@ -75,6 +75,22 @@ class Controller
         }
     }
 
+    public function getOriginalName(array $params)
+    {
+        $fetcher = new Fetcher;
+
+        $fetcher->add($params["isin"]);
+
+        $responses = $fetcher->execute();
+
+        if (empty($responses)) {
+            http_response_code(404);
+        } else {
+            header("Content-Type: text/plain");
+            echo array_values($responses)[0]->name;
+        }
+    }
+
     public function updateEntry(array $params)
     {
         $entityManager = Database::getEntityManager();
