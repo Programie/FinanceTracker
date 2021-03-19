@@ -13,7 +13,8 @@
     "willdurand/negotiation": "^3.0",
     "doctrine/orm": "^2.8",
     "guzzlehttp/guzzle": "^7.2",
-    "swiftmailer/swiftmailer": "^6.2"
+    "swiftmailer/swiftmailer": "^6.2",
+    "symfony/asset": "^5.2"
   },
   "autoload": {
     "psr-4": {

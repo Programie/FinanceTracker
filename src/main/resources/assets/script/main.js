@@ -1,3 +1,11 @@
+import "../style/main.scss";
+
+import $ from "jquery";
+
+window.jQuery = $;
+
+import "bootstrap";
+
 function parseBool(string) {
     var regex = /^\s*(true|1|on)\s*$/i;
     return regex.test(string);

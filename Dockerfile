@@ -1,3 +1,15 @@
+FROM node AS webpack
+
+WORKDIR /app
+
+COPY package.json package-lock.json /app/
+RUN npm install
+
+COPY webpack.config.js /app/
+COPY src/main/resources /app/src/main/resources
+RUN npm run build
+
+
 FROM composer AS composer
 
 COPY composer.* /app/
@@ -23,6 +35,9 @@ RUN sed -ri -e 's!/var/www/html!/app/httpdocs!g' /etc/apache2/sites-available/*.
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 COPY --from=composer /app/vendor /app/vendor
+COPY --from=webpack /app/httpdocs/assets /app/httpdocs/assets
+COPY --from=webpack /app/webpack.assets.json /app/webpack.assets.json
+
 COPY bootstrap.php /app/bootstrap.php
 COPY cli-config.php /app/cli-config.php
 COPY bin /app/bin

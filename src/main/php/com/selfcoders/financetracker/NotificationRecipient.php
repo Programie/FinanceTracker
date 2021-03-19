@@ -2,7 +2,6 @@
 namespace com\selfcoders\financetracker;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 use Swift_Mailer;
 use Swift_Message;
