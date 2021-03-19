@@ -25,7 +25,7 @@ class Controller
     {
         $entityManager = Database::getEntityManager();
 
-        $watchLists = $entityManager->getRepository(WatchList::class)->findAll();
+        $watchLists = $entityManager->getRepository(WatchList::class)->findBy([], ["name" => "asc"]);
 
         $watchList = $entityManager->getRepository(WatchList::class)->findByName($params["name"]);
         if ($watchList === null) {
