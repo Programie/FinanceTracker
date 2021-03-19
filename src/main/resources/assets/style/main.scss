@@ -46,12 +46,15 @@ tr.entry {
 
 @keyframes highlight {
     0% {
-        background-color: #fbf8b2;
+        background-color: $yellow;
+        color: $black;
     }
     50% {
-        background-color: #fbf8b2;
+        background-color: $yellow;
+        color: $black;
     }
     100% {
         background-color: transparent;
+        color: inherit;
     }
 }
