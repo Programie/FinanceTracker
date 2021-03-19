@@ -60,6 +60,19 @@ $newNotifications = [];
 
 try {
     foreach ($responseDataList as $responseData) {
+        if ($responseData->name === null) {
+            fwrite(STDERR, sprintf("Missing name for ISIN %s\n", $responseData->isin));
+            continue;
+        }
+        if ($responseData->date === null) {
+            fwrite(STDERR, sprintf("Missing date for ISIN %s\n", $responseData->isin));
+            continue;
+        }
+        if ($responseData->price === null) {
+            fwrite(STDERR, sprintf("Missing price for ISIN %s\n", $responseData->isin));
+            continue;
+        }
+
         $state = $allStates[$responseData->isin] ?? null;
 
         if ($state === null) {
@@ -73,7 +86,7 @@ try {
         /**
          * @var $previousUpdate Date
          */
-        if ($previousUpdate !== null and $responseData->date !== null and $previousUpdate->format("Y-m-d") !== $responseData->date->format("Y-m-d")) {
+        if ($previousUpdate !== null and $previousUpdate->format("Y-m-d") !== $responseData->date->format("Y-m-d")) {
             $state->setDayStartPrice($responseData->price);
         }
 
