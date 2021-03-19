@@ -42,6 +42,7 @@ class Fetcher
 
                 $responseData = new ResponseData;
                 $responseData->isin = $isin;
+                $responseData->date = null;
 
                 if ($isin === "BTC") {
                     $responseData->name = "Bitcoin";
