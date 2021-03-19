@@ -4,6 +4,7 @@ namespace com\selfcoders\financetracker;
 use com\selfcoders\financetracker\fetcher\Fetcher;
 use com\selfcoders\financetracker\models\News;
 use com\selfcoders\financetracker\models\NewsItem;
+use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
 
@@ -81,6 +82,7 @@ class Controller
 
         $watchListRepository = $entityManager->getRepository(WatchList::class);
         $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
+        $stateRepository = $entityManager->getRepository(State::class);
 
         $watchListEntry = $watchListEntryRepository->findByListAndIsin($params["name"], $params["isin"]);
 
@@ -89,6 +91,7 @@ class Controller
 
             $watchListEntry->setIsin($params["isin"]);
             $watchListEntry->setWatchList($watchListRepository->findByName($params["name"]));
+            $watchListEntry->setState($stateRepository->findByIsin($params["isin"]));
         }
 
         $watchListEntry->setName($_POST["name"]);
