@@ -21,8 +21,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ watchList.name }}</a>
                         <ul class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">
-                            {% for watchList in watchLists %}
-                                <li><a class="dropdown-item" href="/watchlist/{{ watchList.name }}">{{ watchList.name }}</a></li>
+                            {% for thisWatchList in watchLists %}
+                                <li><a class="{{ html_classes("dropdown-item", {"active": thisWatchList.name == watchList.name }) }}" href="/watchlist/{{ thisWatchList.name }}">{{ thisWatchList.name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>

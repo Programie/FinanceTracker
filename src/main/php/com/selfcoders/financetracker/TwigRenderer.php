@@ -3,6 +3,7 @@ namespace com\selfcoders\financetracker;
 
 use Symfony\Component\Asset\Package;
 use Twig\Environment;
+use Twig\Extra\Html\HtmlExtension;
 use Twig\Extra\Intl\IntlExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
@@ -20,6 +21,7 @@ class TwigRenderer
         $loader = new FilesystemLoader(VIEWS_ROOT);
 
         self::$twig = new Environment($loader);
+        self::$twig->addExtension(new HtmlExtension);
         self::$twig->addExtension(new IntlExtension);
 
         self::$twig->addFunction(new TwigFunction("asset", function (string $path) use ($assetsPackage) {
