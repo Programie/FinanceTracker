@@ -34,6 +34,7 @@
             <table class="table table-striped">
                 <thead class="table-light">
                     <tr class="text-nowrap">
+                        <th>#</th>
                         <th>ISIN</th>
                         <th>Name</th>
                         <th>Count</th>
@@ -51,6 +52,7 @@
                 <tbody>
                     {% for entry in watchList.entries %}
                         <tr id="isin-{{ entry.isin }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                            <td class="text-end">{{ loop.index }}</td>
                             <td>{{ entry.isin }}</a></td>
                             <td>{{ entry.name }}</td>
                             <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
