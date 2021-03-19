@@ -28,6 +28,7 @@ class WatchList
     /**
      * @var WatchListEntry[]
      * @ORM\OneToMany(targetEntity="WatchListEntry", mappedBy="watchList")
+     * @ORM\OrderBy({"name"="ASC"})
      */
     private mixed $entries;
 
