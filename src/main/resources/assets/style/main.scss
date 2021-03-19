@@ -1,10 +1,27 @@
+@import "~bootswatch/dist/darkly/variables";
+
+// Fix Navbar height
+$navbar-padding-y: 0.5rem;
+
 @import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/darkly/bootswatch";
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/scss/regular";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
+
+// Workarounds for Bootswatch theme not supporting Bootstrap 5
+.form-control, .form-control:active {
+    background-color: $gray-700 !important;
+}
+
+i.fas {
+    color: $white;
+}
+
+// End of Workarounds
 
 table {
     text-align: left;
