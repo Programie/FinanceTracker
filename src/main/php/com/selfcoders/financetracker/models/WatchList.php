@@ -77,4 +77,38 @@ class WatchList
     {
         return $this->entries;
     }
+
+    /**
+     * @return array
+     */
+    public function getTotal(): array
+    {
+        $count = 0;
+        $price = 0;
+        $totalPrice = 0;
+        $currentPrice = 0;
+        $currentTotalPrice = 0;
+        $priceDifference = 0;
+        $totalPriceDifference = 0;
+
+        foreach ($this->getEntries() as $entry) {
+            $count += $entry->getCount();
+            $price += $entry->getPrice();
+            $totalPrice += $entry->getTotalPrice();
+            $currentPrice += $entry->getCurrentPrice();
+            $currentTotalPrice += $entry->getCurrentTotalPrice();
+            $priceDifference += $entry->getPriceDifference();
+            $totalPriceDifference += $entry->getTotalPriceDifference();
+        }
+
+        return [
+            "count" => $count,
+            "price" => $price,
+            "totalPrice" => $totalPrice,
+            "currentPrice" => $currentPrice,
+            "currentTotalPrice" => $currentTotalPrice,
+            "priceDifference" => $priceDifference,
+            "totalPriceDifference" => $totalPriceDifference
+        ];
+    }
 }
