@@ -3,7 +3,6 @@ namespace com\selfcoders\financetracker;
 
 use com\selfcoders\financetracker\fetcher\Fetcher;
 use com\selfcoders\financetracker\models\News;
-use com\selfcoders\financetracker\models\NewsItem;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
