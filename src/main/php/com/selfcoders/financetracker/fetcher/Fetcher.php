@@ -42,7 +42,7 @@ class Fetcher
 
                 $responseData = new ResponseData;
                 $responseData->isin = $isin;
-                $responseData->date = null;
+                $responseData->date = null;// Set to null to prevent error "Typed property must not be accessed before initialization"
 
                 if ($isin === "BTC") {
                     $responseData->name = "Bitcoin";
