@@ -13,7 +13,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Workarounds for Bootswatch theme not supporting Bootstrap 5
-.form-control, .form-control:active {
+.form-control, .form-control:active, .form-select {
     background-color: $gray-700 !important;
 }
 

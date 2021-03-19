@@ -135,8 +135,16 @@
                     <div class="modal-body">
                         <form class="row g-3" id="edit-form">
                             <div class="col-12">
+                                <label for="edit-watchlist" class="form-label">Watchlist</label>
+                                <select class="form-select" id="edit-watchlist">
+                                    {% for thisWatchList in watchLists %}
+                                        <option value="{{ thisWatchList.name }}" {% if thisWatchList.name == watchList.name %}selected{% endif %}>{{ thisWatchList.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12">
                                 <label for="edit-isin" class="form-label">ISIN</label>
-                                <input type="text" class="form-control" id="edit-isin" disabled/>
+                                <input type="text" class="form-control" id="edit-isin"/>
                             </div>
                             <div class="col-12">
                                 <label for="edit-name" class="form-label">Name</label>

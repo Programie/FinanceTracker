@@ -30,7 +30,7 @@ function editEntry(isin, newValues) {
     var isEdit = false;
 
     if (isin) {
-        modal.find("#edit-isin").prop("disabled", true).val(isin);
+        modal.find("#edit-isin").val(isin);
 
         var entry = $(`.entry[data-isin="${isin}"]`);
 
@@ -46,8 +46,6 @@ function editEntry(isin, newValues) {
 
             isEdit = true;
         }
-    } else {
-        modal.find("#edit-isin").prop("disabled", false);
     }
 
     if (isEdit) {
@@ -127,14 +125,15 @@ $(function() {
         event.preventDefault();
 
         var form = $(this);
+        var watchlist = $("#edit-watchlist").val();
         var isin = $("#edit-isin").val();
 
         $.ajax({
-            url: `/watchlist/${listName}/${isin}`,
+            url: `/watchlist/${watchlist}/${isin}`,
             method: "POST",
             data: form.serialize(),
             success: function() {
-                document.location.hash = "";
+                document.location = `/watchlist/${watchlist}#show&isin=${isin}`
                 document.location.reload();
             }
         });
