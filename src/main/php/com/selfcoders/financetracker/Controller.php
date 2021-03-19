@@ -79,6 +79,7 @@ class Controller
     {
         $entityManager = Database::getEntityManager();
 
+        $watchListRepository = $entityManager->getRepository(WatchList::class);
         $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
 
         $watchListEntry = $watchListEntryRepository->findByListAndIsin($params["name"], $params["isin"]);
@@ -87,6 +88,7 @@ class Controller
             $watchListEntry = new WatchListEntry;
 
             $watchListEntry->setIsin($params["isin"]);
+            $watchListEntry->setWatchList($watchListRepository->findByName($params["name"]));
         }
 
         $watchListEntry->setName($_POST["name"]);
