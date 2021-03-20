@@ -80,7 +80,59 @@ function highlightEntry(isin) {
     }
 }
 
+function toast(title, bodyHtml, headerColor = "primary") {
+    var headerTextColor = "white";
+
+    switch (headerColor) {
+        case "info":
+        case "light":
+        case "white":
+            headerTextColor = "dark";
+            break;
+    }
+
+    var container = $("<div>");
+    container.addClass("toast");
+
+    var header = $("<div>");
+    header.addClass("toast-header");
+    header.addClass(`bg-${headerColor} text-${headerTextColor}`)
+    container.append(header);
+
+    var strongHeader = $("<strong>");
+    strongHeader.addClass("me-auto");
+    strongHeader.text(title);
+    header.append(strongHeader);
+
+    var closeButton = $("<button>");
+    closeButton.addClass("btn-close");
+    closeButton.attr("type", "button");
+    closeButton.data("bs-dismiss", "toast");
+    header.append(closeButton);
+
+    var body = $("<div>");
+    body.addClass("toast-body");
+    body.html(bodyHtml);
+    container.append(body);
+
+    container.toast("show");
+
+    $("#toast-container").append(container);
+}
+
+function successToast(title, bodyHtml) {
+    toast(title, bodyHtml, "success");
+}
+
+function errorToast(title, bodyHtml) {
+    toast(title, bodyHtml, "danger");
+}
+
 $(function() {
+    window.onerror = function(message) {
+        errorToast("JavaScript error occurred", message);
+    };
+
     var listName = $("meta[name=listname]").attr("content");
 
     $("#add-entry").click(function() {
@@ -98,6 +150,10 @@ $(function() {
             url: `/isin/${isin}/original-name`,
             success: function(value) {
                 $("#edit-name").val(value);
+                successToast("Refresh name", `Name updated to <strong>${value}</strong>.`);
+            },
+            error: function() {
+                errorToast("Refresh name", "Refreshing name failed!");
             }
         });
     });
@@ -109,6 +165,10 @@ $(function() {
             url: `/isin/${isin}/current-price`,
             success: function(value) {
                 $("#edit-price").val(value);
+                successToast("Refresh price", `Price updated to <strong>${value}</strong>.`);
+            },
+            error: function() {
+                errorToast("Refresh price", "Refreshing price failed!");
             }
         });
     });
@@ -135,6 +195,9 @@ $(function() {
             success: function() {
                 document.location = `/watchlist/${watchlist}#show&isin=${isin}`
                 document.location.reload();
+            },
+            error: function() {
+                errorToast("Save entry", "Saving entry failed!");
             }
         });
     });
@@ -160,6 +223,9 @@ $(function() {
             method: "POST",
             success: function() {
                 document.location.reload();
+            },
+            error: function() {
+                errorToast("Reset notification state", "Reset failed!");
             }
         });
     });
@@ -175,6 +241,9 @@ $(function() {
                 modal.find(".modal-body").html(html);
 
                 modal.modal("show");
+            },
+            error: function() {
+                errorToast("Fetch news", `Fetching news for ISIN <strong>${isin}</strong> failed!`);
             }
         });
     });
@@ -187,6 +256,9 @@ $(function() {
             method: "DELETE",
             success: function() {
                 document.location.reload();
+            },
+            error: function() {
+                errorToast("Delete entry", "Deleting entry failed!");
             }
         });
     });
