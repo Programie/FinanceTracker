@@ -6,7 +6,6 @@ use com\selfcoders\financetracker\fetcher\Fetcher;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
-use com\selfcoders\financetracker\NotificationRecipient;
 
 require_once __DIR__ . "/../bootstrap.php";
 
@@ -112,35 +111,15 @@ try {
         $entityManager->flush();
     }
 } finally {
-    $notificationsPerRecipient = [];
-
     foreach ($newNotifications as $entry) {
         $recipients = $entry->getWatchList()->getNotificationRecipients();
 
         foreach ($recipients as $recipient) {
-            $recipientKey = $recipient->__toString();
-            if (!isset($notificationsPerRecipient[$recipientKey])) {
-                $notificationsPerRecipient[$recipientKey] = [
-                    "recipient" => $recipient,
-                    "entries" => []
-                ];
+            try {
+                $recipient->sendForWatchListEntry($entry);
+            } catch (Exception $exception) {
+                echo $exception;
             }
-
-            $notificationsPerRecipient[$recipientKey]["entries"][] = $entry;
-        }
-    }
-
-    foreach ($notificationsPerRecipient as $notification) {
-        /**
-         * @var $recipient NotificationRecipient
-         */
-        $recipient = $notification["recipient"];
-        $entries = $notification["entries"];
-
-        try {
-            $recipient->sendForWatchListEntries($entries);
-        } catch (Exception $exception) {
-            echo $exception;
         }
     }
 }

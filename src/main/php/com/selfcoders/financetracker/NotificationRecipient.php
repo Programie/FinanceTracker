@@ -1,6 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker;
 
+use com\selfcoders\financetracker\models\WatchListEntry;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Swift_Mailer;
@@ -10,42 +11,50 @@ use Swift_SmtpTransport;
 class NotificationRecipient
 {
     const TYPE_EMAIL = "email";
-    const TYPE_PUSHOVER_LOW = "pushover_low";
-    const TYPE_PUSHOVER_HIGH = "pushover_high";
+    const TYPE_PUSHOVER = "pushover";
 
     public string $type;
+    public string $limitType;
     public string $target;
 
     public static function fromString(string $string): NotificationRecipient
     {
         $recipient = new self;
 
-        list($recipient->type, $recipient->target) = explode(":", $string, 2);
+        list($recipient->type, $recipient->limitType, $recipient->target) = explode(":", $string, 3);
 
         return $recipient;
     }
 
     public function __toString(): string
     {
-        return implode(":", [$this->type, $this->target]);
+        return implode(":", [$this->type, $this->limitType, $this->target]);
     }
 
-    public function sendForWatchListEntries(array $entries)
+    public function sendForWatchListEntry(WatchListEntry $entry)
     {
-        $subject = "Stock limit reached";
+        if ($entry->getLimitType() !== $this->limitType) {
+            return;
+        }
+
+        $subject = sprintf("Stock limit reached - %s", $entry->getName());
         $body = TwigRenderer::render("notification", [
-            "entries" => $entries
+            "entry" => $entry
         ]);
 
         switch ($this->type) {
             case self::TYPE_EMAIL:
                 $this->sendMail($subject, $body);
                 break;
-            case self::TYPE_PUSHOVER_LOW:
-                $this->sendPushover($subject, $body, getenv("PUSHOVER_LOW_SOUND"));
-                break;
-            case self::TYPE_PUSHOVER_HIGH:
-                $this->sendPushover($subject, $body, getenv("PUSHOVER_HIGH_SOUND"));
+            case self::TYPE_PUSHOVER:
+                switch ($this->limitType) {
+                    case WatchListEntry::LIMIT_TYPE_LOW:
+                        $this->sendPushover($subject, $body, getenv("PUSHOVER_LOW_SOUND"));
+                        break;
+                    case WatchListEntry::LIMIT_TYPE_HIGH:
+                        $this->sendPushover($subject, $body, getenv("PUSHOVER_HIGH_SOUND"));
+                        break;
+                }
                 break;
         }
     }

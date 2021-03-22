@@ -11,6 +11,9 @@ use JsonSerializable;
  */
 class WatchListEntry implements JsonSerializable
 {
+    const LIMIT_TYPE_LOW = "low";
+    const LIMIT_TYPE_HIGH = "high";
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -363,9 +366,9 @@ class WatchListEntry implements JsonSerializable
         }
 
         $limitType = strtolower($this->limitType);
-        if ($limitType === "high" and $difference >= 0) {
+        if ($limitType === self::LIMIT_TYPE_HIGH and $difference >= 0) {
             return true;
-        } elseif ($limitType === "low" and $difference <= 0) {
+        } elseif ($limitType === self::LIMIT_TYPE_LOW and $difference <= 0) {
             return true;
         } else {
             return false;
