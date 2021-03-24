@@ -16,6 +16,9 @@ $router->map(method: "GET", route: "/isin/[:isin]/original-name", target: "getOr
 $router->map(method: "GET", route: "/news.json", target: "getNews");
 $router->map(method: "GET", route: "/news/[:isin].json", target: "getNewsForEntry");
 $router->map(method: "GET", route: "/news/[:isin].html", target: "getNewsHtmlForEntry");
+$router->map(method: "GET", route: "/grafana", target: "emptyResponse");
+$router->map(method: "POST", route: "/grafana/search", target: "grafanaSearch");
+$router->map(method: "POST", route: "/grafana/query", target: "grafanaQuery");
 
 $match = $router->match();
 

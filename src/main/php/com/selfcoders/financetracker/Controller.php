@@ -6,6 +6,11 @@ use com\selfcoders\financetracker\models\News;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
+use GuzzleHttp\Client;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 
 class Controller
 {
@@ -233,5 +238,93 @@ class Controller
                 "date" => $item->date
             ];
         }
+    }
+
+    public function grafanaSearch()
+    {
+        $entityManager = Database::getEntityManager();
+
+        $watchListEntries = $entityManager->getRepository(WatchListEntry::class)->findAll();
+
+        $json = [];
+
+        foreach ($watchListEntries as $watchListEntry) {
+            $json[] = [
+                "text" => $watchListEntry->getName(),
+                "value" => $watchListEntry->getIsin()
+            ];
+        }
+
+        header("Content-Type: application/json");
+        echo json_encode($json);
+    }
+
+    public function grafanaQuery()
+    {
+        $json = json_decode(file_get_contents("php://input"), true);
+
+        $client = new Client([
+            "base_uri" => "https://component-api.wertpapiere.ing.de/api/v1/components/charttooldata/",
+            RequestOptions::QUERY => [
+                "timeRange" => "Intraday",
+                "exchangeId" => 2779,
+                "currencyId" => 814
+            ]
+        ]);
+
+        $requests = [];
+        $responses = [];
+
+        $entityManager = Database::getEntityManager();
+
+        $watchListEntries = $entityManager->getRepository(WatchListEntry::class)->findAll();
+
+        $nameMap = [];
+
+        foreach ($watchListEntries as $watchListEntry) {
+            /**
+             * @var $isin string
+             */
+            $isin = $watchListEntry->getIsin();
+
+            $nameMap[$isin] = $watchListEntry->getName();
+        }
+
+        $isins = $json["targets"][0]["data"]["isins"];
+
+        if (is_array($isins)) {
+            foreach ($isins as $isin) {
+                $requests[$isin] = new Request("GET", $isin);
+            }
+        } else {
+            $requests[$isins] = new Request("GET", $isins);
+        }
+
+        $pool = new Pool($client, $requests, [
+            "concurrency" => 10,
+            "fulfilled" => function (Response $response, string $isin) use (&$responses, $nameMap) {
+                $json = json_decode($response->getBody(), true);
+
+                $data = [];
+
+                foreach ($json["instruments"][0]["data"] as $item) {
+                    $data[] = [$item[1], $item[0]];
+                }
+
+                $responses[] = [
+                    "target" => $nameMap[$isin] ?? $isin,
+                    "datapoints" => $data
+                ];
+            }
+        ]);
+
+        $pool->promise()->wait();
+
+        header("Content-Type: application/json");
+        echo json_encode($responses);
+    }
+
+    public function emptyResponse()
+    {
     }
 }
