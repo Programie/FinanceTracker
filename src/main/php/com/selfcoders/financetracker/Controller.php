@@ -230,12 +230,19 @@ class Controller
 
     private function buildNewsList(News $news, array &$allItems)
     {
+        $state = Database::getEntityManager()->getRepository(State::class)->findByIsin($news->getIsin());
+
+        $currentPrice = $state?->getPrice();
+        $dayStartPrice = $state?->getDayStartPrice();
+
         foreach ($news->getItems() as $item) {
             $allItems[] = [
                 "name" => $news->getName(),
                 "title" => $item->title,
                 "url" => $item->url,
-                "date" => $item->date
+                "date" => $item->date,
+                "currentPrice" => $currentPrice,
+                "dayStartPrice" => $dayStartPrice
             ];
         }
     }
