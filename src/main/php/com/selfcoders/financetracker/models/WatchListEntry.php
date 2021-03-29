@@ -336,6 +336,36 @@ class WatchListEntry implements JsonSerializable
         return $difference * $this->count;
     }
 
+    public function getDayStartPrice(): ?float
+    {
+        return $this->getState()?->getDayStartPrice();
+    }
+
+    public function getDayStartPriceDifference(): ?float
+    {
+        $currentPrice = $this->getCurrentPrice();
+        if ($currentPrice === null) {
+            return null;
+        }
+
+        $dayStartPrice = $this->getDayStartPrice();
+        if ($dayStartPrice === null) {
+            return null;
+        }
+
+        return $currentPrice - $dayStartPrice;
+    }
+
+    public function getTotalDayStartPriceDifference(): ?float
+    {
+        $difference = $this->getDayStartPriceDifference();
+        if ($difference === null) {
+            return null;
+        }
+
+        return $difference * $this->count;
+    }
+
     public function getLimitDifference(): ?float
     {
         if (!$this->isLimitEnabled()) {
