@@ -336,6 +336,30 @@ class WatchListEntry implements JsonSerializable
         return $difference * $this->count;
     }
 
+    public function getRealProfit(): ?float
+    {
+        $buyPrice = $this->getTotalPrice();
+        $sellPrice = $this->getCurrentTotalPrice();
+
+        if ($buyPrice === null or $sellPrice === null) {
+            return null;
+        }
+
+        $buyCommissionPrice = $buyPrice / 100 * 0.25 + 4.9;
+        $sellCommissionPrice = $sellPrice / 100 * 0.25 + 4.9;
+
+        $realBuyPrice = $buyPrice + $buyCommissionPrice;
+        $realSellPrice = $sellPrice - $sellCommissionPrice;
+
+        $profit = $realSellPrice - $realBuyPrice;
+
+        if ($profit > 0) {
+            $profit = $profit * 0.695;
+        }
+
+        return $profit;
+    }
+
     public function getDayStartPrice(): ?float
     {
         return $this->getState()?->getDayStartPrice();
@@ -414,6 +438,7 @@ class WatchListEntry implements JsonSerializable
             "watchDate" => $this->getDate(),
             "watchValue" => $this->getPrice(),
             "currentValue" => $this->getCurrentPrice(),
+            "realProfit" => $this->getRealProfit(),
             "dayStartValue" => $this->getState()?->getDayStartPrice(),
             "limitEnabled" => $this->isLimitEnabled(),
             "limitType" => $this->getLimitType(),

@@ -61,7 +61,8 @@
                             <td class="text-end">{{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>{{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}</td>
                             <td class="text-end">
                                 <span class="{{ html_classes({"text-danger": entry.priceDifference < 0}) }}">{% if entry.priceDifference > 0 %}+{% endif %}{{ entry.priceDifference|format_currency("EUR", locale="de") }}</span><br/>
-                                <span class="{{ html_classes({"text-danger": entry.totalPriceDifference < 0}) }}">{% if entry.totalPriceDifference > 0 %}+{% endif %}{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</span>
+                                <span class="{{ html_classes({"text-danger": entry.totalPriceDifference < 0}) }}">{% if entry.totalPriceDifference > 0 %}+{% endif %}{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</span><br/>
+                                <span class="{{ html_classes("badge", {"bg-danger": entry.realProfit < 0, "bg-success": entry.realProfit > 0}) }}" title="Real profit">{% if entry.realProfit > 0 %}+{% endif %}{{ entry.realProfit|format_currency("EUR", locale="de") }}</span>
                             </td>
                             <td class="text-end">
                                 <span class="{{ html_classes({"text-danger": entry.dayStartPriceDifference < 0}) }}">{% if entry.dayStartPriceDifference > 0 %}+{% endif %}{{ entry.dayStartPriceDifference|format_currency("EUR", locale="de") }}</span><br/>
