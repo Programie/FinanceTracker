@@ -53,11 +53,11 @@ class Fetcher
                     }
                 } else {
                     $responseData->name = $json["name"] ?? null;
-                    $responseData->price = $json["bid"] ?? null;
+                    $responseData->price = $json["price"] ?? null;
 
-                    $bidDate = $json["bidDate"] ?? null;
-                    if ($bidDate !== null) {
-                        $responseData->date = new Date($bidDate);
+                    $date = $json["priceChangeDate"] ?? null;
+                    if ($date !== null) {
+                        $responseData->date = new Date($date);
                     }
                 }
 
