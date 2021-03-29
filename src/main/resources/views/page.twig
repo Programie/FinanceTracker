@@ -58,11 +58,11 @@
                             <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
                             <td class="text-end">{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
                             <td class="text-end">{{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>{{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}</td>
-                            <td class="text-end">{{ entry.priceDifference|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</td>
+                            <td class="text-end">{% if entry.priceDifference > 0 %}+{% endif %}{{ entry.priceDifference|format_currency("EUR", locale="de") }}<br/>{% if entry.totalPriceDifference > 0 %}+{% endif %}{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</td>
                             <td class="text-end text-nowrap">
                                 {% if entry.limitEnabled %}
                                     {{ entry.limit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">{{ entry.limitType }}</span><br/>
-                                    {{ entry.limitDifference|format_currency("EUR", locale="de") }}
+                                    {% if entry.limitDifference > 0 %}+{% endif %}{{ entry.limitDifference|format_currency("EUR", locale="de") }}
                                 {% endif %}
                             </td>
                             <td>{{ entry.date.format("d.m.Y") }}</td>
