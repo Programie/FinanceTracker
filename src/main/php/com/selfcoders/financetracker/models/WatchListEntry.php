@@ -390,7 +390,7 @@ class WatchListEntry implements JsonSerializable
         return $difference * $this->count;
     }
 
-    private function getReachedLimit(): ?array
+    public function getReachedLimit(): ?array
     {
         if (!$this->isLimitEnabled()) {
             return null;
@@ -448,6 +448,7 @@ class WatchListEntry implements JsonSerializable
             "limitEnabled" => $this->isLimitEnabled(),
             "lowLimit" => $this->getLowLimit(),
             "highLimit" => $this->getHighLimit(),
+            "limitReached" => $this->getReachedLimit(),
             "notified" => $this->isNotified()
         ];
     }
