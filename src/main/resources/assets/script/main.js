@@ -22,8 +22,8 @@ function editEntry(isin, newValues) {
     var count = newValues["count"] || 1;
     var price = newValues["price"] || "";
     var limitEnabled = newValues["limitEnabled"] || false;
-    var limit = newValues["limit"] || "";
-    var limitType = newValues["limitType"] || "low";
+    var lowLimit = newValues["lowLimit"] || "";
+    var highLimit = newValues["highLimit"] || "";
     var date = newValues["date"] || "";
     var newsEnabled = newValues["newsEnabled"] || true;
 
@@ -39,8 +39,8 @@ function editEntry(isin, newValues) {
             count = entry.data("count");
             price = entry.data("price");
             limitEnabled = entry.data("limit-enabled");
-            limit = entry.data("limit");
-            limitType = entry.data("limit-type");
+            lowLimit = entry.data("limit-low");
+            highLimit = entry.data("limit-high");
             date = entry.data("date");
             newsEnabled = entry.data("news-enabled");
 
@@ -58,9 +58,8 @@ function editEntry(isin, newValues) {
     modal.find("#edit-count").val(count);
     modal.find("#edit-price").val(price);
     modal.find("#edit-limit-enabled").prop("checked", parseBool(limitEnabled));
-    modal.find("#edit-limit").val(limit);
-    modal.find("#edit-limit-type-low").prop("checked", limitType === "low");
-    modal.find("#edit-limit-type-high").prop("checked", limitType === "high");
+    modal.find("#edit-limit-low").val(lowLimit);
+    modal.find("#edit-limit-high").val(highLimit);
     modal.find("#edit-date").val(date);
     modal.find("#edit-news-enabled").prop("checked", parseBool(newsEnabled));
 

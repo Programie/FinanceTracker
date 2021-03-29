@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  website:
+    image: registry.selfcoders.org/finance-tracker
+    build: .
+    ports:
+      - 8080:80
+    links:
+      - mysql
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_NAME: finance_tracker
+      DATABASE_USERNAME: finance_tracker
+      DATABASE_PASSWORD: finance_tracker
+  mysql:
+    image: mariadb
+    volumes:
+    - ./database.sql:/docker-entrypoint-initdb.d/db.sql:ro
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: finance_tracker
+      MYSQL_USER: finance_tracker
+      MYSQL_PASSWORD: finance_tracker

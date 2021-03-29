@@ -50,13 +50,13 @@ class WatchListEntry implements JsonSerializable
      */
     private bool $limitEnabled;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="float")
      */
-    private ?string $limitType;
+    private ?string $lowLimit;
     /**
-     * @ORM\Column(type="float", name="`limit`")
+     * @ORM\Column(type="float")
      */
-    private ?float $limit;
+    private ?float $highLimit;
     /**
      * @ORM\Column(type="boolean")
      */
@@ -202,38 +202,38 @@ class WatchListEntry implements JsonSerializable
     }
 
     /**
-     * @return string|null
+     * @return float|null
      */
-    public function getLimitType(): ?string
+    public function getLowLimit(): ?float
     {
-        return $this->limitType;
+        return $this->lowLimit;
     }
 
     /**
-     * @param string|null $limitType
+     * @param float|null $lowLimit
      * @return WatchListEntry
      */
-    public function setLimitType(?string $limitType): WatchListEntry
+    public function setLowLimit(?float $lowLimit): WatchListEntry
     {
-        $this->limitType = $limitType;
+        $this->lowLimit = $lowLimit;
         return $this;
     }
 
     /**
      * @return float|null
      */
-    public function getLimit(): ?float
+    public function getHighLimit(): ?float
     {
-        return $this->limit;
+        return $this->highLimit;
     }
 
     /**
-     * @param float|null $limit
+     * @param float|null $highLimit
      * @return WatchListEntry
      */
-    public function setLimit(?float $limit): WatchListEntry
+    public function setHighLimit(?float $highLimit): WatchListEntry
     {
-        $this->limit = $limit;
+        $this->highLimit = $highLimit;
         return $this;
     }
 
@@ -390,43 +390,48 @@ class WatchListEntry implements JsonSerializable
         return $difference * $this->count;
     }
 
-    public function getLimitDifference(): ?float
+    private function getReachedLimit(): ?array
     {
         if (!$this->isLimitEnabled()) {
             return null;
         }
 
-        if ($this->limit === null) {
+        $price = $this->getCurrentPrice();
+        if ($price === null) {
             return null;
         }
 
-        $currentPrice = $this->getCurrentPrice();
-        if ($currentPrice === null) {
+        $lowLimit = $this->getLowLimit();
+        $highLimit = $this->getHighLimit();
+
+        if ($lowLimit and $price <= $lowLimit) {
+            return [self::LIMIT_TYPE_LOW, $price - $lowLimit];
+        } elseif ($highLimit and $price >= $highLimit) {
+            return [self::LIMIT_TYPE_HIGH, $price - $highLimit];
+        } else {
             return null;
         }
+    }
 
-        return $currentPrice - $this->limit;
+    public function getReachedLimitType(): ?string
+    {
+        list($limitType, $difference) = $this->getReachedLimit();
+
+        return $limitType;
+    }
+
+    public function getLimitDifference(): ?float
+    {
+        list($limitType, $difference) = $this->getReachedLimit();
+
+        return $difference;
     }
 
     public function hasReachedLimit(): bool
     {
-        $difference = $this->getLimitDifference();
-        if ($difference === null) {
-            return false;
-        }
+        list($limitType, $difference) = $this->getReachedLimit();
 
-        if ($this->limitType === null) {
-            return false;
-        }
-
-        $limitType = strtolower($this->limitType);
-        if ($limitType === self::LIMIT_TYPE_HIGH and $difference >= 0) {
-            return true;
-        } elseif ($limitType === self::LIMIT_TYPE_LOW and $difference <= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($limitType !== null and $difference !== null);
     }
 
     public function jsonSerialize()
@@ -441,8 +446,8 @@ class WatchListEntry implements JsonSerializable
             "realProfit" => $this->getRealProfit(),
             "dayStartValue" => $this->getState()?->getDayStartPrice(),
             "limitEnabled" => $this->isLimitEnabled(),
-            "limitType" => $this->getLimitType(),
-            "limit" => $this->getLimit(),
+            "lowLimit" => $this->getLowLimit(),
+            "highLimit" => $this->getHighLimit(),
             "notified" => $this->isNotified()
         ];
     }

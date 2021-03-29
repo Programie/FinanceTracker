@@ -119,8 +119,8 @@ class Controller
         $watchListEntry->setPrice(floatval($_POST["price"]));
         $watchListEntry->setDate(new Date($_POST["date"]));
         $watchListEntry->setLimitEnabled(filter_var($_POST["limitEnabled"], FILTER_VALIDATE_BOOLEAN));
-        $watchListEntry->setLimitType($_POST["limitType"]);
-        $watchListEntry->setLimit(floatval($_POST["limit"]));
+        $watchListEntry->setLowLimit(floatval($_POST["lowLimit"]));
+        $watchListEntry->setHighLimit(floatval($_POST["highLimit"]));
         $watchListEntry->setNewsEnabled(filter_var($_POST["newsEnabled"], FILTER_VALIDATE_BOOLEAN));
 
         $entityManager->persist($watchListEntry);

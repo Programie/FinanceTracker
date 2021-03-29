@@ -33,13 +33,14 @@ class NotificationRecipient
 
     public function sendForWatchListEntry(WatchListEntry $entry)
     {
-        if ($entry->getLimitType() !== $this->limitType) {
+        if ($entry->getReachedLimitType() !== $this->limitType) {
             return;
         }
 
         $subject = sprintf("Stock limit reached - %s", $entry->getName());
         $body = TwigRenderer::render("notification", [
-            "entry" => $entry
+            "entry" => $entry,
+            "limitType" => $this->limitType
         ]);
 
         switch ($this->type) {

@@ -52,7 +52,7 @@
 
                 <tbody>
                     {% for entry in watchList.entries %}
-                        <tr id="isin-{{ entry.isin }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit="{{ entry.limit }}" data-limit-type="{{ entry.limitType }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                        <tr id="isin-{{ entry.isin }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td class="text-end">{{ loop.index }}</td>
                             <td>{{ entry.isin }}</a></td>
                             <td>{{ entry.name }}</td>
@@ -70,7 +70,8 @@
                             </td>
                             <td class="text-end text-nowrap">
                                 {% if entry.limitEnabled %}
-                                    {{ entry.limit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">{{ entry.limitType }}</span><br/>
+                                    {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
+                                    {% if entry.highLimit %}{{ entry.highLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">high</span><br/>{% endif %}
                                     <span class="{{ html_classes({"text-danger": entry.limitDifference < 0}) }}">{% if entry.limitDifference > 0 %}+{% endif %}{{ entry.limitDifference|format_currency("EUR", locale="de") }}</span>
                                 {% endif %}
                             </td>
@@ -176,26 +177,21 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label for="edit-limit" class="form-label mb-0">Limit</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="edit-limit-enabled" name="limitEnabled">
+                                    <label for="edit-limit-enabled" class="form-label mb-0">Limit</label>
+                                </div>
 
-                                <div class="row align-items-center">
-                                    <div class="col-8">
-                                        <div class="input-group">
-                                            <span class="input-group-text"><input class="form-check-input mt-0" type="checkbox" id="edit-limit-enabled" name="limitEnabled"></span>
-                                            <input type="number" class="form-control" id="edit-limit" name="limit" step="0.01"/>
-                                            <span class="input-group-text">EUR</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="edit-limit-type-low" name="limitType" value="low">
-                                            <label class="form-check-label" for="edit-limit-type-low">Low</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="edit-limit-type-high" name="limitType" value="high">
-                                            <label class="form-check-label" for="edit-limit-type-high">High</label>
-                                        </div>
-                                    </div>
+                                <div class="input-group mt-2">
+                                    <span class="input-group-text"><label for="edit-limit-low">Low</label></span>
+                                    <input type="number" class="form-control" id="edit-limit-low" name="lowLimit" step="0.01"/>
+                                    <span class="input-group-text">EUR</span>
+                                </div>
+
+                                <div class="input-group mt-2">
+                                    <span class="input-group-text"><label for="edit-limit-high">High</label></span>
+                                    <input type="number" class="form-control" id="edit-limit-high" name="highLimit" step="0.01"/>
+                                    <span class="input-group-text">EUR</span>
                                 </div>
                             </div>
                             <div class="col-12">
