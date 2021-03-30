@@ -46,7 +46,6 @@
                         <th>Date</th>
                         <th>News</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
 
@@ -80,6 +79,14 @@
                                 <div class="btn-group btn-group-sm" role="group">
                                     <button type="button" class="btn btn-primary show-news" title="Show news"><i class="fas fa-rss"></i></button>
                                     <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Show stock on site"><i class="fas fa-chart-line"></i></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" target="_blank" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}">ING</a></li>
+                                            <li><a class="dropdown-item" target="_blank" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}">finanzen.net</a></li>
+                                            <li><a class="dropdown-item" target="_blank" href="https://www.ls-tc.de/de/aktie/{{ entry.isin }}">Lang & Schwarz</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Show in list"><i class="fas fa-external-link-alt"></i></button>
                                         <ul class="dropdown-menu">
                                             {% for thisWatchList in watchLists %}
@@ -104,12 +111,6 @@
                                     {% if entry.notified %}
                                         <button type="button" class="btn btn-warning reset-notify" title="Reset notification state"><i class="fas fa-bell"></i></button>
                                     {% endif %}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <a class="btn btn-primary" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}" target="_blank">ING</a>
-                                    <a class="btn btn-primary" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}" target="_blank">finanzen.net</a>
                                 </div>
                             </td>
                         </tr>
