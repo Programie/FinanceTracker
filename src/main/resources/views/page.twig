@@ -70,8 +70,8 @@
                             </td>
                             <td class="text-end text-nowrap">
                                 {% if entry.limitEnabled %}
-                                    {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
                                     {% if entry.highLimit %}{{ entry.highLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">high</span><br/>{% endif %}
+                                    {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
                                 {% endif %}
                             </td>
                             <td>{{ entry.date.format("d.m.Y") }}</td>
@@ -182,14 +182,14 @@
                                 </div>
 
                                 <div class="input-group mt-2">
-                                    <span class="input-group-text"><label for="edit-limit-low">Low</label></span>
-                                    <input type="number" class="form-control" id="edit-limit-low" name="lowLimit" step="0.01"/>
+                                    <span class="input-group-text"><label for="edit-limit-high">High</label></span>
+                                    <input type="number" class="form-control" id="edit-limit-high" name="highLimit" step="0.01"/>
                                     <span class="input-group-text">EUR</span>
                                 </div>
 
                                 <div class="input-group mt-2">
-                                    <span class="input-group-text"><label for="edit-limit-high">High</label></span>
-                                    <input type="number" class="form-control" id="edit-limit-high" name="highLimit" step="0.01"/>
+                                    <span class="input-group-text"><label for="edit-limit-low">Low</label></span>
+                                    <input type="number" class="form-control" id="edit-limit-low" name="lowLimit" step="0.01"/>
                                     <span class="input-group-text">EUR</span>
                                 </div>
                             </div>
