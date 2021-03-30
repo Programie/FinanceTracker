@@ -72,7 +72,6 @@
                                 {% if entry.limitEnabled %}
                                     {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
                                     {% if entry.highLimit %}{{ entry.highLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">high</span><br/>{% endif %}
-                                    <span class="{{ html_classes({"text-danger": entry.limitDifference < 0}) }}">{% if entry.limitDifference > 0 %}+{% endif %}{{ entry.limitDifference|format_currency("EUR", locale="de") }}</span>
                                 {% endif %}
                             </td>
                             <td>{{ entry.date.format("d.m.Y") }}</td>

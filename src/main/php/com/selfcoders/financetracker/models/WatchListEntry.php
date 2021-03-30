@@ -420,13 +420,6 @@ class WatchListEntry implements JsonSerializable
         return $limitType;
     }
 
-    public function getLimitDifference(): ?float
-    {
-        list($limitType, $difference) = $this->getReachedLimit();
-
-        return $difference;
-    }
-
     public function hasReachedLimit(): bool
     {
         list($limitType, $difference) = $this->getReachedLimit();
