@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  website:
+  app:
     image: registry.selfcoders.org/finance-tracker
     build: .
     ports:
