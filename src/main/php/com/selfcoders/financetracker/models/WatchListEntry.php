@@ -441,7 +441,7 @@ class WatchListEntry implements JsonSerializable
             "limitEnabled" => $this->isLimitEnabled(),
             "lowLimit" => $this->getLowLimit(),
             "highLimit" => $this->getHighLimit(),
-            "limitReached" => $this->getReachedLimit(),
+            "reachedLimit" => $this->getReachedLimit(),
             "notified" => $this->isNotified()
         ];
     }
