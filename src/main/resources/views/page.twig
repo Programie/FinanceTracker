@@ -149,7 +149,7 @@
                                 <label for="edit-watchlist" class="form-label">Watchlist</label>
                                 <select class="form-select" id="edit-watchlist">
                                     {% for thisWatchList in watchLists %}
-                                        <option value="{{ thisWatchList.name }}" {% if thisWatchList.name == watchList.name %}selected{% endif %}>{{ thisWatchList.name }}</option>
+                                        <option value="{{ thisWatchList.name }}" data-price-type="{{ thisWatchList.priceType }}" {% if thisWatchList.name == watchList.name %}selected{% endif %}>{{ thisWatchList.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

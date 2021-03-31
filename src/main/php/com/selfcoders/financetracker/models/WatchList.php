@@ -22,6 +22,10 @@ class WatchList
      */
     private string $name;
     /**
+     * @ORM\Column(type="string", columnDefinition="enum('bid', 'ask')")
+     */
+    private string $priceType;
+    /**
      * @ORM\Column(type="string")
      */
     private ?string $notificationRecipients;
@@ -49,6 +53,24 @@ class WatchList
     public function setName(string $name): WatchList
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceType(): string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * @param string $priceType
+     * @return WatchList
+     */
+    public function setPriceType(string $priceType): WatchList
+    {
+        $this->priceType = $priceType;
         return $this;
     }
 

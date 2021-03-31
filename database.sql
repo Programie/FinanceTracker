@@ -12,13 +12,15 @@ CREATE TABLE `news`
 
 CREATE TABLE `states`
 (
-    `id`            int(11)      NOT NULL AUTO_INCREMENT,
-    `isin`          varchar(100) NOT NULL,
-    `name`          varchar(200) NOT NULL,
-    `updated`       datetime     NOT NULL,
-    `price`         float        NOT NULL,
+    `id`            int(11)             NOT NULL AUTO_INCREMENT,
+    `isin`          varchar(100)        NOT NULL,
+    `name`          varchar(200)        NOT NULL,
+    `priceType`     enum ('bid', 'ask') NOT NULL,
+    `updated`       datetime            NOT NULL,
+    `price`         float               NOT NULL,
     `dayStartPrice` float DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `isin_priceType` (`isin`, `priceType`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -40,28 +42,24 @@ CREATE TABLE `watchlistentries`
     PRIMARY KEY (`id`),
     UNIQUE KEY `watchListId_isin` (`watchListId`, `isin`),
     KEY `isin` (`isin`),
-    KEY `watchlistentries_stateId` (`stateId`)
+    KEY `stateId` (`stateId`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `watchlists`
 (
-    `id`                     int(11)      NOT NULL AUTO_INCREMENT,
-    `name`                   varchar(100) NOT NULL,
+    `id`                     int(11)            NOT NULL AUTO_INCREMENT,
+    `name`                   varchar(100)       NOT NULL,
+    `priceType`              enum ('bid','ask') NOT NULL,
     `notificationRecipients` text DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `name` (`name`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-
-ALTER TABLE `watchlistentries`
-    ADD CONSTRAINT `watchlistentries_stateId` FOREIGN KEY (`stateId`) REFERENCES `states` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-    ADD CONSTRAINT `watchlistentries_watchListId` FOREIGN KEY (`watchListId`) REFERENCES `watchlists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO `watchlists` (`name`)
-VALUES ('Watchlist'),
-       ('Some-list'),
-       ('Another-list');
+INSERT INTO `watchlists` (`name`, `priceType`)
+VALUES ('Watchlist', 'bid'),
+       ('Some-list', 'ask'),
+       ('Another-list', 'ask');

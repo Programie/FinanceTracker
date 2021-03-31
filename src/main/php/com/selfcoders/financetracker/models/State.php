@@ -25,6 +25,10 @@ class State
      */
     private string $name;
     /**
+     * @ORM\Column(type="string", columnDefinition="enum('bid', 'ask')")
+     */
+    private string $priceType;
+    /**
      * @ORM\Column(type="datetime")
      */
     private Date $updated;
@@ -78,6 +82,24 @@ class State
     public function setName(string $name): State
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceType(): string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * @param string $priceType
+     * @return State
+     */
+    public function setPriceType(string $priceType): State
+    {
+        $this->priceType = $priceType;
         return $this;
     }
 

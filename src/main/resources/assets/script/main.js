@@ -159,9 +159,10 @@ $(function() {
 
     $("#edit-refresh-price").click(function() {
         var isin = $("#edit-isin").val().trim();
+        var priceType = $("#edit-watchlist option:selected").data("price-type");
 
         $.get({
-            url: `/isin/${isin}/current-price`,
+            url: `/isin/${isin}/current-price?type=${priceType}`,
             success: function(value) {
                 $("#edit-price").val(value);
                 successToast("Refresh price", `Price updated to <strong>${value}</strong>.`);

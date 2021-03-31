@@ -2,6 +2,7 @@
 namespace com\selfcoders\financetracker;
 
 use com\selfcoders\financetracker\fetcher\Fetcher;
+use com\selfcoders\financetracker\fetcher\ResponseData;
 use com\selfcoders\financetracker\models\News;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
@@ -75,8 +76,20 @@ class Controller
         if (empty($responses)) {
             http_response_code(404);
         } else {
+            /**
+             * @var $responseData ResponseData
+             */
+            $responseData = array_values($responses)[0];
+
+            $priceType = $_GET["type"] ?? PriceType::BID;
+            if ($priceType === PriceType::ASK) {
+                $price = $responseData->askPrice;
+            } else {
+                $price = $responseData->bidPrice;
+            }
+
             header("Content-Type: text/plain");
-            echo array_values($responses)[0]->price;
+            echo $price;
         }
     }
 
@@ -109,9 +122,11 @@ class Controller
         if ($watchListEntry === null) {
             $watchListEntry = new WatchListEntry;
 
+            $watchList = $watchListRepository->findByName($params["name"]);
+
             $watchListEntry->setIsin($params["isin"]);
-            $watchListEntry->setWatchList($watchListRepository->findByName($params["name"]));
-            $watchListEntry->setState($stateRepository->findByIsin($params["isin"]));
+            $watchListEntry->setWatchList($watchList);
+            $watchListEntry->setState($stateRepository->findByIsinAndPriceType($params["isin"], $watchList->getPriceType()));
         }
 
         $watchListEntry->setName($_POST["name"]);
@@ -230,7 +245,7 @@ class Controller
 
     private function buildNewsList(News $news, array &$allItems)
     {
-        $state = Database::getEntityManager()->getRepository(State::class)->findByIsin($news->getIsin());
+        $state = Database::getEntityManager()->getRepository(State::class)->findByIsinAndPriceType($news->getIsin(), PriceType::BID);
 
         $currentPrice = $state?->getPrice();
         $dayStartPrice = $state?->getDayStartPrice();

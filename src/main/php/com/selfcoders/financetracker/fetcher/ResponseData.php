@@ -7,6 +7,8 @@ class ResponseData
 {
     public string $isin;
     public ?string $name = null;
-    public ?float $price = null;
-    public ?Date $date = null;
+    public ?float $bidPrice = null;
+    public ?float $askPrice = null;
+    public ?Date $bidDate = null;
+    public ?Date $askDate = null;
 }

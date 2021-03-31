@@ -45,20 +45,16 @@ class Fetcher
 
                 if ($isin === "BTC") {
                     $responseData->name = "Bitcoin";
-                    $responseData->price = $json["bpi"]["EUR"]["rate_float"] ?? null;
-
-                    $date = $json["time"]["updatedISO"] ?? null;
-                    if ($date !== null) {
-                        $responseData->date = new Date($date);
-                    }
+                    $responseData->bidPrice = $json["bpi"]["EUR"]["rate_float"] ?? null;
+                    $responseData->askPrice = $json["bpi"]["EUR"]["rate_float"] ?? null;
+                    $responseData->bidDate = $this->dateOrNull($json["time"]["updatedISO"] ?? null);
+                    $responseData->askDate = $this->dateOrNull($json["time"]["updatedISO"] ?? null);
                 } else {
                     $responseData->name = $json["name"] ?? null;
-                    $responseData->price = $json["price"] ?? null;
-
-                    $date = $json["priceChangeDate"] ?? null;
-                    if ($date !== null) {
-                        $responseData->date = new Date($date);
-                    }
+                    $responseData->bidPrice = $json["bid"] ?? null;
+                    $responseData->askPrice = $json["ask"] ?? null;
+                    $responseData->bidDate = $this->dateOrNull($json["bidDate"] ?? null);
+                    $responseData->askDate = $this->dateOrNull($json["askDate"] ?? null);
                 }
 
                 $responseDataList[$isin] = $responseData;
@@ -68,5 +64,14 @@ class Fetcher
         $pool->promise()->wait();
 
         return $responseDataList;
+    }
+
+    private function dateOrNull($datetime): ?Date
+    {
+        if ($datetime === null) {
+            return null;
+        }
+
+        return new Date($datetime);
     }
 }

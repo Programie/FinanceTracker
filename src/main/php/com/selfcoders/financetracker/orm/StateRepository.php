@@ -6,8 +6,8 @@ use Doctrine\ORM\EntityRepository;
 
 class StateRepository extends EntityRepository
 {
-    public function findByIsin(string $isin): ?State
+    public function findByIsinAndPriceType(string $isin, string $priceType): ?State
     {
-        return $this->findOneBy(["isin" => $isin]);
+        return $this->findOneBy(["isin" => $isin, "priceType" => $priceType]);
     }
 }

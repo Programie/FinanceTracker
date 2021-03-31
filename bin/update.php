@@ -6,8 +6,36 @@ use com\selfcoders\financetracker\fetcher\Fetcher;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
+use com\selfcoders\financetracker\PriceType;
 
 require_once __DIR__ . "/../bootstrap.php";
+
+function buildState($list, $isin, $name, $priceType, $date, $price)
+{
+    $state = $list[sprintf("%s:%s", $isin, $priceType)] ?? null;
+
+    if ($state === null) {
+        $state = new State;
+        $state->setIsin($isin);
+        $state->setPriceType($priceType);
+        $previousUpdate = null;
+    } else {
+        $previousUpdate = $state->getUpdated();
+    }
+
+    /**
+     * @var $previousUpdate Date
+     */
+    if ($previousUpdate !== null and $previousUpdate->format("Y-m-d") !== $date->format("Y-m-d")) {
+        $state->setDayStartPrice($price);
+    }
+
+    $state->setName($name);
+    $state->setUpdated($date);
+    $state->setPrice($price);
+
+    return $state;
+}
 
 $entityManager = Database::getEntityManager();
 $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
@@ -42,12 +70,14 @@ foreach ($entityManager->getRepository(State::class)->findAll() as $state) {
      */
     $isin = $state->getIsin();
 
-    if (!in_array($isin, $isinList)) {
+    $key = sprintf("%s:%s", $isin, $state->getPriceType());
+
+    if (!in_array($key, $isinList)) {
         $entityManager->remove($state);
         continue;
     }
 
-    $allStates[$isin] = $state;
+    $allStates[$key] = $state;
 }
 
 $entityManager->flush();
@@ -63,42 +93,32 @@ try {
             fwrite(STDERR, sprintf("Missing name for ISIN %s\n", $responseData->isin));
             continue;
         }
-        if ($responseData->date === null) {
+        if ($responseData->bidDate === null or $responseData->askDate === null) {
             fwrite(STDERR, sprintf("Missing date for ISIN %s\n", $responseData->isin));
             continue;
         }
-        if ($responseData->price === null) {
+        if ($responseData->bidPrice === null or $responseData->askPrice === null) {
             fwrite(STDERR, sprintf("Missing price for ISIN %s\n", $responseData->isin));
             continue;
         }
 
-        $state = $allStates[$responseData->isin] ?? null;
+        $bidState = buildState($allStates, $responseData->isin, $responseData->name, PriceType::BID, $responseData->bidDate, $responseData->bidPrice);
+        $askState = buildState($allStates, $responseData->isin, $responseData->name, PriceType::ASK, $responseData->askDate, $responseData->askPrice);
 
-        if ($state === null) {
-            $state = new State;
-            $state->setIsin($responseData->isin);
-            $previousUpdate = null;
-        } else {
-            $previousUpdate = $state->getUpdated();
-        }
-
-        /**
-         * @var $previousUpdate Date
-         */
-        if ($previousUpdate !== null and $previousUpdate->format("Y-m-d") !== $responseData->date->format("Y-m-d")) {
-            $state->setDayStartPrice($responseData->price);
-        }
-
-        $state->setName($responseData->name);
-        $state->setUpdated($responseData->date);
-        $state->setPrice($responseData->price);
-
-        $entityManager->persist($state);
+        $entityManager->persist($bidState);
+        $entityManager->persist($askState);
         $entityManager->flush();
 
         $watchListEntries = $watchListEntryRepository->findByIsin($responseData->isin);
         foreach ($watchListEntries as $entry) {
-            $entry->setState($state);
+            switch ($entry->getWatchList()->getPriceType()) {
+                case PriceType::BID:
+                    $entry->setState($bidState);
+                    break;
+                case PriceType::ASK:
+                    $entry->setState($askState);
+                    break;
+            }
 
             if ($entry->hasReachedLimit() and !$entry->isNotified()) {
                 $entry->setNotified(true);
