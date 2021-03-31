@@ -10,8 +10,11 @@ use com\selfcoders\financetracker\PriceType;
 
 require_once __DIR__ . "/../bootstrap.php";
 
-function buildState($list, $isin, $name, $priceType, $date, $price)
+function buildState(array $list, string $isin, string $name, string $priceType, Date $date, float $price)
 {
+    /**
+     * @var $state State|null
+     */
     $state = $list[sprintf("%s:%s", $isin, $priceType)] ?? null;
 
     if ($state === null) {
