@@ -16,7 +16,7 @@ services:
   mysql:
     image: mariadb
     volumes:
-    - ./database.sql:/docker-entrypoint-initdb.d/db.sql:ro
+      - ./database.sql:/docker-entrypoint-initdb.d/db.sql:ro
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: finance_tracker
