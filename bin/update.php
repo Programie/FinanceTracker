@@ -72,7 +72,7 @@ foreach ($entityManager->getRepository(State::class)->findAll() as $state) {
 
     $key = sprintf("%s:%s", $isin, $state->getPriceType());
 
-    if (!in_array($key, $isinList)) {
+    if (!in_array($isin, $isinList)) {
         $entityManager->remove($state);
         continue;
     }
