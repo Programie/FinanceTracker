@@ -2,10 +2,23 @@
 namespace com\selfcoders\financetracker;
 
 use DateTime;
+use DateTimeZone;
 use JsonSerializable;
 
 class Date extends DateTime implements JsonSerializable
 {
+    public static function fromUtc(string $datetime)
+    {
+        return new self($datetime, new DateTimeZone("UTC"));
+    }
+
+    public function toUtc(): Date
+    {
+        $utcDate = clone $this;
+        $utcDate->setTimezone(new DateTimeZone("UTC"));
+        return $utcDate;
+    }
+
     public function formatRelativeTime()
     {
         $diff = (new self)->getTimestamp() - $this->getTimestamp();
