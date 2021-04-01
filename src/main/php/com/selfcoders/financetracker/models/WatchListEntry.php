@@ -427,6 +427,35 @@ class WatchListEntry implements JsonSerializable
         return ($limitType !== null and $difference !== null);
     }
 
+    public function getPercentageToLimit(): ?float
+    {
+        if (!$this->isLimitEnabled()) {
+            return null;
+        }
+
+        $price = $this->getCurrentPrice();
+        if ($price === null) {
+            return null;
+        }
+
+        $lowLimit = $this->getLowLimit();
+        $highLimit = $this->getHighLimit();
+
+        if ($lowLimit) {
+            $lowLimitPercentage = $lowLimit / $price;
+        } else {
+            $lowLimitPercentage = null;
+        }
+
+        if ($highLimit) {
+            $highLimitPercentage = $price / $highLimit;
+        } else {
+            $highLimitPercentage = null;
+        }
+
+        return max($lowLimitPercentage, $highLimitPercentage);
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -441,6 +470,7 @@ class WatchListEntry implements JsonSerializable
             "limitEnabled" => $this->isLimitEnabled(),
             "lowLimit" => $this->getLowLimit(),
             "highLimit" => $this->getHighLimit(),
+            "limitPercentage" => $this->getPercentageToLimit(),
             "reachedLimit" => $this->getReachedLimit(),
             "notified" => $this->isNotified()
         ];

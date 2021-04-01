@@ -69,6 +69,7 @@
                             </td>
                             <td class="text-end text-nowrap">
                                 {% if entry.limitEnabled %}
+                                    {% if entry.percentageToLimit %}{{ entry.percentageToLimit|format_percent_number(locale="de") }}<br/>{% endif %}
                                     {% if entry.highLimit %}{{ entry.highLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">high</span><br/>{% endif %}
                                     {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
                                 {% endif %}
