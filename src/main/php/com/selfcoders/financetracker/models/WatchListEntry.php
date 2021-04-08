@@ -345,14 +345,9 @@ class WatchListEntry implements JsonSerializable
             return null;
         }
 
-        $buyCommissionPrice = $buyPrice / 100 * 0.25 + 4.9;
-        $sellCommissionPrice = $sellPrice / 100 * 0.25 + 4.9;
+        $profit = $sellPrice - $buyPrice;
 
-        $realBuyPrice = $buyPrice + $buyCommissionPrice;
-        $realSellPrice = $sellPrice - $sellCommissionPrice;
-
-        $profit = $realSellPrice - $realBuyPrice;
-
+        // 30,5% taxes (25% + 5,5%) if we made some profit
         if ($profit > 0) {
             $profit = $profit * 0.695;
         }
