@@ -39,6 +39,10 @@ class State
     /**
      * @ORM\Column(type="float")
      */
+    private float $previousPrice;
+    /**
+     * @ORM\Column(type="float")
+     */
     private ?float $dayStartPrice;
 
     /**
@@ -136,6 +140,24 @@ class State
     public function setPrice(float $price): State
     {
         $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPreviousPrice(): float
+    {
+        return $this->previousPrice;
+    }
+
+    /**
+     * @param float $previousPrice
+     * @return State
+     */
+    public function setPreviousPrice(float $previousPrice): State
+    {
+        $this->previousPrice = $previousPrice;
         return $this;
     }
 

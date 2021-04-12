@@ -18,6 +18,7 @@ CREATE TABLE `states`
     `priceType`     enum ('bid', 'ask') NOT NULL,
     `updated`       datetime            NOT NULL,
     `price`         float               NOT NULL,
+    `previousPrice` float DEFAULT NULL,
     `dayStartPrice` float DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `isin_priceType` (`isin`, `priceType`)

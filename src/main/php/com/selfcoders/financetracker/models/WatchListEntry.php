@@ -306,6 +306,11 @@ class WatchListEntry implements JsonSerializable
         return $this->getState()?->getPrice();
     }
 
+    public function getPreviousPrice(): ?float
+    {
+        return $this->getState()?->getPreviousPrice();
+    }
+
     public function getCurrentTotalPrice(): ?float
     {
         $price = $this->getCurrentPrice();
@@ -334,6 +339,18 @@ class WatchListEntry implements JsonSerializable
         }
 
         return $difference * $this->count;
+    }
+
+    public function getPriceChangeDifference(): ?float
+    {
+        $currentPrice = $this->getCurrentPrice();
+        $previousPrice = $this->getPreviousPrice();
+
+        if ($currentPrice === null or $previousPrice === null) {
+            return null;
+        }
+
+        return $currentPrice - $previousPrice;
     }
 
     public function getRealProfit(): ?float

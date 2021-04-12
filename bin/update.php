@@ -22,8 +22,10 @@ function buildState(array $list, string $isin, string $name, string $priceType, 
         $state->setIsin($isin);
         $state->setPriceType($priceType);
         $previousUpdate = null;
+        $previousPrice = null;
     } else {
         $previousUpdate = $state->getUpdated();
+        $previousPrice = $state->getPrice();
     }
 
     /**
@@ -31,6 +33,10 @@ function buildState(array $list, string $isin, string $name, string $priceType, 
      */
     if ($previousUpdate !== null and $previousUpdate->format("Y-m-d") !== $date->format("Y-m-d")) {
         $state->setDayStartPrice($price);
+    }
+
+    if ($previousPrice !== $price) {
+        $state->setPreviousPrice($previousPrice);
     }
 
     $state->setName($name);
