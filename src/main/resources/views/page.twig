@@ -58,9 +58,17 @@
                             <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
                             <td class="text-end">{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
                             <td class="text-end">
-                                {% if entry.priceChangeDifference > 0 %} <i class="fas fa-arrow-circle-up text-success"></i>{% elseif entry.priceChangeDifference < 0 %} <i class="fas fa-arrow-circle-down text-danger"></i>{% endif %}
-                                {{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>
-                                {{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}
+                                <div class="d-table float-end">
+                                    <span class="d-table-cell">
+                                        {{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>
+                                        {{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}
+                                    </span>
+                                    <span class="d-table-cell">
+                                        {% if entry.priceChangeDifference %}
+                                            &nbsp;<i class="{{ html_classes("fas", {"fa-arrow-circle-up text-success": entry.priceChangeDifference > 0, "fa-arrow-circle-down text-danger": entry.priceChangeDifference < 0}) }}"></i>
+                                        {% endif %}
+                                    </span>
+                                </div>
                             </td>
                             <td class="text-end">
                                 <span class="{{ html_classes({"text-danger": entry.priceDifference < 0}) }}">{% if entry.priceDifference > 0 %}+{% endif %}{{ entry.priceDifference|format_currency("EUR", locale="de") }}</span><br/>
