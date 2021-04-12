@@ -39,7 +39,7 @@ class State
     /**
      * @ORM\Column(type="float")
      */
-    private float $previousPrice;
+    private ?float $previousPrice;
     /**
      * @ORM\Column(type="float")
      */
@@ -144,9 +144,9 @@ class State
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getPreviousPrice(): float
+    public function getPreviousPrice(): ?float
     {
         return $this->previousPrice;
     }
