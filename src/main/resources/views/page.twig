@@ -58,7 +58,8 @@
                             <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
                             <td class="text-end">{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
                             <td class="text-end">
-                                {{ entry.currentPrice|format_currency("EUR", locale="de") }}{% if entry.priceChangeDifference > 0 %} <i class="fas fa-arrow-circle-up text-success"></i>{% elseif entry.priceChangeDifference < 0 %} <i class="fas fa-arrow-circle-down text-danger"></i>{% endif %}<br/>
+                                {% if entry.priceChangeDifference > 0 %} <i class="fas fa-arrow-circle-up text-success"></i>{% elseif entry.priceChangeDifference < 0 %} <i class="fas fa-arrow-circle-down text-danger"></i>{% endif %}
+                                {{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>
                                 {{ entry.currentTotalPrice|format_currency("EUR", locale="de") }}
                             </td>
                             <td class="text-end">
