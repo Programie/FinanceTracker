@@ -152,10 +152,10 @@ class State
     }
 
     /**
-     * @param float $previousPrice
+     * @param float|null $previousPrice
      * @return State
      */
-    public function setPreviousPrice(float $previousPrice): State
+    public function setPreviousPrice(?float $previousPrice): State
     {
         $this->previousPrice = $previousPrice;
         return $this;
