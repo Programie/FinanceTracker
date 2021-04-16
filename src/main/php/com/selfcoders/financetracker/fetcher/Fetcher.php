@@ -19,8 +19,8 @@ class Fetcher
 
     public function add(string $isin)
     {
-        if ($isin === "BTC") {
-            $url = "https://api.coindesk.com/v1/bpi/currentprice/EUR.json";
+        if (str_starts_with($isin, "BITPANDA:")) {
+            $url = "https://api.bitpanda.com/v1/ticker";
         } else {
             $url = sprintf("https://component-api.wertpapiere.ing.de/api/v1/components/instrumentheader/%s", $isin);
         }
@@ -43,12 +43,19 @@ class Fetcher
                 $responseData = new ResponseData;
                 $responseData->isin = $isin;
 
-                if ($isin === "BTC") {
-                    $responseData->name = "Bitcoin";
-                    $responseData->bidPrice = $json["bpi"]["EUR"]["rate_float"] ?? null;
-                    $responseData->askPrice = $json["bpi"]["EUR"]["rate_float"] ?? null;
-                    $responseData->bidDate = $this->dateOrNull($json["time"]["updatedISO"] ?? null);
-                    $responseData->askDate = $this->dateOrNull($json["time"]["updatedISO"] ?? null);
+                if (str_starts_with($isin, "BITPANDA:")) {
+                    $realIsin = trim(substr($isin, 9));
+
+                    $responseData->name = $realIsin;
+                    $price = $json[$realIsin]["EUR"] ?? null;
+                    if ($price !== null) {
+                        $price = floatval($price);
+                    }
+
+                    $responseData->bidPrice = $price;
+                    $responseData->askPrice = $price;
+                    $responseData->bidDate = new Date;
+                    $responseData->askDate = $responseData->bidDate;
                 } else {
                     $responseData->name = $json["name"] ?? null;
                     $responseData->bidPrice = $json["bid"] ?? null;
