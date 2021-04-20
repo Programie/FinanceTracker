@@ -17,7 +17,7 @@ class WatchListEntryRepository extends EntityRepository
             ->where("watchList.name = :name")
             ->setParameter("name", $watchList)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /**
