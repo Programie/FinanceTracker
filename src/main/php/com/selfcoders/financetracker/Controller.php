@@ -264,9 +264,17 @@ class Controller
 
     public function grafanaSearch()
     {
-        $entityManager = Database::getEntityManager();
+        $json = json_decode(file_get_contents("php://input"), true);
 
-        $watchListEntries = $entityManager->getRepository(WatchListEntry::class)->findAll();
+        $entityManager = Database::getEntityManager();
+        $watchListRepository = $entityManager->getRepository(WatchListEntry::class);
+
+        $watchListName = $json["target"] ?? null;
+        if ($watchListName === null) {
+            $watchListEntries = $watchListRepository->findAll();
+        } else {
+            $watchListEntries = $watchListRepository->findByList($watchListName);
+        }
 
         $json = [];
 

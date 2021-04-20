@@ -8,6 +8,20 @@ class WatchListEntryRepository extends EntityRepository
 {
     /**
      * @param string $watchList
+     * @return WatchListEntry[]
+     */
+    public function findByList(string $watchList): array
+    {
+        return $this->createQueryBuilder("entry")
+            ->leftJoin("entry.watchList", "watchList")
+            ->where("watchList.name = :name")
+            ->setParameter("name", $watchList)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @param string $watchList
      * @param string $isin
      * @return WatchListEntry|null
      */
