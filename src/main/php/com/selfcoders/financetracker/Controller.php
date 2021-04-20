@@ -307,7 +307,20 @@ class Controller
 
         $entityManager = Database::getEntityManager();
 
-        $watchListEntries = $entityManager->getRepository(WatchListEntry::class)->findAll();
+        $watchListName = $json["targets"][0]["data"]["list"] ?? null;
+
+        if ($watchListName === null) {
+            $watchListEntries = $entityManager->getRepository(WatchListEntry::class)->findAll();
+
+            $isins = $json["targets"][0]["data"]["isins"];
+        } else {
+            $watchListEntries = $entityManager->getRepository(WatchListEntry::class)->findByList($watchListName);
+
+            $isins = [];
+            foreach ($watchListEntries as $watchListEntry) {
+                $isins[] = $watchListEntry->getIsin();
+            }
+        }
 
         $nameMap = [];
 
@@ -319,8 +332,6 @@ class Controller
 
             $nameMap[$isin] = $watchListEntry->getName();
         }
-
-        $isins = $json["targets"][0]["data"]["isins"];
 
         if (is_array($isins)) {
             foreach ($isins as $isin) {
