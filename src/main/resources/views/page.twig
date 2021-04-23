@@ -107,11 +107,15 @@
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Show stock on site"><i class="fas fa-chart-line"></i></button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" target="_blank" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}">ING</a></li>
-                                            <li><a class="dropdown-item" target="_blank" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}">finanzen.net</a></li>
-                                            <li><a class="dropdown-item" target="_blank" href="https://www.ls-tc.de/de/aktie/{{ entry.isin }}">Lang & Schwarz</a></li>
-                                            <li><a class="dropdown-item" target="_blank" href="https://www.gettex.de/suche/?tx_indexedsearch[sword]={{ entry.isin }}">gettex</a></li>
-                                            <li><a class="dropdown-item" target="_blank" href="https://de.scalable.capital/broker/security?isin={{ entry.isin }}">Scalable Capital</a></li>
+                                            {% if "BITPANDA:" in entry.isin %}
+                                                <li><a class="dropdown-item" target="_blank" href="https://web.bitpanda.com/price/{{ entry.isin|split(":", 2)[1]|lower }}">Bitpanda</a></li>
+                                            {% else %}
+                                                <li><a class="dropdown-item" target="_blank" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}">ING</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}">finanzen.net</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://www.ls-tc.de/de/aktie/{{ entry.isin }}">Lang & Schwarz</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://www.gettex.de/suche/?tx_indexedsearch[sword]={{ entry.isin }}">gettex</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://de.scalable.capital/broker/security?isin={{ entry.isin }}">Scalable Capital</a></li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                     <div class="btn-group btn-group-sm" role="group">
