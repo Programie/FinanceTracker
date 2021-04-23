@@ -101,6 +101,19 @@ class WatchList
         return $this->entries;
     }
 
+    public function getNotifiedEntries()
+    {
+        $entries = [];
+
+        foreach ($this->entries as $entry) {
+            if ($entry->isNotified()) {
+                $entries[] = $entry;
+            }
+        }
+
+        return $entries;
+    }
+
     /**
      * @return array
      */

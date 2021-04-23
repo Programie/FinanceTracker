@@ -70,6 +70,8 @@ function editEntry(isin, newValues) {
 }
 
 function highlightEntry(isin) {
+    $("tr.entry").removeClass("highlight");
+
     var tableRow = $(`#isin-${isin}`);
     tableRow.addClass("highlight");
 
@@ -125,6 +127,38 @@ function successToast(title, bodyHtml) {
 
 function errorToast(title, bodyHtml) {
     toast(title, bodyHtml, "danger");
+}
+
+function loadHash() {
+    var hash = document.location.hash.substring(1).split("&").filter(Boolean);
+    if (hash.length) {
+        var parameterMap = {};
+
+        for (var index = 1; index < hash.length; index++) {
+            var parameter = hash[index].split("=");
+
+            parameterMap[parameter[0]] = parameter[1];
+        }
+
+        var isin = parameterMap["isin"] || null;
+
+        switch (hash[0]) {
+            case "edit":
+                editEntry(isin, parameterMap);
+                break;
+            case "show-or-edit":
+                var tableRow = $(`#isin-${isin}`);
+                if (tableRow.length) {
+                    highlightEntry(isin);
+                } else {
+                    editEntry(isin, parameterMap);
+                }
+                break;
+            case "show":
+                highlightEntry(isin);
+                break;
+        }
+    }
 }
 
 $(function() {
@@ -263,33 +297,6 @@ $(function() {
         });
     });
 
-    var hash = document.location.hash.substring(1).split("&").filter(Boolean);
-    if (hash.length) {
-        var parameterMap = {};
-
-        for (var index = 1; index < hash.length; index++) {
-            var parameter = hash[index].split("=");
-
-            parameterMap[parameter[0]] = parameter[1];
-        }
-
-        var isin = parameterMap["isin"] || null;
-
-        switch (hash[0]) {
-            case "edit":
-                editEntry(isin, parameterMap);
-                break;
-            case "show-or-edit":
-                var tableRow = $(`#isin-${isin}`);
-                if (tableRow.length) {
-                    highlightEntry(isin);
-                } else {
-                    editEntry(isin, parameterMap);
-                }
-                break;
-            case "show":
-                highlightEntry(isin);
-                break;
-        }
-    }
+    $(window).on("hashchange", loadHash);
+    loadHash();
 });
