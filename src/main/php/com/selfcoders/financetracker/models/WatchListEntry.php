@@ -439,7 +439,7 @@ class WatchListEntry implements JsonSerializable
         return ($limitType !== null and $difference !== null);
     }
 
-    public function getPercentageToLimit(): ?float
+    public function getLowLimitPercentage(): ?float
     {
         if (!$this->isLimitEnabled()) {
             return null;
@@ -450,25 +450,42 @@ class WatchListEntry implements JsonSerializable
             return null;
         }
 
-        $lowLimit = $this->getLowLimit();
-        $highLimit = $this->getHighLimit();
-
-        if ($lowLimit) {
-            $lowLimitPercentage = $lowLimit / $price;
-        } else {
-            $lowLimitPercentage = null;
+        $limit = $this->getLowLimit();
+        if (!$limit) {
+            return null;
         }
 
-        if ($highLimit) {
-            $highLimitPercentage = $price / $highLimit;
-        } else {
-            $highLimitPercentage = null;
+        return $limit / $price;
+    }
+
+    public function getHighLimitPercentage(): ?float
+    {
+        if (!$this->isLimitEnabled()) {
+            return null;
         }
+
+        $price = $this->getCurrentPrice();
+        if ($price === null) {
+            return null;
+        }
+
+        $limit = $this->getHighLimit();
+        if (!$limit) {
+            return null;
+        }
+
+        return $limit / $price;
+    }
+
+    public function getPercentageToLimit(): ?float
+    {
+        $lowLimitPercentage = $this->getLowLimitPercentage();
+        $highLimitPercentage = $this->getHighLimitPercentage();
 
         return max($lowLimitPercentage, $highLimitPercentage);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             "isin" => $this->getIsin(),
@@ -481,7 +498,9 @@ class WatchListEntry implements JsonSerializable
             "dayStartValue" => $this->getState()?->getDayStartPrice(),
             "limitEnabled" => $this->isLimitEnabled(),
             "lowLimit" => $this->getLowLimit(),
+            "lowLimitPercentage" => $this->getLowLimitPercentage(),
             "highLimit" => $this->getHighLimit(),
+            "highLimitPercentage" => $this->getHighLimitPercentage(),
             "limitPercentage" => $this->getPercentageToLimit(),
             "reachedLimit" => $this->getReachedLimit(),
             "notified" => $this->isNotified()
