@@ -64,7 +64,7 @@
 
                 <tbody>
                     {% for entry in watchList.entries %}
-                        <tr id="isin-{{ entry.isin|replace(":", "-") }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                        <tr id="isin-{{ entry.isin|replace({":", "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td class="text-end">{{ loop.index }}</td>
                             <td>{{ entry.isin }}</a></td>
                             <td>{{ entry.name }}</td>
