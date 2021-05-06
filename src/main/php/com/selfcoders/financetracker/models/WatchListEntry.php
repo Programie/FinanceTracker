@@ -474,7 +474,7 @@ class WatchListEntry implements JsonSerializable
             return null;
         }
 
-        return $limit / $price;
+        return $price / $limit;
     }
 
     public function getPercentageToLimit(): ?float
