@@ -72,7 +72,9 @@ function editEntry(isin, newValues) {
 function highlightEntry(isin) {
     $("tr.entry").removeClass("highlight");
 
-    var tableRow = $(`#isin-${isin}`);
+    var id = isin.replaceAll(":", "-");
+
+    var tableRow = $(`#isin-${id}`);
     tableRow.addClass("highlight");
 
     var element = tableRow[0] || null;
@@ -147,7 +149,8 @@ function loadHash() {
                 editEntry(isin, parameterMap);
                 break;
             case "show-or-edit":
-                var tableRow = $(`#isin-${isin}`);
+                var id = isin.replaceAll(":", "-");
+                var tableRow = $(`#isin-${id}`);
                 if (tableRow.length) {
                     highlightEntry(isin);
                 } else {
