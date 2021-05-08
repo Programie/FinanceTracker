@@ -48,14 +48,7 @@ class NotificationRecipient
                 $this->sendMail($subject, $body);
                 break;
             case self::TYPE_PUSHOVER:
-                switch ($this->limitType) {
-                    case WatchListEntry::LIMIT_TYPE_LOW:
-                        $this->sendPushover($subject, $body, getenv("PUSHOVER_LOW_SOUND"));
-                        break;
-                    case WatchListEntry::LIMIT_TYPE_HIGH:
-                        $this->sendPushover($subject, $body, getenv("PUSHOVER_HIGH_SOUND"));
-                        break;
-                }
+                $this->sendPushover($subject, $body);
                 break;
         }
     }
@@ -81,17 +74,19 @@ class NotificationRecipient
         $mailer->send($message);
     }
 
-    private function sendPushover(string $title, string $message, string $sound)
+    private function sendPushover(string $title, string $message)
     {
+        $targetConfig = [];
+
+        parse_str($this->target, $targetConfig);
+
         $client = new Client;
         $client->post("https://api.pushover.net/1/messages.json", [
-            RequestOptions::FORM_PARAMS => [
+            RequestOptions::FORM_PARAMS => array_merge([
                 "token" => getenv("PUSHOVER_TOKEN"),
-                "user" => $this->target,
                 "title" => $title,
-                "message" => $message,
-                "sound" => $sound
-            ]
+                "message" => $message
+            ], $targetConfig)
         ]);
     }
 }
