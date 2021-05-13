@@ -178,6 +178,22 @@ class Controller
         $entityManager->flush();
     }
 
+    public function toggleNotifications(array $params)
+    {
+        $entityManager = Database::getEntityManager();
+
+        $watchList = $entityManager->getRepository(WatchList::class)->findByName($params["name"]);
+        if ($watchList === null) {
+            http_response_code(404);
+            return;
+        }
+
+        $watchList->setNotificationsEnabled(filter_var($_POST["state"], FILTER_VALIDATE_BOOLEAN));
+
+        $entityManager->persist($watchList);
+        $entityManager->flush();
+    }
+
     public function getNews()
     {
         $entityManager = Database::getEntityManager();

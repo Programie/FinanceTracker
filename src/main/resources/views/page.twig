@@ -18,19 +18,30 @@
                 <span class="navbar-brand">Watchlist</span>
                 <button class="btn btn-primary btn-sm" id="add-entry"><i class="fas fa-plus-square"></i> Add entry</button>
                 <ul class="navbar-nav">
-                    {% if watchList.notifiedEntries %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-bell"></i>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="{{ html_classes("fas", {"fa-bell": watchList.notificationsEnabled,"fa-bell-slash": not watchList.notificationsEnabled}) }}"></i>
+                            {% if watchList.notifiedEntries %}
                                 <span class="badge bg-danger">{{ watchList.notifiedEntries|length }}</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">
+                            {% endif %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">
+                            <form class="px-2">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="toggle-notifications" {% if watchList.notificationsEnabled %}checked{% endif %}>
+                                    <label class="form-check-label" for="toggle-notifications">Notifications</label>
+                                </div>
+                            </form>
+
+                            {% if watchList.notifiedEntries %}
+                                <div class="dropdown-divider"></div>
+
                                 {% for entry in watchList.notifiedEntries %}
-                                    <li><a class="dropdown-item" href="#show&isin={{ entry.isin }}">{{ entry.name }}</a></li>
+                                    <a class="dropdown-item" href="#show&isin={{ entry.isin }}">{{ entry.name }}</a>
                                 {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
+                            {% endif %}
+                        </div>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ watchList.name }}</a>
                         <ul class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">

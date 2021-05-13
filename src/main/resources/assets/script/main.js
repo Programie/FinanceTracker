@@ -300,6 +300,22 @@ $(function() {
         });
     });
 
+    $("#toggle-notifications").change(function() {
+        $.ajax({
+            url: `/watchlist/${listName}/notifications`,
+            method: "POST",
+            data: {
+                state: $(this).is(":checked")
+            },
+            success: function() {
+                document.location.reload();
+            },
+            error: function() {
+                errorToast("Toggle notifications", "Toggling notifications failed!");
+            }
+        });
+    });
+
     $(window).on("hashchange", loadHash);
     loadHash();
 });

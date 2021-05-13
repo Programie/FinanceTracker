@@ -30,6 +30,10 @@ class WatchList
      */
     private ?string $notificationRecipients;
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $notificationsEnabled;
+    /**
      * @var WatchListEntry[]
      * @ORM\OneToMany(targetEntity="WatchListEntry", mappedBy="watchList")
      * @ORM\OrderBy({"name"="ASC"})
@@ -91,6 +95,24 @@ class WatchList
         }
 
         return $recipients;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotificationsEnabled(): bool
+    {
+        return $this->notificationsEnabled;
+    }
+
+    /**
+     * @param bool $notificationsEnabled
+     * @return WatchList
+     */
+    public function setNotificationsEnabled(bool $notificationsEnabled): WatchList
+    {
+        $this->notificationsEnabled = $notificationsEnabled;
+        return $this;
     }
 
     /**

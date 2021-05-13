@@ -8,6 +8,7 @@ $router = new AltoRouter;
 $router->map(method: "GET", route: "/", target: "redirectToDefaultWatchlist");
 $router->map(method: "GET", route: "/watchlist/[:name]", target: "getContent");
 $router->map(method: "GET", route: "/watchlist/[:name].json", target: "getJson");
+$router->map(method: "POST", route: "/watchlist/[:name]/notifications", target: "toggleNotifications");
 $router->map(method: "POST", route: "/watchlist/[:name]/[:isin]", target: "updateEntry");
 $router->map(method: "POST", route: "/watchlist/[:name]/[:isin]/reset-notified", target: "resetNotified");
 $router->map(method: "DELETE", route: "/watchlist/[:name]/[:isin]", target: "removeEntry");
