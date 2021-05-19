@@ -130,7 +130,7 @@ try {
             }
 
             $watchList = $entry->getWatchList();
-            if ($watchList->isNotificationsEnabled() and $entry->hasReachedLimit() and !$entry->isNotified()) {
+            if ($watchList->isNotificationsEnabled() and $entry->hasReachedLimit() and !$entry->notificationTriggered()) {
                 $entry->setNotified(true);
 
                 $newNotifications[] = $entry;

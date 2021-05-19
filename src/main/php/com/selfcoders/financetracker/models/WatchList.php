@@ -128,7 +128,7 @@ class WatchList
         $entries = [];
 
         foreach ($this->entries as $entry) {
-            if ($entry->isNotified()) {
+            if ($entry->notificationTriggered()) {
                 $entries[] = $entry;
             }
         }

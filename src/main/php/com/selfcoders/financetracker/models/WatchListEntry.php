@@ -62,9 +62,9 @@ class WatchListEntry implements JsonSerializable
      */
     private bool $newsEnabled;
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="datetime")
      */
-    private bool $notified = false;
+    private ?Date $notificationDate;
     /**
      * @ORM\OneToOne(targetEntity="State")
      * @ORM\JoinColumn(name="stateId", referencedColumnName="id")
@@ -258,9 +258,9 @@ class WatchListEntry implements JsonSerializable
     /**
      * @return bool
      */
-    public function isNotified(): bool
+    public function notificationTriggered(): bool
     {
-        return $this->notified;
+        return $this->notificationDate !== null;
     }
 
     /**
@@ -269,8 +269,21 @@ class WatchListEntry implements JsonSerializable
      */
     public function setNotified(bool $notified): WatchListEntry
     {
-        $this->notified = $notified;
+        if ($notified) {
+            $this->notificationDate = new Date;
+        } else {
+            $this->notificationDate = null;
+        }
+
         return $this;
+    }
+
+    /**
+     * @return Date|null
+     */
+    public function getNotificationDate(): ?Date
+    {
+        return $this->notificationDate;
     }
 
     /**
@@ -503,7 +516,7 @@ class WatchListEntry implements JsonSerializable
             "highLimitPercentage" => $this->getHighLimitPercentage(),
             "limitPercentage" => $this->getPercentageToLimit(),
             "reachedLimit" => $this->getReachedLimit(),
-            "notified" => $this->isNotified()
+            "notified" => $this->notificationTriggered()
         ];
     }
 }

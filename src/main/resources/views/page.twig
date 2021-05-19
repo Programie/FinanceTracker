@@ -151,8 +151,8 @@
                                         </ul>
                                     </div>
                                     <button type="button" class="btn btn-danger delete-entry" title="Delete from list"><i class="fas fa-trash-alt"></i></button>
-                                    {% if entry.notified %}
-                                        <button type="button" class="btn btn-warning reset-notify" title="Reset notification state"><i class="fas fa-bell"></i></button>
+                                    {% if entry.notificationTriggered %}
+                                        <button type="button" class="btn btn-warning reset-notify" title="Notified {{ entry.notificationDate.formatRelativeTime() }} - Click to reset"><i class="fas fa-bell"></i></button>
                                     {% endif %}
                                 </div>
                             </td>
