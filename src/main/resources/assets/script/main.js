@@ -9,6 +9,7 @@ import "bootstrap";
 import "datatables.net";
 import "./datatables-bs5";
 import "./datatables-plugins";
+import "./datatables-search-highlight";
 
 var dataTable;
 
