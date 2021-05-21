@@ -7,6 +7,7 @@ $navbar-padding-y: 0.5rem;
 @import "~bootswatch/dist/darkly/bootswatch";
 
 @import "datatables-bs5.css";
+@import "datatables-search-highlight";
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
@@ -41,7 +42,7 @@ tr.entry {
     scroll-margin-top: 85px;
 }
 
-.highlight {
+tr.entry.highlight {
     animation: highlight 5s ease-out;
     animation-iteration-count: 1;
 }

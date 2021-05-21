@@ -1,8 +1,6 @@
 import $ from "jquery";
 import "./jquery.highlight";
 
-import "../style/datatables-search-highlight.scss";
-
 /*! SearchHighlight for DataTables v1.0.1
  * 2014 SpryMedia Ltd - datatables.net/license
  */
