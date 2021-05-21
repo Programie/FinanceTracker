@@ -6,9 +6,25 @@ window.jQuery = $;
 
 import "bootstrap";
 
+import "datatables.net";
+import "./datatables-bs5";
+import "./datatables-plugins";
+
+var dataTable;
+
 function parseBool(string) {
     var regex = /^\s*(true|1|on)\s*$/i;
     return regex.test(string);
+}
+
+function getIdByIsin(isin) {
+    return isin.replaceAll(":", "-");
+}
+
+function getDataTableRowByIsin(isin) {
+    var id = getIdByIsin(isin);
+
+    return dataTable.row(`#isin-${id}`);
 }
 
 function editEntry(isin, newValues) {
@@ -73,6 +89,8 @@ function highlightEntry(isin) {
     $("tr.entry").removeClass("highlight");
 
     var id = isin.replaceAll(":", "-");
+
+    getDataTableRowByIsin(isin).show();
 
     var tableRow = $(`#isin-${id}`);
     tableRow.addClass("highlight");
@@ -149,9 +167,7 @@ function loadHash() {
                 editEntry(isin, parameterMap);
                 break;
             case "show-or-edit":
-                var id = isin.replaceAll(":", "-");
-                var tableRow = $(`#isin-${id}`);
-                if (tableRow.length) {
+                if (getDataTableRowByIsin(isin).length) {
                     highlightEntry(isin);
                 } else {
                     editEntry(isin, parameterMap);
@@ -165,17 +181,20 @@ function loadHash() {
 }
 
 $(function() {
+    dataTable = $("#table").DataTable();
+
     window.onerror = function(message) {
         errorToast("JavaScript error occurred", message);
     };
 
     var listName = $("meta[name=listname]").attr("content");
+    var tbody = $("#table tbody");
 
     $("#add-entry").click(function() {
         editEntry(null, {});
     });
 
-    $(".edit-entry").click(function() {
+    tbody.on("click", ".edit-entry", function() {
         editEntry($(this).closest(".entry").data("isin"), {});
     });
 
@@ -239,7 +258,7 @@ $(function() {
         });
     });
 
-    $(".delete-entry").click(function() {
+    tbody.on("click", ".delete-entry", function() {
         var entry = $(this).closest(".entry");
         var modal = $("#delete-modal");
 
@@ -252,7 +271,7 @@ $(function() {
         modal.modal("show");
     });
 
-    $(".reset-notify").click(function() {
+    tbody.on("click", ".reset-notify", function() {
         var isin = $(this).closest(".entry").data("isin");
 
         $.ajax({
@@ -267,7 +286,7 @@ $(function() {
         });
     });
 
-    $(".show-news").click(function() {
+    tbody.on("click", ".show-news", function() {
         var isin = $(this).closest(".entry").data("isin");
 
         $.get({

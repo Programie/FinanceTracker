@@ -55,7 +55,7 @@
         </nav>
 
         <div class="container mt-3">
-            <table class="table table-striped">
+            <table class="table table-striped" id="table" data-fixed-header="true" data-order='[[2, "asc"]]' data-page-length="25" data-length-menu='[[10, 25, 50, -1], [10, 25, 50, "All"]]'>
                 <thead class="table-light">
                     <tr class="text-nowrap">
                         <th>#</th>
@@ -69,19 +69,19 @@
                         <th>Limit</th>
                         <th>Date</th>
                         <th>News</th>
-                        <th></th>
+                        <th data-orderable="false" data-searchable="false"></th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for entry in watchList.entries %}
                         <tr id="isin-{{ entry.isin|replace({":": "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
-                            <td class="text-end">{{ loop.index }}</td>
-                            <td>{{ entry.isin }}</a></td>
-                            <td>{{ entry.name }}</td>
-                            <td class="text-end">{{ entry.count|format_number(locale="de") }}</td>
-                            <td class="text-end">{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
-                            <td class="text-end">
+                            <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
+                            <td data-order="{{ entry.isin }}">{{ entry.isin }}</a></td>
+                            <td data-order="{{ entry.name }}">{{ entry.name }}</td>
+                            <td data-order="{{ entry.count }}" class="text-end">{{ entry.count|format_number(locale="de") }}</td>
+                            <td data-order="{{ entry.price }}" class="text-end">{{ entry.price|format_currency("EUR", locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", locale="de") }}</td>
+                            <td data-order="{{ entry.currentPrice }}" class="text-end">
                                 <div class="d-table float-end">
                                     <span class="d-table-cell">
                                         {{ entry.currentPrice|format_currency("EUR", locale="de") }}<br/>
@@ -94,24 +94,24 @@
                                     </span>
                                 </div>
                             </td>
-                            <td class="text-end">
+                            <td data-order="{{ entry.priceDifference }}" class="text-end">
                                 <span class="{{ html_classes({"text-danger": entry.priceDifference < 0}) }}">{% if entry.priceDifference > 0 %}+{% endif %}{{ entry.priceDifference|format_currency("EUR", locale="de") }}</span><br/>
                                 <span class="{{ html_classes({"text-danger": entry.totalPriceDifference < 0}) }}">{% if entry.totalPriceDifference > 0 %}+{% endif %}{{ entry.totalPriceDifference|format_currency("EUR", locale="de") }}</span><br/>
                                 <span class="{{ html_classes("badge", {"bg-danger": entry.realProfit < 0, "bg-success": entry.realProfit > 0}) }}" title="Real profit">{% if entry.realProfit > 0 %}+{% endif %}{{ entry.realProfit|format_currency("EUR", locale="de") }}</span>
                             </td>
-                            <td class="text-end">
+                            <td data-order="{{ entry.dayStartPriceDifference }}" class="text-end">
                                 <span class="{{ html_classes({"text-danger": entry.dayStartPriceDifference < 0}) }}">{% if entry.dayStartPriceDifference > 0 %}+{% endif %}{{ entry.dayStartPriceDifference|format_currency("EUR", locale="de") }}</span><br/>
                                 <span class="{{ html_classes({"text-danger": entry.totalDayStartPriceDifference < 0}) }}">{% if entry.totalDayStartPriceDifference > 0 %}+{% endif %}{{ entry.totalDayStartPriceDifference|format_currency("EUR", locale="de") }}</span>
                             </td>
-                            <td class="text-end text-nowrap">
+                            <td data-order="{{ entry.percentageToLimit }}" class="text-end text-nowrap">
                                 {% if entry.limitEnabled %}
                                     {% if entry.percentageToLimit %}{{ entry.percentageToLimit|format_percent_number(locale="de") }}<br/>{% endif %}
                                     {% if entry.highLimit %}{{ entry.highLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">high</span><br/>{% endif %}
                                     {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
                                 {% endif %}
                             </td>
-                            <td>{{ entry.date.format("d.m.Y") }}</td>
-                            <td>{% if entry.newsEnabled %}<i class="fas fa-check"></i>{% endif %}</td>
+                            <td data-order="{{ entry.date.format("c") }}">{{ entry.date.format("d.m.Y") }}</td>
+                            <td data-order="{{ entry.newsEnabled }}">{% if entry.newsEnabled %}<i class="fas fa-check"></i>{% endif %}</td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
                                     <button type="button" class="btn btn-primary show-news" title="Show news"><i class="fas fa-rss"></i></button>
