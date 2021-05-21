@@ -31,10 +31,12 @@ module.exports = {
                     {
                         loader: "postcss-loader",
                         options: {
-                            plugins: function() {
-                                return [
-                                    require("autoprefixer")
-                                ];
+                            postcssOptions: {
+                                plugins: function() {
+                                    return [
+                                        require("autoprefixer")
+                                    ];
+                                }
                             }
                         }
                     },

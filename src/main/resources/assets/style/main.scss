@@ -14,16 +14,16 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
-// Workarounds for Bootswatch theme not supporting Bootstrap 5
-.form-control, .form-control:active, .form-select {
+// Make form controls dark
+.form-control, .form-control:active, .form-control:focus, .form-control:focus-visible, .form-select {
     background-color: $gray-700 !important;
-}
-
-i.fas {
     color: $white;
 }
 
-// End of Workarounds
+// White icons on buttons as buttons are dark
+button i.fas {
+    color: $white;
+}
 
 table {
     text-align: left;
