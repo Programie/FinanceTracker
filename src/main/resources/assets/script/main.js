@@ -150,39 +150,46 @@ function errorToast(title, bodyHtml) {
     toast(title, bodyHtml, "danger");
 }
 
+function splitHashString() {
+    return document.location.hash.substring(1).split("&").filter(Boolean);
+}
+
+function getHashParameterMap() {
+    var hash = splitHashString();
+    var parameterMap = {};
+
+    for (var index = 1; index < hash.length; index++) {
+        var parameter = hash[index].split("=");
+
+        parameterMap[parameter[0]] = parameter[1];
+    }
+
+    return parameterMap;
+}
+
 function loadHash() {
-    var hash = document.location.hash.substring(1).split("&").filter(Boolean);
-    if (hash.length) {
-        var parameterMap = {};
+    var hash = splitHashString();
+    var parameterMap = getHashParameterMap();
 
-        for (var index = 1; index < hash.length; index++) {
-            var parameter = hash[index].split("=");
-
-            parameterMap[parameter[0]] = parameter[1];
-        }
-
-        var isin = parameterMap["isin"] || null;
-
-        switch (hash[0]) {
-            case "edit":
-                editEntry(isin, parameterMap);
-                break;
-            case "show-or-edit":
-                if (getDataTableRowByIsin(isin).length) {
-                    highlightEntry(isin);
-                } else {
-                    editEntry(isin, parameterMap);
-                }
-                break;
-            case "show":
-                highlightEntry(isin);
-                break;
-        }
+    switch (hash[0]) {
+        case "edit":
+            editEntry(parameterMap["isin"] || null, parameterMap);
+            break;
+        case "search":
+            dataTable.search(parameterMap["query"] || null).draw();
+            break;
+        case "show":
+            highlightEntry(parameterMap["isin"] || null);
+            break;
     }
 }
 
 $(function() {
-    dataTable = $("#table").DataTable();
+    dataTable = $("#table").DataTable({
+        language: {
+            zeroRecords: "<p>No matching records found.</p><button class='btn btn-primary btn-sm' id='search-add-entry'><i class='fas fa-plus-square'></i> Add as new entry</button>"
+        }
+    });
 
     window.onerror = function(message) {
         errorToast("JavaScript error occurred", message);
@@ -193,6 +200,10 @@ $(function() {
 
     $("#add-entry").click(function() {
         editEntry(null, {});
+    });
+
+    tbody.on("click", "#search-add-entry", function() {
+        editEntry(dataTable.search(), getHashParameterMap());
     });
 
     tbody.on("click", ".edit-entry", function() {
