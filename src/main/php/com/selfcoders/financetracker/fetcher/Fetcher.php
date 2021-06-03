@@ -19,7 +19,7 @@ class Fetcher
 
     public function add(string $isin)
     {
-        if (str_starts_with($isin, "BITPANDA:")) {
+        if (str_starts_with($isin, "CRYPTO:")) {
             $url = "https://api.bitpanda.com/v1/ticker";
         } else {
             $url = sprintf("https://component-api.wertpapiere.ing.de/api/v1/components/instrumentheader/%s", $isin);
@@ -43,7 +43,7 @@ class Fetcher
                 $responseData = new ResponseData;
                 $responseData->isin = $isin;
 
-                if (str_starts_with($isin, "BITPANDA:")) {
+                if (str_starts_with($isin, "CRYPTO:")) {
                     $realIsin = trim(substr($isin, 9));
 
                     $responseData->name = $realIsin;
