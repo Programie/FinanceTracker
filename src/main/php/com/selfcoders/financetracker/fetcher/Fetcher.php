@@ -44,7 +44,7 @@ class Fetcher
                 $responseData->isin = $isin;
 
                 if (str_starts_with($isin, "CRYPTO:")) {
-                    $realIsin = trim(substr($isin, 9));
+                    $realIsin = trim(substr($isin, 7));
 
                     $responseData->name = $realIsin;
                     $price = $json[$realIsin]["EUR"] ?? null;
