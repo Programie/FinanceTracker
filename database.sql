@@ -40,6 +40,7 @@ CREATE TABLE `watchlistentries`
     `highLimit`        float                 DEFAULT NULL,
     `newsEnabled`      tinyint(1)   NOT NULL DEFAULT 1,
     `notificationDate` datetime              DEFAULT NULL,
+    `notificationType` enum ('low', 'high')  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `watchListId_isin` (`watchListId`, `isin`),
     KEY `isin` (`isin`),
