@@ -130,10 +130,14 @@ try {
             }
 
             $watchList = $entry->getWatchList();
-            if ($watchList->isNotificationsEnabled() and $entry->hasReachedLimit() and !$entry->notificationTriggered()) {
-                $entry->setNotified(true);
+            if ($watchList->isNotificationsEnabled()) {
+                list($limitType, $difference) = $entry->getReachedLimit();
 
-                $newNotifications[] = $entry;
+                if ($limitType !== null and $limitType !== $entry->getNotificationType() and $difference !== null) {
+                    $entry->setNotified($limitType);
+
+                    $newNotifications[] = $entry;
+                }
             }
 
             $entityManager->persist($entry);

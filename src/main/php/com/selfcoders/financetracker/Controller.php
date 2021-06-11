@@ -172,7 +172,7 @@ class Controller
             return;
         }
 
-        $watchListEntry->setNotified(false);
+        $watchListEntry->clearNotification();
 
         $entityManager->persist($watchListEntry);
         $entityManager->flush();

@@ -66,6 +66,10 @@ class WatchListEntry implements JsonSerializable
      */
     private ?Date $notificationDate;
     /**
+     * @ORM\Column(type="string", columnDefinition="enum('low', 'high')")
+     */
+    private ?string $notificationType;
+    /**
      * @ORM\OneToOne(targetEntity="State")
      * @ORM\JoinColumn(name="stateId", referencedColumnName="id")
      */
@@ -264,16 +268,24 @@ class WatchListEntry implements JsonSerializable
     }
 
     /**
-     * @param bool $notified
+     * @param string|null $type
      * @return WatchListEntry
      */
-    public function setNotified(bool $notified): WatchListEntry
+    public function setNotified(string $type = null): WatchListEntry
     {
-        if ($notified) {
-            $this->notificationDate = new Date;
-        } else {
-            $this->notificationDate = null;
-        }
+        $this->notificationDate = new Date;
+        $this->notificationType = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function clearNotification(): WatchListEntry
+    {
+        $this->notificationDate = null;
+        $this->notificationType = null;
 
         return $this;
     }
@@ -284,6 +296,14 @@ class WatchListEntry implements JsonSerializable
     public function getNotificationDate(): ?Date
     {
         return $this->notificationDate;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNotificationType(): ?string
+    {
+        return $this->notificationType;
     }
 
     /**
