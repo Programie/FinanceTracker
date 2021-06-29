@@ -20,7 +20,7 @@ class Fetcher
     public function add(string $isin)
     {
         if (str_starts_with($isin, "CRYPTO:")) {
-            $url = "https://api.bitpanda.com/v1/ticker";
+            $url = sprintf("https://api.binance.com/api/v3/ticker/price?symbol=%sEUR", strtoupper(trim(substr($isin, 7))));
         } else {
             $url = sprintf("https://component-api.wertpapiere.ing.de/api/v1/components/instrumentheader/%s", $isin);
         }
@@ -47,7 +47,7 @@ class Fetcher
                     $realIsin = trim(substr($isin, 7));
 
                     $responseData->name = $realIsin;
-                    $price = $json[$realIsin]["EUR"] ?? null;
+                    $price = $json["price"] ?? null;
                     if ($price !== null) {
                         $price = floatval($price);
                     }
