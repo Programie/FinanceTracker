@@ -58,6 +58,10 @@ class WatchListEntry implements JsonSerializable
      */
     private ?float $highLimit;
     /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $updateInterval;
+    /**
      * @ORM\Column(type="boolean")
      */
     private bool $newsEnabled;
@@ -238,6 +242,24 @@ class WatchListEntry implements JsonSerializable
     public function setHighLimit(?float $highLimit): WatchListEntry
     {
         $this->highLimit = $highLimit;
+        return $this;
+    }
+
+    /**
+     * @return ?int
+     */
+    public function getUpdateInterval(): ?int
+    {
+        return $this->updateInterval;
+    }
+
+    /**
+     * @param ?int $updateInterval
+     * @return WatchListEntry
+     */
+    public function setUpdateInterval(?int $updateInterval): WatchListEntry
+    {
+        $this->updateInterval = $updateInterval;
         return $this;
     }
 

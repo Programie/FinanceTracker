@@ -44,6 +44,10 @@ class State
      * @ORM\Column(type="float")
      */
     private ?float $dayStartPrice;
+    /**
+     * @var Date|null
+     */
+    private ?Date $lastUpdate;
 
     /**
      * @return int
@@ -176,6 +180,24 @@ class State
     public function setDayStartPrice(?float $dayStartPrice): State
     {
         $this->dayStartPrice = $dayStartPrice;
+        return $this;
+    }
+
+    /**
+     * @return Date|null
+     */
+    public function getLastUpdate(): ?Date
+    {
+        return $this->lastUpdate;
+    }
+
+    /**
+     * @param Date $date
+     * @return State
+     */
+    public function setLastUpdate(Date $date): State
+    {
+        $this->lastUpdate = $date;
         return $this;
     }
 }
