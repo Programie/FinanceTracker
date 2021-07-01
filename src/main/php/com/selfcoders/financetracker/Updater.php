@@ -32,7 +32,8 @@ class Updater
         while (true) {
             try {
                 $this->doUpdate();
-            } catch (Throwable) {
+            } catch (Throwable $exception) {
+                printf("Error on line %d in %s: %s\n%s", $exception->getLine(), $exception->getFile(), $exception->getMessage(), $exception->getTraceAsString());
             }
 
             sleep(5);
