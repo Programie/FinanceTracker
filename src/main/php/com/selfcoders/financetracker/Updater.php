@@ -15,22 +15,18 @@ class Updater
 {
     private EntityManager $entityManager;
     private WatchListEntryRepository $watchListEntryRepository;
-    /**
-     * @var WatchList[]
-     */
-    private array $watchLists;
 
     public function __construct()
     {
         $this->entityManager = Database::getEntityManager();
         $this->watchListEntryRepository = $this->entityManager->getRepository(WatchListEntry::class);
-        $this->watchLists = $this->entityManager->getRepository(WatchList::class)->findAll();
     }
 
     public function run()
     {
         while (true) {
             try {
+                $this->entityManager->clear();
                 $this->doUpdate();
             } catch (Throwable $exception) {
                 printf("Error on line %d in %s: %s\n%s", $exception->getLine(), $exception->getFile(), $exception->getMessage(), $exception->getTraceAsString());
@@ -40,11 +36,16 @@ class Updater
         }
     }
 
+    private function getWatchlists()
+    {
+        return $this->entityManager->getRepository(WatchList::class)->findAll();
+    }
+
     private function getAllIsins()
     {
         $isinList = [];
 
-        foreach ($this->watchLists as $watchList) {
+        foreach ($this->getWatchlists() as $watchList) {
             /**
              * @var $entry WatchListEntry
              */
@@ -62,12 +63,12 @@ class Updater
 
         $isinList = [];
 
-        foreach ($this->watchLists as $watchList) {
+        foreach ($this->getWatchlists() as $watchList) {
             /**
              * @var $entry WatchListEntry
              */
             foreach ($watchList->getEntries() as $entry) {
-                $lastUpdate = $entry->getState()?->getLastUpdate();
+                $lastUpdate = $entry->getState()?->getFetched();
                 $updateInterval = $entry->getUpdateInterval() ?? $watchList->getUpdateInterval();
 
                 if ($lastUpdate === null or $now - $lastUpdate->getTimestamp() >= $updateInterval) {
@@ -229,7 +230,7 @@ class Updater
 
         $state->setName($responseData->name);
         $state->setUpdated($date);
-        $state->setLastUpdate(new Date);
+        $state->setFetched(new Date);
         $state->setPrice($price);
 
         return $state;

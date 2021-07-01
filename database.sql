@@ -17,6 +17,7 @@ CREATE TABLE `states`
     `name`          varchar(200)        NOT NULL,
     `priceType`     enum ('bid', 'ask') NOT NULL,
     `updated`       datetime            NOT NULL,
+    `fetched`       datetime            NOT NULL,
     `price`         float               NOT NULL,
     `previousPrice` float DEFAULT NULL,
     `dayStartPrice` float DEFAULT NULL,

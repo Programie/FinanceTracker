@@ -33,6 +33,10 @@ class State
      */
     private Date $updated;
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private Date $fetched;
+    /**
      * @ORM\Column(type="float")
      */
     private float $price;
@@ -44,10 +48,6 @@ class State
      * @ORM\Column(type="float")
      */
     private ?float $dayStartPrice;
-    /**
-     * @var Date|null
-     */
-    private ?Date $lastUpdate = null;
 
     /**
      * @return int
@@ -130,6 +130,24 @@ class State
     }
 
     /**
+     * @return Date
+     */
+    public function getFetched(): Date
+    {
+        return $this->fetched;
+    }
+
+    /**
+     * @param Date $date
+     * @return State
+     */
+    public function setFetched(Date $date): State
+    {
+        $this->fetched = $date;
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getPrice(): float
@@ -180,24 +198,6 @@ class State
     public function setDayStartPrice(?float $dayStartPrice): State
     {
         $this->dayStartPrice = $dayStartPrice;
-        return $this;
-    }
-
-    /**
-     * @return Date|null
-     */
-    public function getLastUpdate(): ?Date
-    {
-        return $this->lastUpdate;
-    }
-
-    /**
-     * @param Date $date
-     * @return State
-     */
-    public function setLastUpdate(Date $date): State
-    {
-        $this->lastUpdate = $date;
         return $this;
     }
 }
