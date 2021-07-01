@@ -138,6 +138,8 @@ class Updater
                     continue;
                 }
 
+                printf("[%s] Updating price to %f (bid) / %f (ask)\n", $responseData->isin, $responseData->bidPrice, $responseData->askPrice);
+
                 $bidState = $this->buildState($allStates, $responseData, PriceType::BID);
                 $askState = $this->buildState($allStates, $responseData, PriceType::ASK);
 
