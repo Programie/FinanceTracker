@@ -130,13 +130,13 @@ class Controller
         }
 
         $watchListEntry->setName($_POST["name"]);
-        $watchListEntry->setCount(floatval($_POST["count"]));
-        $watchListEntry->setPrice(floatval($_POST["price"]));
+        $watchListEntry->setCount(floatval($_POST["count"] ?? 0));
+        $watchListEntry->setPrice(floatval($_POST["price"] ?? 0));
         $watchListEntry->setDate(new Date($_POST["date"]));
-        $watchListEntry->setLimitEnabled(filter_var($_POST["limitEnabled"], FILTER_VALIDATE_BOOLEAN));
-        $watchListEntry->setLowLimit(floatval($_POST["lowLimit"]));
-        $watchListEntry->setHighLimit(floatval($_POST["highLimit"]));
-        $watchListEntry->setNewsEnabled(filter_var($_POST["newsEnabled"], FILTER_VALIDATE_BOOLEAN));
+        $watchListEntry->setLimitEnabled(filter_var($_POST["limitEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
+        $watchListEntry->setLowLimit(floatval($_POST["lowLimit"] ?? 0));
+        $watchListEntry->setHighLimit(floatval($_POST["highLimit"] ?? 0));
+        $watchListEntry->setNewsEnabled(filter_var($_POST["newsEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
 
         $updateInterval = intval($_POST["updateInterval"] ?? 0);
         if ($updateInterval <= 0) {
