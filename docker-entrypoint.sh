@@ -6,7 +6,7 @@ case "$1" in
     ;;
 
     backend)
-        exec /app/bin/updater.php
+        exec gosu www-data /app/bin/updater.php
     ;;
 
     *)

@@ -29,7 +29,7 @@ RUN sed -ri -e 's!/var/www/html!/app/httpdocs!g' /etc/apache2/sites-available/*.
     echo "ServerTokens Prod" > /etc/apache2/conf-enabled/z-server-tokens.conf && \
     a2enmod rewrite && \
     apt-get -y update && \
-    apt-get install -y libicu-dev && \
+    apt-get install -y libicu-dev gosu && \
     docker-php-ext-configure intl && \
     docker-php-ext-install intl pdo_mysql && \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
