@@ -36,6 +36,11 @@ class Updater
         }
     }
 
+    private function log(string $string, $stream = STDOUT)
+    {
+        fwrite($stream, sprintf("[%s] %s\n", date("r"), $string));
+    }
+
     private function getWatchlists()
     {
         return $this->entityManager->getRepository(WatchList::class)->findAll();
@@ -126,19 +131,19 @@ class Updater
         try {
             foreach ($responseDataList as $responseData) {
                 if ($responseData->name === null) {
-                    fwrite(STDERR, sprintf("Missing name for ISIN %s\n", $responseData->isin));
+                    $this->log(sprintf("[%s] Missing name", $responseData->isin), STDERR);
                     continue;
                 }
                 if ($responseData->bidDate === null or $responseData->askDate === null) {
-                    fwrite(STDERR, sprintf("Missing date for ISIN %s\n", $responseData->isin));
+                    $this->log(sprintf("[%s] Missing date", $responseData->isin), STDERR);
                     continue;
                 }
                 if ($responseData->bidPrice === null or $responseData->askPrice === null) {
-                    fwrite(STDERR, sprintf("Missing price for ISIN %s\n", $responseData->isin));
+                    $this->log(sprintf("[%s] Missing price", $responseData->isin), STDERR);
                     continue;
                 }
 
-                printf("[%s] Updating price to %f (bid) / %f (ask)\n", $responseData->isin, $responseData->bidPrice, $responseData->askPrice);
+                $this->log(sprintf("[%s] Updating price to %f (bid) / %f (ask)", $responseData->isin, $responseData->bidPrice, $responseData->askPrice));
 
                 $bidState = $this->buildState($allStates, $responseData, PriceType::BID);
                 $askState = $this->buildState($allStates, $responseData, PriceType::ASK);
