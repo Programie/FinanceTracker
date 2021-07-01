@@ -156,6 +156,9 @@
                                     {% if entry.notificationTriggered %}
                                         <button type="button" class="btn btn-warning reset-notify" title="Notified {{ entry.notificationDate.formatRelativeTime() }} - Click to reset"><i class="fas fa-bell"></i></button>
                                     {% endif %}
+                                    {% if entry.updateInterval %}
+                                        <button class="btn btn-warning" title="Updating every {{ entry.updateInterval }} seconds"><i class="fas fa-clock"></i></button>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
