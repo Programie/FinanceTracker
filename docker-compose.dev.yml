@@ -1,6 +1,9 @@
 version: '3.8'
 
 services:
-  app:
+  frontend:
+    volumes:
+      - .:/app:ro
+  backend:
     volumes:
       - .:/app:ro

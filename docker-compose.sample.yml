@@ -1,7 +1,17 @@
 version: '3.8'
 
 services:
-  app:
+  frontend:
+    image: registry.selfcoders.org/finance-tracker
+    build: .
+    ports:
+      - 80:80
+    environment:
+      DATABASE_HOST: my.db.host
+      DATABASE_NAME: finance_tracker
+      DATABASE_USERNAME: finance_tracker
+      DATABASE_PASSWORD: "password-for-user"
+  backend:
     image: registry.selfcoders.org/finance-tracker
     build: .
     ports:

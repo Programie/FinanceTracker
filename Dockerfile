@@ -38,8 +38,12 @@ COPY --from=composer /app/vendor /app/vendor
 COPY --from=webpack /app/httpdocs/assets /app/httpdocs/assets
 COPY --from=webpack /app/webpack.assets.json /app/webpack.assets.json
 
+COPY docker-entrypoint.sh /entrypoint.sh
 COPY bootstrap.php /app/bootstrap.php
 COPY cli-config.php /app/cli-config.php
 COPY bin /app/bin
 COPY httpdocs /app/httpdocs
 COPY src /app/src
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["frontend"]

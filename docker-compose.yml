@@ -1,11 +1,21 @@
 version: '3.8'
 
 services:
-  app:
+  frontend:
     image: registry.selfcoders.org/finance-tracker
     build: .
     ports:
       - 8080:80
+    links:
+      - mysql
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_NAME: finance_tracker
+      DATABASE_USERNAME: finance_tracker
+      DATABASE_PASSWORD: finance_tracker
+  backend:
+    image: registry.selfcoders.org/finance-tracker
+    build: .
     links:
       - mysql
     environment:
