@@ -47,7 +47,7 @@ class State
     /**
      * @var Date|null
      */
-    private ?Date $lastUpdate;
+    private ?Date $lastUpdate = null;
 
     /**
      * @return int

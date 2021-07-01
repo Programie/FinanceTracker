@@ -67,7 +67,7 @@ class Updater
              * @var $entry WatchListEntry
              */
             foreach ($watchList->getEntries() as $entry) {
-                $lastUpdate = $entry->getState()->getLastUpdate();
+                $lastUpdate = $entry->getState()?->getLastUpdate();
                 $updateInterval = $entry->getUpdateInterval() ?? $watchList->getUpdateInterval();
 
                 if ($lastUpdate === null or $now >= $lastUpdate->getTimestamp() - $updateInterval) {
