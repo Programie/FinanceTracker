@@ -70,7 +70,7 @@ class Updater
                 $lastUpdate = $entry->getState()?->getLastUpdate();
                 $updateInterval = $entry->getUpdateInterval() ?? $watchList->getUpdateInterval();
 
-                if ($lastUpdate === null or $now >= $lastUpdate->getTimestamp() - $updateInterval) {
+                if ($lastUpdate === null or $now - $lastUpdate->getTimestamp() >= $updateInterval) {
                     $isinList[] = $entry->getIsin();
                 }
             }
