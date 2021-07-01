@@ -75,7 +75,7 @@
 
                 <tbody>
                     {% for entry in watchList.entries %}
-                        <tr id="isin-{{ entry.isin|replace({":": "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                        <tr id="isin-{{ entry.isin|replace({":": "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-update-interval="{{ entry.updateInterval }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
                             <td data-order="{{ entry.isin }}">{{ entry.isin }}</a></td>
                             <td data-order="{{ entry.name }}">{{ entry.name }}</td>
@@ -237,6 +237,13 @@
                                     <span class="input-group-text"><label for="edit-limit-low">Low</label></span>
                                     <input type="number" class="form-control" id="edit-limit-low" name="lowLimit" step="0.01"/>
                                     <span class="input-group-text">EUR</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-update-interval" class="form-label">Update interval</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="edit-update-interval" name="updateInterval" step="5" min="0" placeholder="{{ watchList.updateInterval }}"/>
+                                    <span class="input-group-text">Sec</span>
                                 </div>
                             </div>
                             <div class="col-12">

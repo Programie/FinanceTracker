@@ -138,6 +138,13 @@ class Controller
         $watchListEntry->setHighLimit(floatval($_POST["highLimit"]));
         $watchListEntry->setNewsEnabled(filter_var($_POST["newsEnabled"], FILTER_VALIDATE_BOOLEAN));
 
+        $updateInterval = intval($_POST["updateInterval"] ?? 0);
+        if ($updateInterval <= 0) {
+            $updateInterval = null;
+        }
+
+        $watchListEntry->setUpdateInterval($updateInterval);
+
         $entityManager->persist($watchListEntry);
         $entityManager->flush();
     }
