@@ -7,6 +7,7 @@
     "ext-dom": "*",
     "ext-intl": "*",
     "ext-pdo": "*",
+    "ext-libxml": "*",
     "twig/twig": "^3.3",
     "twig/html-extra": "^3.3",
     "twig/intl-extra": "^3.3",

@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker;
 
-use com\selfcoders\financetracker\fetcher\Fetcher;
+use com\selfcoders\financetracker\fetcher\BaseFetcher;
 use com\selfcoders\financetracker\fetcher\ResponseData;
 use com\selfcoders\financetracker\models\News;
 use com\selfcoders\financetracker\models\State;
@@ -67,9 +67,9 @@ class Controller
 
     public function getCurrentPrice(array $params)
     {
-        $fetcher = new Fetcher;
+        $fetcher = BaseFetcher::getFetcher($params["isin"]);
 
-        $fetcher->add($params["isin"]);
+        $fetcher->add($params["isin"], null);
 
         $responses = $fetcher->execute();
 
@@ -95,9 +95,9 @@ class Controller
 
     public function getOriginalName(array $params)
     {
-        $fetcher = new Fetcher;
+        $fetcher = BaseFetcher::getFetcher($params["isin"]);
 
-        $fetcher->add($params["isin"]);
+        $fetcher->add($params["isin"], null);
 
         $responses = $fetcher->execute();
 
@@ -129,6 +129,14 @@ class Controller
             $watchListEntry->setState($stateRepository->findByIsinAndPriceType($params["isin"], $watchList->getPriceType()));
         }
 
+        $fetcher = BaseFetcher::getFetcher($params["isin"]);
+        $fetcher->add($params["isin"], null);
+        $responseDataList = $fetcher->execute();
+        $responseData = reset($responseDataList);
+        if ($responseData instanceof ResponseData) {
+            $watchListEntry->setWkn($responseData->wkn);
+        }
+
         $watchListEntry->setName($_POST["name"]);
         $watchListEntry->setCount(floatval($_POST["count"] ?? 0));
         $watchListEntry->setPrice(floatval($_POST["price"] ?? 0));
@@ -136,14 +144,8 @@ class Controller
         $watchListEntry->setLimitEnabled(filter_var($_POST["limitEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
         $watchListEntry->setLowLimit(floatval($_POST["lowLimit"] ?? 0));
         $watchListEntry->setHighLimit(floatval($_POST["highLimit"] ?? 0));
+        $watchListEntry->setFastUpdateIntervalEnabled(filter_var($_POST["fastUpdateIntervalEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
         $watchListEntry->setNewsEnabled(filter_var($_POST["newsEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
-
-        $updateInterval = intval($_POST["updateInterval"] ?? 0);
-        if ($updateInterval <= 0) {
-            $updateInterval = null;
-        }
-
-        $watchListEntry->setUpdateInterval($updateInterval);
 
         $entityManager->persist($watchListEntry);
         $entityManager->flush();

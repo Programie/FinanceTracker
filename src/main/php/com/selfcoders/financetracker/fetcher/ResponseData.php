@@ -5,7 +5,8 @@ use com\selfcoders\financetracker\Date;
 
 class ResponseData
 {
-    public string $isin;
+    public ?string $isin = null;
+    public ?string $wkn = null;
     public ?string $name = null;
     public ?float $bidPrice = null;
     public ?float $askPrice = null;

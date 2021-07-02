@@ -32,6 +32,10 @@ class WatchListEntry implements JsonSerializable
     /**
      * @ORM\Column(type="string")
      */
+    private ?string $wkn;
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $name;
     /**
      * @ORM\Column(type="date", name="`date`")
@@ -58,9 +62,9 @@ class WatchListEntry implements JsonSerializable
      */
     private ?float $highLimit;
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="boolean")
      */
-    private ?int $updateInterval;
+    private bool $fastUpdateIntervalEnabled;
     /**
      * @ORM\Column(type="boolean")
      */
@@ -116,6 +120,24 @@ class WatchListEntry implements JsonSerializable
     public function setIsin(string $isin): WatchListEntry
     {
         $this->isin = $isin;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getWkn(): ?string
+    {
+        return $this->wkn;
+    }
+
+    /**
+     * @param string|null $wkn
+     * @return WatchListEntry
+     */
+    public function setWkn(?string $wkn): WatchListEntry
+    {
+        $this->wkn = $wkn;
         return $this;
     }
 
@@ -246,20 +268,20 @@ class WatchListEntry implements JsonSerializable
     }
 
     /**
-     * @return ?int
+     * @return bool
      */
-    public function getUpdateInterval(): ?int
+    public function isFastUpdateIntervalEnabled(): bool
     {
-        return $this->updateInterval;
+        return $this->fastUpdateIntervalEnabled;
     }
 
     /**
-     * @param ?int $updateInterval
+     * @param bool $fastUpdateIntervalEnabled
      * @return WatchListEntry
      */
-    public function setUpdateInterval(?int $updateInterval): WatchListEntry
+    public function setFastUpdateIntervalEnabled(bool $fastUpdateIntervalEnabled): WatchListEntry
     {
-        $this->updateInterval = $updateInterval;
+        $this->fastUpdateIntervalEnabled = $fastUpdateIntervalEnabled;
         return $this;
     }
 

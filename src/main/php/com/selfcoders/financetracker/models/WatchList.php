@@ -26,10 +26,6 @@ class WatchList
      */
     private string $priceType;
     /**
-     * @ORM\Column(type="integer")
-     */
-    private int $updateInterval;
-    /**
      * @ORM\Column(type="string")
      */
     private ?string $notificationRecipients;
@@ -79,21 +75,6 @@ class WatchList
     public function setPriceType(string $priceType): WatchList
     {
         $this->priceType = $priceType;
-        return $this;
-    }
-
-    public function getUpdateInterval(): int
-    {
-        return $this->updateInterval;
-    }
-
-    /**
-     * @param int $updateInterval
-     * @return WatchList
-     */
-    public function setUpdateInterval(int $updateInterval): WatchList
-    {
-        $this->updateInterval = $updateInterval;
         return $this;
     }
 

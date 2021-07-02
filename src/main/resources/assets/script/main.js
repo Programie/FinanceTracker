@@ -41,8 +41,8 @@ function editEntry(isin, newValues) {
     var limitEnabled = newValues["limitEnabled"] || false;
     var lowLimit = newValues["lowLimit"] || "";
     var highLimit = newValues["highLimit"] || "";
-    var updateInterval = newValues["updateInterval"] || "";
     var date = newValues["date"] || "";
+    var fastUpdateIntervalEnabled = newValues["fastUpdateIntervalEnabled"] || "";
     var newsEnabled = newValues["newsEnabled"] || true;
 
     var isEdit = false;
@@ -59,8 +59,8 @@ function editEntry(isin, newValues) {
             limitEnabled = entry.data("limit-enabled");
             lowLimit = entry.data("limit-low");
             highLimit = entry.data("limit-high");
-            updateInterval = entry.data("update-interval");
             date = entry.data("date");
+            fastUpdateIntervalEnabled = entry.data("fast-update-interval-enabled");
             newsEnabled = entry.data("news-enabled");
 
             isEdit = true;
@@ -79,8 +79,8 @@ function editEntry(isin, newValues) {
     modal.find("#edit-limit-enabled").prop("checked", parseBool(limitEnabled));
     modal.find("#edit-limit-low").val(lowLimit);
     modal.find("#edit-limit-high").val(highLimit);
-    modal.find("#edit-update-interval").val(updateInterval);
     modal.find("#edit-date").val(date);
+    modal.find("#edit-fast-update-interval-enabled").prop("checked", parseBool(fastUpdateIntervalEnabled));
     modal.find("#edit-news-enabled").prop("checked", parseBool(newsEnabled));
 
     modal.find("#edit-refresh-name").data("value", newValues["name"] || "");

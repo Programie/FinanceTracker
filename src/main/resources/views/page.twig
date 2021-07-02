@@ -75,7 +75,7 @@
 
                 <tbody>
                     {% for entry in watchList.entries %}
-                        <tr id="isin-{{ entry.isin|replace({":": "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-update-interval="{{ entry.updateInterval }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                        <tr id="isin-{{ entry.isin|replace({":": "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-fast-update-interval-enabled="{{ entry.fastUpdateIntervalEnabled }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
                             <td data-order="{{ entry.isin }}">{{ entry.isin }}</a></td>
                             <td data-order="{{ entry.name }}">{{ entry.name }}</td>
@@ -156,8 +156,8 @@
                                     {% if entry.notificationTriggered %}
                                         <button type="button" class="btn btn-warning reset-notify" title="Notified {{ entry.notificationDate.formatRelativeTime() }} - Click to reset"><i class="fas fa-bell"></i></button>
                                     {% endif %}
-                                    {% if entry.updateInterval %}
-                                        <button class="btn btn-warning" title="Updating every {{ entry.updateInterval }} seconds"><i class="fas fa-clock"></i></button>
+                                    {% if entry.fastUpdateIntervalEnabled %}
+                                        <button class="btn btn-warning" title="Fast update interval enabled"><i class="fas fa-clock"></i></button>
                                     {% endif %}
                                 </div>
                             </td>
@@ -243,17 +243,16 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label for="edit-update-interval" class="form-label">Update interval</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="edit-update-interval" name="updateInterval" step="5" min="0" placeholder="{{ watchList.updateInterval }}"/>
-                                    <span class="input-group-text">Sec</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
                                 <label for="edit-date" class="form-label">Date</label>
                                 <div class="input-group">
                                     <input type="date" class="form-control" id="edit-date" name="date"/>
                                     <button class="btn btn-outline-secondary" type="button" id="edit-refresh-date" title="Refresh date"><i class="fas fa-redo"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="edit-fast-update-interval-enabled" name="fastUpdateIntervalEnabled">
+                                    <label class="form-check-label" for="edit-fast-update-interval-enabled">Fast update interval</label>
                                 </div>
                             </div>
                             <div class="col-12">

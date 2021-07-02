@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker;
 
-use com\selfcoders\financetracker\fetcher\Fetcher;
+use com\selfcoders\financetracker\fetcher\FetcherHelper;
 use com\selfcoders\financetracker\fetcher\ResponseData;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
@@ -9,12 +9,16 @@ use com\selfcoders\financetracker\models\WatchListEntry;
 use com\selfcoders\financetracker\orm\WatchListEntryRepository;
 use Doctrine\ORM\EntityManager;
 use Exception;
-use Throwable;
 
 class Updater
 {
+    private const UPDATE_INTERVAL_FAST = 10;
+    private const UPDATE_INTERVAL_NORMAL = 60;
+
     private EntityManager $entityManager;
     private WatchListEntryRepository $watchListEntryRepository;
+    private int $lastFastUpdate = 0;
+    private int $lastNormalUpdate = 0;
 
     public function __construct()
     {
@@ -25,14 +29,10 @@ class Updater
     public function run()
     {
         while (true) {
-            try {
-                $this->entityManager->clear();
-                $this->doUpdate();
-            } catch (Throwable $exception) {
-                printf("Error on line %d in %s: %s\n%s", $exception->getLine(), $exception->getFile(), $exception->getMessage(), $exception->getTraceAsString());
-            }
+            $this->entityManager->clear();
+            $this->doUpdate();
 
-            sleep(5);
+            sleep(min(self::UPDATE_INTERVAL_FAST, self::UPDATE_INTERVAL_NORMAL));
         }
     }
 
@@ -62,53 +62,51 @@ class Updater
         return array_filter(array_unique($isinList));
     }
 
-    private function getIsinsToUpdate()
+    private function groupIsinWknListByInterval()
     {
-        $now = (new Date)->getTimestamp();
-
-        $isinList = [];
+        $perIsinData = [];
 
         foreach ($this->getWatchlists() as $watchList) {
             /**
              * @var $entry WatchListEntry
              */
             foreach ($watchList->getEntries() as $entry) {
-                $lastUpdate = $entry->getState()?->getFetched();
-                $updateInterval = $entry->getUpdateInterval() ?? $watchList->getUpdateInterval();
+                $isin = $entry->getIsin();
+                $wkn = $entry->getWkn();
 
-                if ($lastUpdate === null or $now - $lastUpdate->getTimestamp() >= $updateInterval) {
-                    $isinList[] = $entry->getIsin();
+                if ($entry->isFastUpdateIntervalEnabled()) {
+                    $perIsinData[$isin] = ["fast", $wkn];
+                } elseif (!isset($perIsinData[$isin])) {
+                    $perIsinData[$isin] = ["normal", $wkn];
                 }
             }
         }
 
-        return array_filter(array_unique($isinList));
+        $fastUpdateIsinWknList = [];
+        $normalUpdateIsinWknList = [];
+
+        foreach ($perIsinData as $isin => $data) {
+            if ($data[0] === "fast") {
+                $fastUpdateIsinWknList[] = [$isin, $data[1]];
+            } else {
+                $normalUpdateIsinWknList[] = [$isin, $data[1]];
+            }
+        }
+
+        return [$fastUpdateIsinWknList, $normalUpdateIsinWknList];
     }
 
-    private function doUpdate()
+    private function doUpdateForIsinWknList(array $isinWknList)
     {
-        $isinList = $this->getIsinsToUpdate();
-
-        // No need to update
-        if (empty($isinList)) {
-            return;
-        }
-
-        $fetcher = new Fetcher;
-
-        foreach ($isinList as $isin) {
-            $fetcher->add($isin);
-        }
-
-        $responseDataList = $fetcher->execute();
+        $responseDataList = FetcherHelper::getData($isinWknList);
 
         $allStates = [];
         $allIsins = $this->getAllIsins();
 
+        /**
+         * @var State $state
+         */
         foreach ($this->entityManager->getRepository(State::class)->findAll() as $state) {
-            /**
-             * @var $isin string
-             */
             $isin = $state->getIsin();
 
             $key = sprintf("%s:%s", $isin, $state->getPriceType());
@@ -120,8 +118,6 @@ class Updater
 
             $allStates[$key] = $state;
         }
-
-        $this->entityManager->flush();
 
         /**
          * @var $newNotifications WatchListEntry
@@ -193,6 +189,23 @@ class Updater
         }
     }
 
+    private function doUpdate()
+    {
+        list($fastUpdateIsinWknList, $normalUpdateIsinWknList) = $this->groupIsinWknListByInterval();
+
+        if (time() - $this->lastFastUpdate >= self::UPDATE_INTERVAL_FAST) {
+            $this->doUpdateForIsinWknList($fastUpdateIsinWknList);
+            $this->lastFastUpdate = time();
+        }
+
+        if (time() - $this->lastNormalUpdate >= self::UPDATE_INTERVAL_NORMAL) {
+            $this->doUpdateForIsinWknList($normalUpdateIsinWknList);
+            $this->lastNormalUpdate = time();
+        }
+
+        $this->entityManager->flush();
+    }
+
     private function buildState(array $list, ResponseData $responseData, string $priceType)
     {
         switch ($priceType) {
@@ -237,7 +250,6 @@ class Updater
 
         $state->setName($responseData->name);
         $state->setUpdated($date);
-        $state->setFetched(new Date);
         $state->setPrice($price);
 
         return $state;
