@@ -14,8 +14,6 @@ class Monitoring
 
     private EntityManager $entityManager;
     private int $nowTimestamp;
-    private array $checkOutput = [];
-    private int $checkState = self::CHECK_MK_STATE_OK;
 
     public function __construct()
     {
@@ -24,6 +22,7 @@ class Monitoring
 
     public function checkEntry(WatchListEntry $watchListEntry)
     {
+        $checkState = self::CHECK_MK_STATE_OK;
         $stateMessage = "OK";
 
         /**
@@ -32,39 +31,49 @@ class Monitoring
         $state = $watchListEntry->getState();
 
         if ($state === null) {
-            $this->checkState = self::CHECK_MK_STATE_CRITICAL;
+            $checkState = self::CHECK_MK_STATE_CRITICAL;
             $stateMessage = "No state available (!!)";
         } else {
             $fetchedDate = $state->getFetched();
 
             if ($fetchedDate === null) {
-                $this->checkState = self::CHECK_MK_STATE_CRITICAL;
+                $checkState = self::CHECK_MK_STATE_CRITICAL;
                 $stateMessage = "No fetch date available (!!)";
             } else {
                 $fetchedDifference = $this->nowTimestamp - $fetchedDate->getTimestamp();
 
                 if ($fetchedDifference >= 300) {
-                    $this->checkState = self::CHECK_MK_STATE_CRITICAL;
+                    $checkState = self::CHECK_MK_STATE_CRITICAL;
                     $stateMessage = "Last fetched over 5 minutes ago (!!)";
                 } elseif ($fetchedDifference >= 120) {
-                    $this->checkState = self::CHECK_MK_STATE_WARNING;
+                    $checkState = self::CHECK_MK_STATE_WARNING;
                     $stateMessage = "Last fetched over 2 minutes ago (!)";
                 }
             }
         }
 
-        $this->checkOutput[] = sprintf("%s: %s", $watchListEntry->getName(), $stateMessage);
+        $checkOutput = sprintf("%s %s: %s", $watchListEntry->getIsin(), $watchListEntry->getName(), $stateMessage);
+
+        return [$checkState, $checkOutput];
     }
 
     public function checkAllEntries()
     {
+        $overallState = self::CHECK_MK_STATE_OK;
         $this->nowTimestamp = (new Date)->getTimestamp();
         $watchListEntries = $this->entityManager->getRepository(WatchListEntry::class)->findAll();
+        $messageLines = [sprintf("Checked %d entries", count($watchListEntries))];
 
         foreach ($watchListEntries as $watchListEntry) {
-            $this->checkEntry($watchListEntry);
+            list($checkState, $checkOutput) = $this->checkEntry($watchListEntry);
+
+            $overallState = max($overallState, $checkState);
+
+            if ($checkState !== self::CHECK_MK_STATE_OK) {
+                $messageLines[] = $checkOutput;
+            }
         }
 
-        printf("%d FinanceTracker_States - %s\n", $this->checkState, str_replace("\n", "\\n", implode("\\n", $this->checkOutput)));
+        printf("%d FinanceTracker_States - %s\n", $overallState, str_replace("\n", "\\n", implode("\\n", $messageLines)));
     }
 }
