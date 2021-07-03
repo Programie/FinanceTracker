@@ -31,6 +31,10 @@ class State
     /**
      * @ORM\Column(type="datetime")
      */
+    private Date $fetched;
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private Date $updated;
     /**
      * @ORM\Column(type="float")
@@ -104,6 +108,24 @@ class State
     public function setPriceType(string $priceType): State
     {
         $this->priceType = $priceType;
+        return $this;
+    }
+
+    /**
+     * @return Date
+     */
+    public function getFetched(): Date
+    {
+        return $this->fetched;
+    }
+
+    /**
+     * @param Date $fetched
+     * @return State
+     */
+    public function setFetched(Date $fetched): State
+    {
+        $this->fetched = $fetched;
         return $this;
     }
 

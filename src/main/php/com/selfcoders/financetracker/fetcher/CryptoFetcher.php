@@ -29,14 +29,15 @@ class CryptoFetcher extends BaseFetcher
      */
     public function execute()
     {
+        $startDate = new Date;
         $responseDataList = [];
 
         $pool = new Pool($this->client, $this->requests, [
             "concurrency" => 10,
-            "fulfilled" => function (Response $response, string $isin) use (&$responseDataList) {
+            "fulfilled" => function (Response $response, string $isin) use (&$responseDataList, $startDate) {
                 $json = json_decode($response->getBody(), true);
 
-                $responseData = new ResponseData;
+                $responseData = new ResponseData($startDate);
                 $responseData->isin = $isin;
 
                 $responseData->name = trim(substr($isin, 7));

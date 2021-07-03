@@ -249,6 +249,7 @@ class Updater
         }
 
         $state->setName($responseData->name);
+        $state->setFetched($responseData->fetchDate);
         $state->setUpdated($date);
         $state->setPrice($price);
 

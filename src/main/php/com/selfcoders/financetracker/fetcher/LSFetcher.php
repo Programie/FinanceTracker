@@ -26,6 +26,7 @@ class LSFetcher extends BaseFetcher
 
     public function execute()
     {
+        $startDate = new Date;
         $responseDataList = [];
 
         $response = $this->client->get("https://www.ls-tc.de/de/watchlist", [
@@ -44,7 +45,7 @@ class LSFetcher extends BaseFetcher
         foreach ($xpath->query("//table/tbody/tr") as $tableRow) {
             $cells = $tableRow->getElementsByTagName("td");
 
-            $responseData = new ResponseData;
+            $responseData = new ResponseData($startDate);
 
             $responseData->wkn = $cells->item(0)?->nodeValue;
             $responseData->isin = $this->wknIsinMap[$responseData->wkn] ?? null;
