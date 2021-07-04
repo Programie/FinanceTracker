@@ -5,9 +5,10 @@ class FetcherHelper
 {
     /**
      * @param array $isinWknList
+     * @param bool $force
      * @return ResponseData[]
      */
-    public static function getData(array $isinWknList)
+    public static function getData(array $isinWknList, bool $force = false): array
     {
         $cryptoFetcher = new CryptoFetcher;
         $lsFetcher = new LSFetcher;
@@ -22,6 +23,6 @@ class FetcherHelper
             }
         }
 
-        return array_merge($cryptoFetcher->execute(), $lsFetcher->execute());
+        return array_merge($cryptoFetcher->execute($force), $lsFetcher->execute($force));
     }
 }

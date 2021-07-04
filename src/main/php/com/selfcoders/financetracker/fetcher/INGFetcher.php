@@ -21,13 +21,17 @@ class INGFetcher extends BaseFetcher
         ]);
     }
 
-    public function add(string $isin, ?string $wkn)
+    public function add(string $isin, ?string $wkn): void
     {
         $this->requests[$isin] = new Request("GET", $isin);
     }
 
-    public function execute()
+    public function execute(bool $force = false): array
     {
+        if (!$force and !self::shouldUpdate(120)) {
+            return [];
+        }
+
         $startDate = new Date;
         $responseDataList = [];
 
@@ -52,6 +56,21 @@ class INGFetcher extends BaseFetcher
         $pool->promise()->wait();
 
         return $responseDataList;
+    }
+
+    public static function shouldUpdate(int $tolerance): bool
+    {
+        $now = new Date;
+
+        if ($now->isWeekend()) {
+            return false;
+        }
+
+        if (!$now->isInTimeRange("08:00:00", "22:00:00", $tolerance)) {
+            return false;
+        }
+
+        return true;
     }
 
     private function dateOrNull($datetime): ?Date

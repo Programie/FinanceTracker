@@ -71,7 +71,7 @@ class Controller
 
         $fetcher->add($params["isin"], null);
 
-        $responses = $fetcher->execute();
+        $responses = $fetcher->execute(true);
 
         if (empty($responses)) {
             http_response_code(404);
@@ -99,7 +99,7 @@ class Controller
 
         $fetcher->add($params["isin"], null);
 
-        $responses = $fetcher->execute();
+        $responses = $fetcher->execute(true);
 
         if (empty($responses)) {
             http_response_code(404);
@@ -131,7 +131,7 @@ class Controller
 
         $fetcher = BaseFetcher::getFetcher($params["isin"]);
         $fetcher->add($params["isin"], null);
-        $responseDataList = $fetcher->execute();
+        $responseDataList = $fetcher->execute(true);
         $responseData = reset($responseDataList);
         if ($responseData instanceof ResponseData) {
             $watchListEntry->setWkn($responseData->wkn);

@@ -1,13 +1,18 @@
 <?php
-namespace com\selfcoders\financetracker;
+namespace com\selfcoders\financetracker\updater;
 
+use com\selfcoders\financetracker\Database;
+use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\fetcher\FetcherHelper;
 use com\selfcoders\financetracker\fetcher\ResponseData;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchList;
 use com\selfcoders\financetracker\models\WatchListEntry;
 use com\selfcoders\financetracker\orm\WatchListEntryRepository;
+use com\selfcoders\financetracker\PriceType;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Exception;
 
 class Updater
@@ -62,9 +67,9 @@ class Updater
         return array_filter(array_unique($isinList));
     }
 
-    private function groupIsinWknListByInterval()
+    private function getGroupedUpdateEntries()
     {
-        $perIsinData = [];
+        $perIsinUpdateEntries = [];
 
         foreach ($this->getWatchlists() as $watchList) {
             /**
@@ -73,32 +78,49 @@ class Updater
             foreach ($watchList->getEntries() as $entry) {
                 $isin = $entry->getIsin();
                 $wkn = $entry->getWkn();
+                $hasState = $entry->getState() !== null;
 
                 if ($entry->isFastUpdateIntervalEnabled()) {
-                    $perIsinData[$isin] = ["fast", $wkn];
-                } elseif (!isset($perIsinData[$isin])) {
-                    $perIsinData[$isin] = ["normal", $wkn];
+                    $perIsinUpdateEntries[$isin] = new UpdateEntry(UpdateEntry::TYPE_FAST, $isin, $wkn, $hasState);
+                } elseif (!isset($perIsinUpdateEntries[$isin])) {
+                    $perIsinUpdateEntries[$isin] = new UpdateEntry(UpdateEntry::TYPE_NORMAL, $isin, $wkn, $hasState);
                 }
             }
         }
 
-        $fastUpdateIsinWknList = [];
-        $normalUpdateIsinWknList = [];
+        $fastUpdateEntries = [];
+        $normalUpdateEntries = [];
 
-        foreach ($perIsinData as $isin => $data) {
-            if ($data[0] === "fast") {
-                $fastUpdateIsinWknList[] = [$isin, $data[1]];
+        foreach ($perIsinUpdateEntries as $updateEntry) {
+            if ($updateEntry->updateType === UpdateEntry::TYPE_FAST) {
+                $fastUpdateEntries[] = $updateEntry;
             } else {
-                $normalUpdateIsinWknList[] = [$isin, $data[1]];
+                $normalUpdateEntries[] = $updateEntry;
             }
         }
 
-        return [$fastUpdateIsinWknList, $normalUpdateIsinWknList];
+        return [$fastUpdateEntries, $normalUpdateEntries];
     }
 
-    private function doUpdateForIsinWknList(array $isinWknList)
+    /**
+     * @param UpdateEntry[] $updateEntries
+     * @param bool $force
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    private function doUpdateForEntries(array $updateEntries, bool $force)
     {
-        $responseDataList = FetcherHelper::getData($isinWknList);
+        $isinWknList = [];
+
+        foreach ($updateEntries as $updateEntry) {
+            if (!$updateEntry->hasState) {
+                $force = true;
+            }
+
+            $isinWknList[] = [$updateEntry->isin, $updateEntry->wkn];
+        }
+
+        $responseDataList = FetcherHelper::getData($isinWknList, $force);
 
         $allStates = [];
         $allIsins = $this->getAllIsins();
@@ -191,15 +213,15 @@ class Updater
 
     private function doUpdate()
     {
-        list($fastUpdateIsinWknList, $normalUpdateIsinWknList) = $this->groupIsinWknListByInterval();
+        list($fastUpdateEntries, $normalUpdateEntries) = $this->getGroupedUpdateEntries();
 
         if (time() - $this->lastFastUpdate >= self::UPDATE_INTERVAL_FAST) {
-            $this->doUpdateForIsinWknList($fastUpdateIsinWknList);
+            $this->doUpdateForEntries($fastUpdateEntries, !$this->lastFastUpdate);
             $this->lastFastUpdate = time();
         }
 
         if (time() - $this->lastNormalUpdate >= self::UPDATE_INTERVAL_NORMAL) {
-            $this->doUpdateForIsinWknList($normalUpdateIsinWknList);
+            $this->doUpdateForEntries($normalUpdateEntries, !$this->lastNormalUpdate);
             $this->lastNormalUpdate = time();
         }
 

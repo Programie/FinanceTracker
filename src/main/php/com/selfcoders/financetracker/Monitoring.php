@@ -1,6 +1,9 @@
 <?php
 namespace com\selfcoders\financetracker;
 
+use com\selfcoders\financetracker\fetcher\BaseFetcher;
+use com\selfcoders\financetracker\fetcher\Fetcher;
+use com\selfcoders\financetracker\fetcher\FetcherHelper;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchListEntry;
 use Doctrine\ORM\EntityManager;
@@ -26,28 +29,35 @@ class Monitoring
         $stateMessage = "OK";
 
         /**
-         * @var $state State|null
+         * @var $fetcherClass Fetcher
          */
-        $state = $watchListEntry->getState();
+        $fetcherClass = BaseFetcher::getFetcherClass($watchListEntry->getIsin(), BaseFetcher::DATASOURCE_LS);
 
-        if ($state === null) {
-            $checkState = self::CHECK_MK_STATE_CRITICAL;
-            $stateMessage = "No state available (!!)";
-        } else {
-            $fetchedDate = $state->getFetched();
+        if ($fetcherClass === null or $fetcherClass::shouldUpdate(0)) {
+            /**
+             * @var $state State|null
+             */
+            $state = $watchListEntry->getState();
 
-            if ($fetchedDate === null) {
+            if ($state === null) {
                 $checkState = self::CHECK_MK_STATE_CRITICAL;
-                $stateMessage = "No fetch date available (!!)";
+                $stateMessage = "No state available (!!)";
             } else {
-                $fetchedDifference = $this->nowTimestamp - $fetchedDate->getTimestamp();
+                $fetchedDate = $state->getFetched();
 
-                if ($fetchedDifference >= 300) {
+                if ($fetchedDate === null) {
                     $checkState = self::CHECK_MK_STATE_CRITICAL;
-                    $stateMessage = "Last fetched over 5 minutes ago (!!)";
-                } elseif ($fetchedDifference >= 120) {
-                    $checkState = self::CHECK_MK_STATE_WARNING;
-                    $stateMessage = "Last fetched over 2 minutes ago (!)";
+                    $stateMessage = "No fetch date available (!!)";
+                } else {
+                    $fetchedDifference = $this->nowTimestamp - $fetchedDate->getTimestamp();
+
+                    if ($fetchedDifference >= 300) {
+                        $checkState = self::CHECK_MK_STATE_CRITICAL;
+                        $stateMessage = "Last fetched over 5 minutes ago (!!)";
+                    } elseif ($fetchedDifference >= 120) {
+                        $checkState = self::CHECK_MK_STATE_WARNING;
+                        $stateMessage = "Last fetched over 2 minutes ago (!)";
+                    }
                 }
             }
         }

@@ -1,13 +1,14 @@
 <?php
 namespace com\selfcoders\financetracker;
 
+use DateInterval;
 use DateTime;
 use DateTimeZone;
 use JsonSerializable;
 
 class Date extends DateTime implements JsonSerializable
 {
-    public static function fromUtc(string $datetime)
+    public static function fromUtc(string $datetime): Date
     {
         return new self($datetime, new DateTimeZone("UTC"));
     }
@@ -19,7 +20,7 @@ class Date extends DateTime implements JsonSerializable
         return $utcDate;
     }
 
-    public function formatRelativeTime()
+    public function formatRelativeTime(): string
     {
         $diff = (new self)->getTimestamp() - $this->getTimestamp();
 
@@ -40,6 +41,32 @@ class Date extends DateTime implements JsonSerializable
         }
 
         return sprintf("%dh ago", floor($diff / 3600));
+    }
+
+    public function isWeekend(): bool
+    {
+        $weekday = $this->format("N");
+
+        // Saturday or Sunday
+        return $weekday == 6 or $weekday == 7;
+    }
+
+    public function isInTimeRange(string $startTime, string $endTime, int $tolerance = 0): bool
+    {
+        $startDate = new self($startTime);
+        $endDate = new self($endTime);
+
+        $startDate->sub(new DateInterval(sprintf("PT%dS", $tolerance)));
+        $endDate->add(new DateInterval(sprintf("PT%dS", $tolerance)));
+
+        // Is multi day range? (e.g. 17:00 - 08:00)
+        if ($endDate < $startDate) {
+            $endDate = clone $endDate;
+
+            $endDate->modify("+1 day");
+        }
+
+        return ($this >= $startDate and $this <= $endDate);
     }
 
     public function jsonSerialize()

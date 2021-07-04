@@ -21,7 +21,7 @@ class CryptoFetcher extends BaseFetcher
         ]);
     }
 
-    public function add(string $isin, ?string $wkn)
+    public function add(string $isin, ?string $wkn): void
     {
         $this->requests[$isin] = new Request("GET", sprintf("api/v3/ticker/price?symbol=%sEUR", strtoupper(trim(substr($isin, 7)))));
     }
@@ -29,8 +29,12 @@ class CryptoFetcher extends BaseFetcher
     /**
      * @return ResponseData[]
      */
-    public function execute()
+    public function execute(bool $force = false): array
     {
+        if (!$force and !self::shouldUpdate(120)) {
+            return [];
+        }
+
         $startDate = new Date;
         $responseDataList = [];
 
@@ -60,5 +64,10 @@ class CryptoFetcher extends BaseFetcher
         $pool->promise()->wait();
 
         return $responseDataList;
+    }
+
+    public static function shouldUpdate(int $tolerance): bool
+    {
+        return true;
     }
 }
