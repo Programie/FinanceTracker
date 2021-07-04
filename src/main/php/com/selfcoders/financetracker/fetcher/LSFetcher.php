@@ -16,7 +16,9 @@ class LSFetcher extends BaseFetcher
 
     public function __construct()
     {
-        $this->client = new Client;
+        $this->client = new Client([
+            RequestOptions::TIMEOUT => 5
+        ]);
     }
 
     public function add(string $isin, ?string $wkn)

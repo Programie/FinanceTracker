@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 
 class CryptoFetcher extends BaseFetcher
 {
@@ -15,7 +16,8 @@ class CryptoFetcher extends BaseFetcher
     public function __construct()
     {
         $this->client = new Client([
-            "base_uri" => "https://api.binance.com"
+            "base_uri" => "https://api.binance.com",
+            RequestOptions::TIMEOUT => 5
         ]);
     }
 

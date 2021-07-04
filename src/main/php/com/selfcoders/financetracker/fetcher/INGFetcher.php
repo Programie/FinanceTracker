@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 
 class INGFetcher extends BaseFetcher
 {
@@ -15,7 +16,8 @@ class INGFetcher extends BaseFetcher
     public function __construct()
     {
         $this->client = new Client([
-            "base_uri" => "https://component-api.wertpapiere.ing.de/api/v1/components/instrumentheader/"
+            "base_uri" => "https://component-api.wertpapiere.ing.de/api/v1/components/instrumentheader/",
+            RequestOptions::TIMEOUT => 5
         ]);
     }
 
