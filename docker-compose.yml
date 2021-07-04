@@ -10,6 +10,7 @@ services:
     links:
       - mysql
     environment:
+      TZ: Europe/Berlin
       DATABASE_HOST: mysql
       DATABASE_NAME: finance_tracker
       DATABASE_USERNAME: finance_tracker
@@ -21,6 +22,7 @@ services:
     links:
       - mysql
     environment:
+      TZ: Europe/Berlin
       DATABASE_HOST: mysql
       DATABASE_NAME: finance_tracker
       DATABASE_USERNAME: finance_tracker
@@ -30,6 +32,7 @@ services:
     volumes:
       - ./database.sql:/docker-entrypoint-initdb.d/db.sql:ro
     environment:
+      TZ: Europe/Berlin
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: finance_tracker
       MYSQL_USER: finance_tracker
