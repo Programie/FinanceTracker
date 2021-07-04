@@ -2,12 +2,14 @@
 namespace com\selfcoders\financetracker\fetcher;
 
 use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\Utils;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\RequestOptions;
+use Throwable;
 
 class LSFetcher extends BaseFetcher
 {
@@ -31,14 +33,20 @@ class LSFetcher extends BaseFetcher
         $startDate = new Date;
         $responseDataList = [];
 
-        $response = $this->client->get("https://www.ls-tc.de/de/watchlist", [
-            RequestOptions::COOKIES => CookieJar::fromArray([
-                "watchlist" => implode("%2C", array_keys($this->wknIsinMap))
-            ], "www.ls-tc.de")
-        ]);
+        try {
+            $response = $this->client->get("https://www.ls-tc.de/de/watchlist", [
+                RequestOptions::COOKIES => CookieJar::fromArray([
+                    "watchlist" => implode("%2C", array_keys($this->wknIsinMap))
+                ], "www.ls-tc.de")
+            ]);
 
-        $doc = new DOMDocument;
-        $doc->loadHTML($response->getBody()->getContents(), LIBXML_NOERROR);
+            $doc = new DOMDocument;
+            $doc->loadHTML($response->getBody()->getContents(), LIBXML_NOERROR);
+        } catch (Throwable $exception) {
+            Utils::printException($exception);
+
+            return [];
+        }
 
         $xpath = new DOMXPath($doc);
         /**
