@@ -120,6 +120,7 @@
                                         <ul class="dropdown-menu">
                                             {% if "CRYPTO:" in entry.isin %}
                                                 <li><a class="dropdown-item" target="_blank" href="https://www.binance.com/de/trade/{{ entry.isin|split(":", 2)[1]|upper }}_EUR">Binance</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://www.bitcoin.de/de/{{ entry.isin|split(":", 2)[1]|lower }}eur/market">bitcoin.de</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://web.bitpanda.com/price/{{ entry.isin|split(":", 2)[1]|lower }}">Bitpanda</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="/coinmarketcap/{{ entry.isin|split(":", 2)[1]|lower }}">CoinMarketCap</a></li>
                                             {% else %}
