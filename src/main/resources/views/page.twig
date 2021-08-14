@@ -121,6 +121,7 @@
                                             {% if "CRYPTO:" in entry.isin %}
                                                 <li><a class="dropdown-item" target="_blank" href="https://www.binance.com/de/trade/{{ entry.isin|split(":", 2)[1]|upper }}_EUR">Binance</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://web.bitpanda.com/price/{{ entry.isin|split(":", 2)[1]|lower }}">Bitpanda</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="/coinmarketcap/{{ entry.isin|split(":", 2)[1]|lower }}">CoinMarketCap</a></li>
                                             {% else %}
                                                 <li><a class="dropdown-item" target="_blank" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}">ING</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}">finanzen.net</a></li>

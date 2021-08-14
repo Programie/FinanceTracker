@@ -12,6 +12,7 @@ use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use RuntimeException;
 
 class Controller
 {
@@ -388,6 +389,34 @@ class Controller
 
         header("Content-Type: application/json");
         echo json_encode($responses);
+    }
+
+    public function redirectToCoinMarketCap(array $params)
+    {
+        $symbol = strtoupper($params["symbol"]);
+
+        $client = new Client([
+            "base_uri" => "https://pro-api.coinmarketcap.com",
+            RequestOptions::HEADERS => [
+                "X-CMC_PRO_API_KEY" => getenv("COINMARKETCAP_API_KEY")
+            ]
+        ]);
+
+        $response = $client->get("/v1/cryptocurrency/info", [
+            RequestOptions::QUERY => [
+                "symbol" => $symbol
+            ]
+        ]);
+
+        $json = json_decode($response->getBody(), true);
+
+        $slug = $json["data"][$symbol]["slug"] ?? null;
+
+        if ($slug === null) {
+            throw new RuntimeException("No slug returned in request to CoinMarketCap API!");
+        }
+
+        header(sprintf("Location: https://coinmarketcap.com/currencies/%s/", $slug));
     }
 
     public function emptyResponse()

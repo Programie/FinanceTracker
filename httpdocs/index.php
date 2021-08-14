@@ -20,6 +20,7 @@ $router->map(method: "GET", route: "/news/[:isin].html", target: "getNewsHtmlFor
 $router->map(method: "GET", route: "/grafana", target: "emptyResponse");
 $router->map(method: "POST", route: "/grafana/search", target: "grafanaSearch");
 $router->map(method: "POST", route: "/grafana/query", target: "grafanaQuery");
+$router->map(method: "GET", route: "/coinmarketcap/[:symbol]", target: "redirectToCoinMarketCap");
 
 $match = $router->match();
 
