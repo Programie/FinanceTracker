@@ -2,7 +2,6 @@
 namespace com\selfcoders\financetracker\orm;
 
 use com\selfcoders\financetracker\Date;
-use com\selfcoders\financetracker\DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
@@ -18,7 +17,7 @@ class DateType extends DateTimeType
             return null;
         }
 
-        if ($value instanceof DateTime) {
+        if ($value instanceof Date) {
             return $value->format("Y-m-d");
         }
 

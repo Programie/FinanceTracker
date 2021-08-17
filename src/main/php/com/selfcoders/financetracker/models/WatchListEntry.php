@@ -161,18 +161,18 @@ class WatchListEntry implements JsonSerializable
     }
 
     /**
-     * @return DateTime|null
+     * @return Date|null
      */
-    public function getDate(): ?DateTime
+    public function getDate(): ?Date
     {
         return $this->date;
     }
 
     /**
-     * @param DateTime $date
+     * @param Date $date
      * @return WatchListEntry
      */
-    public function setDate(DateTime $date): WatchListEntry
+    public function setDate(Date $date): WatchListEntry
     {
         $this->date = $date;
         return $this;
