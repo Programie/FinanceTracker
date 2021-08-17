@@ -2,6 +2,7 @@
 namespace com\selfcoders\financetracker;
 
 use com\selfcoders\financetracker\orm\DateType;
+use com\selfcoders\financetracker\orm\DateTimeType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
@@ -12,7 +13,7 @@ class Database
 
     public static function init()
     {
-        Type::overrideType("datetime", DateType::class);
+        Type::overrideType("datetime", DateTimeType::class);
         Type::overrideType("date", DateType::class);
 
         $connection = [

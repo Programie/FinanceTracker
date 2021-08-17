@@ -1,13 +1,12 @@
 <?php
 namespace com\selfcoders\financetracker\orm;
 
-use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\DateTimeType as BaseDateTimeType;
 
-class DateType extends DateTimeType
+class DateTimeType extends BaseDateTimeType
 {
     /**
      * {@inheritdoc}
@@ -19,7 +18,7 @@ class DateType extends DateTimeType
         }
 
         if ($value instanceof DateTime) {
-            return $value->format("Y-m-d");
+            return $value->toUtc()->format("Y-m-d H:i:s");
         }
 
         throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ["null", "Date"]);
@@ -34,6 +33,6 @@ class DateType extends DateTimeType
             return null;
         }
 
-        return new Date($value);
+        return DateTime::fromUtc($value);
     }
 }

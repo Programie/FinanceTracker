@@ -1,6 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\models;
 
+use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
@@ -40,7 +41,7 @@ class WatchListEntry implements JsonSerializable
     /**
      * @ORM\Column(type="date", name="`date`")
      */
-    private ?DateTime $date;
+    private ?Date $date;
     /**
      * @ORM\Column(type="float")
      */
