@@ -33,6 +33,11 @@ class Date extends DateTime implements JsonSerializable
         return ($this >= $startDate and $this <= $endDate);
     }
 
+    public function diffNow(): DateInterval
+    {
+        return $this->diff(new static);
+    }
+
     public function jsonSerialize()
     {
         return $this->format("c");

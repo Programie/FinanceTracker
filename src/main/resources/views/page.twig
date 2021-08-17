@@ -110,7 +110,10 @@
                                     {% if entry.lowLimit %}{{ entry.lowLimit|format_currency("EUR", locale="de") }} <span class="badge bg-primary">low</span><br/>{% endif %}
                                 {% endif %}
                             </td>
-                            <td data-order="{{ entry.date.format("c") }}">{{ entry.date.format("d.m.Y") }}</td>
+                            <td data-order="{{ entry.date.format("c") }}">
+                                {{ entry.date.format("d.m.Y") }}<br/>
+                                {{ entry.date.diffNow.days }} days
+                            </td>
                             <td data-order="{{ entry.newsEnabled }}">{% if entry.newsEnabled %}<i class="fas fa-check"></i>{% endif %}</td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
