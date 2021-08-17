@@ -141,7 +141,7 @@ class Controller
         $watchListEntry->setName($_POST["name"]);
         $watchListEntry->setCount(floatval($_POST["count"] ?? 0));
         $watchListEntry->setPrice(floatval($_POST["price"] ?? 0));
-        $watchListEntry->setDate(new Date($_POST["date"]));
+        $watchListEntry->setDate(new DateTime($_POST["date"]));
         $watchListEntry->setLimitEnabled(filter_var($_POST["limitEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
         $watchListEntry->setLowLimit(floatval($_POST["lowLimit"] ?? 0));
         $watchListEntry->setHighLimit(floatval($_POST["highLimit"] ?? 0));

@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\fetcher;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 
 class ResponseData
 {
@@ -10,11 +10,11 @@ class ResponseData
     public ?string $name = null;
     public ?float $bidPrice = null;
     public ?float $askPrice = null;
-    public ?Date $bidDate = null;
-    public ?Date $askDate = null;
-    public Date $fetchDate;
+    public ?DateTime $bidDate = null;
+    public ?DateTime $askDate = null;
+    public DateTime $fetchDate;
 
-    public function __construct(Date $fetchDate)
+    public function __construct(DateTime $fetchDate)
     {
         $this->fetchDate = $fetchDate;
     }

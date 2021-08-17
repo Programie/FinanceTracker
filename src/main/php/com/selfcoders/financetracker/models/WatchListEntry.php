@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\models;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -40,7 +40,7 @@ class WatchListEntry implements JsonSerializable
     /**
      * @ORM\Column(type="date", name="`date`")
      */
-    private ?Date $date;
+    private ?DateTime $date;
     /**
      * @ORM\Column(type="float")
      */
@@ -72,7 +72,7 @@ class WatchListEntry implements JsonSerializable
     /**
      * @ORM\Column(type="datetime")
      */
-    private ?Date $notificationDate;
+    private ?DateTime $notificationDate;
     /**
      * @ORM\Column(type="string", columnDefinition="enum('low', 'high')")
      */
@@ -160,18 +160,18 @@ class WatchListEntry implements JsonSerializable
     }
 
     /**
-     * @return Date|null
+     * @return DateTime|null
      */
-    public function getDate(): ?Date
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
 
     /**
-     * @param Date $date
+     * @param DateTime $date
      * @return WatchListEntry
      */
-    public function setDate(Date $date): WatchListEntry
+    public function setDate(DateTime $date): WatchListEntry
     {
         $this->date = $date;
         return $this;
@@ -317,7 +317,7 @@ class WatchListEntry implements JsonSerializable
      */
     public function setNotified(string $type = null): WatchListEntry
     {
-        $this->notificationDate = new Date;
+        $this->notificationDate = new DateTime;
         $this->notificationType = $type;
 
         return $this;
@@ -335,9 +335,9 @@ class WatchListEntry implements JsonSerializable
     }
 
     /**
-     * @return Date|null
+     * @return DateTime|null
      */
-    public function getNotificationDate(): ?Date
+    public function getNotificationDate(): ?DateTime
     {
         return $this->notificationDate;
     }

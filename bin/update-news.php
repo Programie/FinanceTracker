@@ -1,7 +1,7 @@
 #! /usr/bin/env php
 <?php
 use com\selfcoders\financetracker\Database;
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use com\selfcoders\financetracker\models\News;
 use com\selfcoders\financetracker\models\NewsItem;
 use com\selfcoders\financetracker\models\WatchList;
@@ -13,7 +13,7 @@ use GuzzleHttp\Psr7\Response;
 
 require_once __DIR__ . "/../bootstrap.php";
 
-$maxAge = new Date;
+$maxAge = new DateTime;
 $maxAge->sub(new DateInterval("P1D"));
 
 $entityManager = Database::getEntityManager();
@@ -78,7 +78,7 @@ $pool = new Pool($client, $requests, [
 
             $newsItem->title = $title;
             $newsItem->url = $url;
-            $newsItem->date = new Date($date);
+            $newsItem->date = new DateTime($date);
 
             if ($newsItem->date < $maxAge) {
                 continue;

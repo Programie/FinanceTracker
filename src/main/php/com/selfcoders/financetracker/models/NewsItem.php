@@ -1,13 +1,13 @@
 <?php
 namespace com\selfcoders\financetracker\models;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 
 class NewsItem
 {
     public string $title;
     public ?string $url;
-    public Date $date;
+    public DateTime $date;
 
     public static function fromArray(array $data): NewsItem
     {
@@ -15,7 +15,7 @@ class NewsItem
 
         $item->title = $data["title"];
         $item->url = $data["url"];
-        $item->date = new Date($data["date"]);
+        $item->date = new DateTime($data["date"]);
 
         return $item;
     }

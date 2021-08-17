@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\fetcher;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
@@ -35,7 +35,7 @@ class CryptoFetcher extends BaseFetcher
             return [];
         }
 
-        $startDate = new Date;
+        $startDate = new DateTime;
         $responseDataList = [];
 
         $pool = new Pool($this->client, $this->requests, [
@@ -54,7 +54,7 @@ class CryptoFetcher extends BaseFetcher
 
                 $responseData->bidPrice = $price;
                 $responseData->askPrice = $price;
-                $responseData->bidDate = new Date;
+                $responseData->bidDate = new DateTime;
                 $responseData->askDate = $responseData->bidDate;
 
                 $responseDataList[$isin] = $responseData;

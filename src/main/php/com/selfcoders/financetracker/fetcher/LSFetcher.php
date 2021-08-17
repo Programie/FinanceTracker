@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\fetcher;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use com\selfcoders\financetracker\Utils;
 use DOMDocument;
 use DOMElement;
@@ -34,7 +34,7 @@ class LSFetcher extends BaseFetcher
             return [];
         }
 
-        $startDate = new Date;
+        $startDate = new DateTime;
         $responseDataList = [];
 
         try {
@@ -70,9 +70,9 @@ class LSFetcher extends BaseFetcher
             $time = $cells->item(6)?->nodeValue ?? null;
 
             if ($time !== null and preg_match("/^([0-9]{2}:[0-9]{2}:[0-9]{2})$/", $time)) {
-                $date = new Date($time);
+                $date = new DateTime($time);
             } else {
-                $date = new Date;
+                $date = new DateTime;
             }
 
             $responseData->bidDate = $date;
@@ -91,7 +91,7 @@ class LSFetcher extends BaseFetcher
 
     public static function shouldUpdate(int $tolerance): bool
     {
-        $now = new Date;
+        $now = new DateTime;
 
         if ($now->isWeekend()) {
             return false;

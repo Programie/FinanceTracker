@@ -70,7 +70,7 @@ class Monitoring
     public function checkAllEntries()
     {
         $overallState = self::CHECK_MK_STATE_OK;
-        $this->nowTimestamp = (new Date)->getTimestamp();
+        $this->nowTimestamp = (new DateTime)->getTimestamp();
         $watchListEntries = $this->entityManager->getRepository(WatchListEntry::class)->findAll();
         $messageLines = [sprintf("Checked %d entries", count($watchListEntries))];
 

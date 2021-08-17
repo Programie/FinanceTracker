@@ -2,7 +2,7 @@
 namespace com\selfcoders\financetracker\updater;
 
 use com\selfcoders\financetracker\Database;
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use com\selfcoders\financetracker\fetcher\FetcherHelper;
 use com\selfcoders\financetracker\fetcher\ResponseData;
 use com\selfcoders\financetracker\models\State;
@@ -260,7 +260,7 @@ class Updater
         }
 
         /**
-         * @var $previousUpdate Date
+         * @var $previousUpdate DateTime
          */
         if ($previousUpdate !== null and $previousUpdate->format("Y-m-d") !== $date->format("Y-m-d")) {
             $state->setDayStartPrice($price);

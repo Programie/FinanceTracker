@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\orm;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
@@ -17,7 +17,7 @@ class DateType extends DateTimeType
             return null;
         }
 
-        if ($value instanceof Date) {
+        if ($value instanceof DateTime) {
             return $value->toUtc()->format("Y-m-d H:i:s");
         }
 
@@ -33,6 +33,6 @@ class DateType extends DateTimeType
             return null;
         }
 
-        return Date::fromUtc($value);
+        return DateTime::fromUtc($value);
     }
 }

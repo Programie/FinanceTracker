@@ -1,7 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\fetcher;
 
-use com\selfcoders\financetracker\Date;
+use com\selfcoders\financetracker\DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
@@ -32,7 +32,7 @@ class INGFetcher extends BaseFetcher
             return [];
         }
 
-        $startDate = new Date;
+        $startDate = new DateTime;
         $responseDataList = [];
 
         $pool = new Pool($this->client, $this->requests, [
@@ -60,7 +60,7 @@ class INGFetcher extends BaseFetcher
 
     public static function shouldUpdate(int $tolerance): bool
     {
-        $now = new Date;
+        $now = new DateTime;
 
         if ($now->isWeekend()) {
             return false;
@@ -73,12 +73,12 @@ class INGFetcher extends BaseFetcher
         return true;
     }
 
-    private function dateOrNull($datetime): ?Date
+    private function dateOrNull($datetime): ?DateTime
     {
         if ($datetime === null) {
             return null;
         }
 
-        return new Date($datetime);
+        return new DateTime($datetime);
     }
 }
