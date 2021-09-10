@@ -19,6 +19,7 @@ class Updater
 {
     private const UPDATE_INTERVAL_FAST = 10;
     private const UPDATE_INTERVAL_NORMAL = 60;
+    private const MAX_NOTIFICATION_AGE = 3600;
 
     private EntityManager $entityManager;
     private WatchListEntryRepository $watchListEntryRepository;
@@ -185,10 +186,21 @@ class Updater
                     if ($watchList->isNotificationsEnabled()) {
                         list($limitType, $difference) = $entry->getReachedLimit();
 
-                        if ($limitType !== null and $limitType !== $entry->getNotificationType() and $difference !== null) {
-                            $entry->setNotified($limitType);
+                        if ($limitType === null) {
+                            $lastLimitReached = $entry->getLastLimitReached();
 
-                            $newNotifications[] = $entry;
+                            if ($lastLimitReached !== null and (new DateTime)->getTimestamp() - $lastLimitReached->getTimestamp() >= self::MAX_NOTIFICATION_AGE) {
+                                $entry->setLastLimitReached(null);
+                                $entry->clearNotification();
+                            }
+                        } else {
+                            $entry->setLastLimitReached(new DateTime);
+
+                            if ($limitType !== $entry->getNotificationType()) {
+                                $entry->setNotified($limitType);
+
+                                $newNotifications[] = $entry;
+                            }
                         }
                     }
 

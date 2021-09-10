@@ -63,6 +63,10 @@ class WatchListEntry implements JsonSerializable
      */
     private ?float $highLimit;
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?DateTime $lastLimitReached;
+    /**
      * @ORM\Column(type="boolean")
      */
     private bool $fastUpdateIntervalEnabled;
@@ -265,6 +269,24 @@ class WatchListEntry implements JsonSerializable
     public function setHighLimit(?float $highLimit): WatchListEntry
     {
         $this->highLimit = $highLimit;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getLastLimitReached(): ?DateTime
+    {
+        return $this->lastLimitReached;
+    }
+
+    /**
+     * @param DateTime|null $lastLimitReached
+     * @return WatchListEntry
+     */
+    public function setLastLimitReached(?DateTime $lastLimitReached): WatchListEntry
+    {
+        $this->lastLimitReached = $lastLimitReached;
         return $this;
     }
 

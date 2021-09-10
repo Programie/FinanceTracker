@@ -40,6 +40,7 @@ CREATE TABLE `watchlistentries`
     `limitEnabled`              tinyint(1)   NOT NULL DEFAULT 0,
     `lowLimit`                  float                 DEFAULT NULL,
     `highLimit`                 float                 DEFAULT NULL,
+    `lastLimitReached`          datetime              DEFAULT NULL,
     `fastUpdateIntervalEnabled` tinyint(1)   NOT NULL DEFAULT 0,
     `newsEnabled`               tinyint(1)   NOT NULL DEFAULT 1,
     `notificationDate`          datetime              DEFAULT NULL,
