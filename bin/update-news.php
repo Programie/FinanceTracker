@@ -21,6 +21,12 @@ $entityManager = Database::getEntityManager();
 $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
 $newsRepository = $entityManager->getRepository(News::class);
 
+$unusedNewsEntries = [];
+
+foreach ($newsRepository->findAll() as $newsEntry) {
+    $unusedNewsEntries[$newsEntry->getIsin()] = $newsEntry;
+}
+
 $isinToNames = [];
 
 foreach ($entityManager->getRepository(WatchList::class)->findAll() as $watchList) {
@@ -32,9 +38,21 @@ foreach ($entityManager->getRepository(WatchList::class)->findAll() as $watchLis
             continue;
         }
 
-        $isinToNames[$entry->getIsin()] = $entry->getName();
+        $isin = $entry->getIsin();
+
+        $isinToNames[$isin] = $entry->getName();
+
+        if (isset($unusedNewsEntries[$isin])) {
+            unset($unusedNewsEntries[$isin]);
+        }
     }
 }
+
+foreach ($unusedNewsEntries as $newsEntry) {
+    $entityManager->remove($newsEntry);
+}
+
+$entityManager->flush();
 
 $client = new Client;
 
