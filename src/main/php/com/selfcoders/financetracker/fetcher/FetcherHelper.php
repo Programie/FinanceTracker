@@ -26,6 +26,6 @@ class FetcherHelper
             }
         }
 
-        return array_merge($cryptoFetcher->execute($force), $lsFetcher->execute($force));
+        return array_merge($cryptoFetcher->execute($force), $coinMarketCapFetcher->execute($force), $lsFetcher->execute($force));
     }
 }
