@@ -395,10 +395,12 @@ class Controller
     {
         $symbol = strtoupper($params["symbol"]);
 
+        $apiKeys = explode(",", getenv("COINMARKETCAP_API_KEY"));
+
         $client = new Client([
             "base_uri" => "https://pro-api.coinmarketcap.com",
             RequestOptions::HEADERS => [
-                "X-CMC_PRO_API_KEY" => getenv("COINMARKETCAP_API_KEY")
+                "X-CMC_PRO_API_KEY" => $apiKeys[array_rand($apiKeys)]
             ]
         ]);
 
