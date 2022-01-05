@@ -19,7 +19,7 @@ class LSFetcher extends BaseFetcher
     public function __construct()
     {
         $this->client = new Client([
-            RequestOptions::TIMEOUT => 5
+            RequestOptions::TIMEOUT => 10
         ]);
     }
 
