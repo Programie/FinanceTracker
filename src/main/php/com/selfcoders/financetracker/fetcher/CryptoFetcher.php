@@ -23,7 +23,10 @@ class CryptoFetcher extends BaseFetcher
 
     public function add(string $isin, ?string $wkn): void
     {
-        $this->requests[$isin] = new Request("GET", sprintf("api/v3/ticker/price?symbol=%sEUR", strtoupper(trim(substr($isin, 7)))));
+        $isinParts = explode(":", $isin);
+        $symbol = trim(end($isinParts));
+
+        $this->requests[$isin] = new Request("GET", sprintf("api/v3/ticker/price?symbol=%sEUR", strtoupper($symbol)));
     }
 
     /**
@@ -46,7 +49,8 @@ class CryptoFetcher extends BaseFetcher
                 $responseData = new ResponseData($startDate);
                 $responseData->isin = $isin;
 
-                $responseData->name = trim(substr($isin, 7));
+                $isinParts = explode(":", $isin);
+                $responseData->name = trim(end($isinParts));
                 $price = $json["price"] ?? null;
                 if ($price !== null) {
                     $price = floatval($price);
