@@ -54,7 +54,7 @@ class CoinMarketCapFetcher extends BaseFetcher
                 $responseData = new ResponseData($startDate);
                 $responseData->isin = $isin;
 
-                $responseData->name = $json["data"]["symbol"] ?? null;
+                $responseData->name = $json["data"]["name"] ?? null;
 
                 $price = $json["data"]["quote"]["EUR"]["price"] ?? null;
                 $date = $json["data"]["quote"]["EUR"]["last_updated"] ?? null;
