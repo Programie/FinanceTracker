@@ -15,9 +15,14 @@ class CoinMarketCapFetcher extends BaseFetcher
 
     public function __construct()
     {
+        $apiKeys = explode(",", getenv("COINMARKETCAP_API_KEY"));
+
         $this->client = new Client([
             "base_uri" => "https://pro-api.coinmarketcap.com",
-            RequestOptions::TIMEOUT => 5
+            RequestOptions::TIMEOUT => 5,
+            RequestOptions::HEADERS => [
+                "X-CMC_PRO_API_KEY" => $apiKeys[array_rand($apiKeys)]
+            ]
         ]);
     }
 
