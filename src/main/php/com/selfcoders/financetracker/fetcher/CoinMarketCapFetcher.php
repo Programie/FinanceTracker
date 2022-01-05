@@ -79,6 +79,20 @@ class CoinMarketCapFetcher extends BaseFetcher
 
     public static function shouldUpdate(int $tolerance): bool
     {
-        return true;
+        $timeRange = getenv("COINMARKETCAP_UPDATE_TIME");
+        if ($timeRange === false) {
+            return true;
+        }
+
+        $timeRange = trim($timeRange);
+        if ($timeRange === "" or !str_contains($timeRange, "-")) {
+            return true;
+        }
+
+        list($startTime, $endTime) = explode("-", $timeRange);
+
+        $now = new DateTime;
+
+        return $now->isInTimeRange($startTime, $endTime, $tolerance);
     }
 }
