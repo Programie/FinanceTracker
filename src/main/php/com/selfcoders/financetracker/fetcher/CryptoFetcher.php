@@ -2,8 +2,8 @@
 namespace com\selfcoders\financetracker\fetcher;
 
 use com\selfcoders\financetracker\DateTime;
+use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -64,7 +64,7 @@ class CryptoFetcher extends BaseFetcher
 
                 $responseDataList[$isin] = $responseData;
             },
-            "rejected" => function (RequestException $reason, string $isin) {
+            "rejected" => function (Exception $reason, string $isin) {
                 fwrite(STDERR, sprintf("[%s] Error while getting data from Binance API for %s: %s\n", date("r"), $isin, $reason->getMessage()));
             }
         ]);
