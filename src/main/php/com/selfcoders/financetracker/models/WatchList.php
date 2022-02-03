@@ -22,6 +22,10 @@ class WatchList
      */
     private string $name;
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $enabled;
+    /**
      * @ORM\Column(type="string", columnDefinition="enum('bid', 'ask')")
      */
     private string $priceType;
@@ -57,6 +61,24 @@ class WatchList
     public function setName(string $name): WatchList
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     * @return WatchList
+     */
+    public function setEnabled(bool $enabled): WatchList
+    {
+        $this->enabled = $enabled;
         return $this;
     }
 

@@ -49,7 +49,7 @@ class Updater
 
     private function getWatchlists()
     {
-        return $this->entityManager->getRepository(WatchList::class)->findAll();
+        return $this->entityManager->getRepository(WatchList::class)->findEnabled();
     }
 
     private function getAllIsins()

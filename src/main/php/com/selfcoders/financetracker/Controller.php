@@ -22,7 +22,7 @@ class Controller
 
         $watchList = $entityManager->getRepository(WatchList::class)->findByName("Watchlist");
         if ($watchList === null) {
-            $watchList = $entityManager->getRepository(WatchList::class)->findAll()[0];
+            $watchList = $entityManager->getRepository(WatchList::class)->findEnabled()[0];
         }
 
         header(sprintf("Location: /watchlist/%s", $watchList->getName()));

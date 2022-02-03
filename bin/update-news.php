@@ -29,7 +29,7 @@ foreach ($newsRepository->findAll() as $newsEntry) {
 
 $isinToNames = [];
 
-foreach ($entityManager->getRepository(WatchList::class)->findAll() as $watchList) {
+foreach ($entityManager->getRepository(WatchList::class)->findEnabled() as $watchList) {
     /**
      * @var $entry WatchListEntry
      */

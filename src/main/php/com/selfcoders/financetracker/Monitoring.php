@@ -3,7 +3,6 @@ namespace com\selfcoders\financetracker;
 
 use com\selfcoders\financetracker\fetcher\BaseFetcher;
 use com\selfcoders\financetracker\fetcher\Fetcher;
-use com\selfcoders\financetracker\fetcher\FetcherHelper;
 use com\selfcoders\financetracker\models\State;
 use com\selfcoders\financetracker\models\WatchListEntry;
 use Doctrine\ORM\EntityManager;
@@ -71,10 +70,19 @@ class Monitoring
     {
         $overallState = self::CHECK_MK_STATE_OK;
         $this->nowTimestamp = (new DateTime)->getTimestamp();
+
+        /**
+         * @var $watchListEntries WatchListEntry[]
+         */
         $watchListEntries = $this->entityManager->getRepository(WatchListEntry::class)->findAll();
+
         $messageLines = [sprintf("Checked %d entries", count($watchListEntries))];
 
         foreach ($watchListEntries as $watchListEntry) {
+            if (!$watchListEntry->getWatchList()->isEnabled()) {
+                continue;
+            }
+
             list($checkState, $checkOutput) = $this->checkEntry($watchListEntry);
 
             $overallState = max($overallState, $checkState);

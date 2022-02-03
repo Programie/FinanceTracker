@@ -56,6 +56,7 @@ CREATE TABLE `watchlists`
 (
     `id`                     int(11)            NOT NULL AUTO_INCREMENT,
     `name`                   varchar(100)       NOT NULL,
+    `enabled`                tinyint(1)         NOT NULL DEFAULT 1,
     `priceType`              enum ('bid','ask') NOT NULL,
     `notificationRecipients` text                        DEFAULT NULL,
     `notificationsEnabled`   tinyint(1)         NOT NULL DEFAULT 1,

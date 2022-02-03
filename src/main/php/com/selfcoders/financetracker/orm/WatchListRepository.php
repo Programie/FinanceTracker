@@ -10,4 +10,12 @@ class WatchListRepository extends EntityRepository
     {
         return $this->findOneBy(["name" => $name]);
     }
+
+    /**
+     * @return WatchList[]
+     */
+    public function findEnabled(?array $orderBy = null, $limit = null, $offset = null): array
+    {
+        return $this->findBy(["enabled" => true], $orderBy, $limit, $offset);
+    }
 }
