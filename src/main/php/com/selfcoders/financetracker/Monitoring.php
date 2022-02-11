@@ -70,18 +70,21 @@ class Monitoring
     {
         $overallState = self::CHECK_MK_STATE_OK;
         $this->nowTimestamp = (new DateTime)->getTimestamp();
+        $checkedEntries = 0;
 
         /**
          * @var $watchListEntries WatchListEntry[]
          */
         $watchListEntries = $this->entityManager->getRepository(WatchListEntry::class)->findAll();
 
-        $messageLines = [sprintf("Checked %d entries", count($watchListEntries))];
+        $messageLines = [];
 
         foreach ($watchListEntries as $watchListEntry) {
             if (!$watchListEntry->getWatchList()->isEnabled()) {
                 continue;
             }
+
+            $checkedEntries++;
 
             list($checkState, $checkOutput) = $this->checkEntry($watchListEntry);
 
@@ -91,6 +94,8 @@ class Monitoring
                 $messageLines[] = $checkOutput;
             }
         }
+
+        array_unshift($messageLines, sprintf("Checked %d entries", $checkedEntries));
 
         printf("%d FinanceTracker_States - %s\n", $overallState, str_replace("\n", "\\n", implode("\\n", $messageLines)));
     }
