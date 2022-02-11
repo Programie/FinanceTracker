@@ -179,7 +179,7 @@
                         <td class="text-end">{{ watchList.total.price|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
                         <td class="text-end">{{ watchList.total.currentPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.currentTotalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
                         <td class="text-end">{{ watchList.total.priceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
-                        <td></td>
+                        <td class="text-end">{{ watchList.total.dayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalDayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
                         <td></td>
                         <td></td>
                         <td></td>

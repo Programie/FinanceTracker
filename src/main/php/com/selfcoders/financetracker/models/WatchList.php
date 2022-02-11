@@ -170,6 +170,8 @@ class WatchList
         $currentTotalPrice = 0;
         $priceDifference = 0;
         $totalPriceDifference = 0;
+        $dayStartPriceDifference = 0;
+        $totalDayStartPriceDifference = 0;
 
         foreach ($this->getEntries() as $entry) {
             $count += $entry->getCount();
@@ -179,6 +181,8 @@ class WatchList
             $currentTotalPrice += $entry->getCurrentTotalPrice();
             $priceDifference += $entry->getPriceDifference();
             $totalPriceDifference += $entry->getTotalPriceDifference();
+            $dayStartPriceDifference += $entry->getDayStartPriceDifference();
+            $totalDayStartPriceDifference += $entry->getTotalDayStartPriceDifference();
         }
 
         return [
@@ -188,7 +192,9 @@ class WatchList
             "currentPrice" => $currentPrice,
             "currentTotalPrice" => $currentTotalPrice,
             "priceDifference" => $priceDifference,
-            "totalPriceDifference" => $totalPriceDifference
+            "totalPriceDifference" => $totalPriceDifference,
+            "dayStartPriceDifference" => $dayStartPriceDifference,
+            "totalDayStartPriceDifference" => $totalDayStartPriceDifference
         ];
     }
 }
