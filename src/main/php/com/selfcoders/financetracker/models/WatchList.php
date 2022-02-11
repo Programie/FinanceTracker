@@ -1,6 +1,7 @@
 <?php
 namespace com\selfcoders\financetracker\models;
 
+use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\NotificationRecipient;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -172,6 +173,8 @@ class WatchList
         $totalPriceDifference = 0;
         $dayStartPriceDifference = 0;
         $totalDayStartPriceDifference = 0;
+        $minDate = null;
+        $maxDate = null;
 
         foreach ($this->getEntries() as $entry) {
             $count += $entry->getCount();
@@ -183,6 +186,17 @@ class WatchList
             $totalPriceDifference += $entry->getTotalPriceDifference();
             $dayStartPriceDifference += $entry->getDayStartPriceDifference();
             $totalDayStartPriceDifference += $entry->getTotalDayStartPriceDifference();
+
+            $date = $entry->getDate();
+            if ($date !== null) {
+                if ($minDate === null or $date < $minDate) {
+                    $minDate = $date;
+                }
+
+                if ($maxDate === null or $date > $maxDate) {
+                    $maxDate = $date;
+                }
+            }
         }
 
         return [
@@ -194,7 +208,9 @@ class WatchList
             "priceDifference" => $priceDifference,
             "totalPriceDifference" => $totalPriceDifference,
             "dayStartPriceDifference" => $dayStartPriceDifference,
-            "totalDayStartPriceDifference" => $totalDayStartPriceDifference
+            "totalDayStartPriceDifference" => $totalDayStartPriceDifference,
+            "minDate" => $minDate,
+            "maxDate" => $maxDate
         ];
     }
 }

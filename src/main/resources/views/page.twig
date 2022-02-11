@@ -181,7 +181,7 @@
                         <td class="text-end">{{ watchList.total.priceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
                         <td class="text-end">{{ watchList.total.dayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalDayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
                         <td></td>
-                        <td></td>
+                        <td>{% if watchList.total.minDate %}{{ watchList.total.minDate.diffNow.days }} days{% endif %}</td>
                         <td></td>
                         <td></td>
                     </tr>
