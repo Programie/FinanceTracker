@@ -49,13 +49,14 @@ class Monitoring
                     $stateMessage = "No fetch date available (!!)";
                 } else {
                     $fetchedDifference = $this->nowTimestamp - $fetchedDate->getTimestamp();
+                    $fetchedDifferenceMinutes = (int)($fetchedDifference / 60);
 
                     if ($fetchedDifference >= 300) {
                         $checkState = self::CHECK_MK_STATE_CRITICAL;
-                        $stateMessage = "Last fetched over 5 minutes ago (!!)";
+                        $stateMessage = sprintf("Last fetched %d minutes ago (!!)", $fetchedDifferenceMinutes);
                     } elseif ($fetchedDifference >= 120) {
                         $checkState = self::CHECK_MK_STATE_WARNING;
-                        $stateMessage = "Last fetched over 2 minutes ago (!)";
+                        $stateMessage = sprintf("Last fetched %d minutes ago (!)", $fetchedDifferenceMinutes);
                     }
                 }
             }
