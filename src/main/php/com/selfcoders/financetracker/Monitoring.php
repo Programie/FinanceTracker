@@ -42,22 +42,15 @@ class Monitoring
                 $checkState = self::CHECK_MK_STATE_CRITICAL;
                 $stateMessage = "No state available (!!)";
             } else {
-                $fetchedDate = $state->getFetched();
+                $fetchedDifference = $this->nowTimestamp - $state->getFetched()->getTimestamp();
+                $fetchedDifferenceMinutes = (int)($fetchedDifference / 60);
 
-                if ($fetchedDate === null) {
+                if ($fetchedDifference >= 300) {
                     $checkState = self::CHECK_MK_STATE_CRITICAL;
-                    $stateMessage = "No fetch date available (!!)";
-                } else {
-                    $fetchedDifference = $this->nowTimestamp - $fetchedDate->getTimestamp();
-                    $fetchedDifferenceMinutes = (int)($fetchedDifference / 60);
-
-                    if ($fetchedDifference >= 300) {
-                        $checkState = self::CHECK_MK_STATE_CRITICAL;
-                        $stateMessage = sprintf("Last fetched %d minutes ago (!!)", $fetchedDifferenceMinutes);
-                    } elseif ($fetchedDifference >= 120) {
-                        $checkState = self::CHECK_MK_STATE_WARNING;
-                        $stateMessage = sprintf("Last fetched %d minutes ago (!)", $fetchedDifferenceMinutes);
-                    }
+                    $stateMessage = sprintf("Last fetched %d minutes ago (!!)", $fetchedDifferenceMinutes);
+                } elseif ($fetchedDifference >= 120) {
+                    $checkState = self::CHECK_MK_STATE_WARNING;
+                    $stateMessage = sprintf("Last fetched %d minutes ago (!)", $fetchedDifferenceMinutes);
                 }
             }
         }
