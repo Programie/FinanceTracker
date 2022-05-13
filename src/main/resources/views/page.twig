@@ -95,11 +95,13 @@
                                 </div>
                             </td>
                             <td data-order="{{ entry.priceDifference }}" class="text-end">
+                                <span class="{{ html_classes({"text-danger": entry.priceDifferencePercentage < 0}) }}">{% if entry.priceDifferencePercentage > 0 %}+{% endif %}{{ entry.priceDifferencePercentage|format_percent_number({max_fraction_digit: 2}, locale="de") }}</span><br/>
                                 <span class="{{ html_classes({"text-danger": entry.priceDifference < 0}) }}">{% if entry.priceDifference > 0 %}+{% endif %}{{ entry.priceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</span><br/>
                                 <span class="{{ html_classes({"text-danger": entry.totalPriceDifference < 0}) }}">{% if entry.totalPriceDifference > 0 %}+{% endif %}{{ entry.totalPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</span><br/>
                                 <span class="{{ html_classes("badge", {"bg-danger": entry.realProfit < 0, "bg-success": entry.realProfit > 0}) }}" title="Real profit">{% if entry.realProfit > 0 %}+{% endif %}{{ entry.realProfit|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</span>
                             </td>
                             <td data-order="{{ entry.dayStartPriceDifference }}" class="text-end">
+                                <span class="{{ html_classes({"text-danger": entry.dayStartPriceDifferencePercentage < 0}) }}">{% if entry.dayStartPriceDifferencePercentage > 0 %}+{% endif %}{{ entry.dayStartPriceDifferencePercentage|format_percent_number({max_fraction_digit: 2}, locale="de") }}</span><br/>
                                 <span class="{{ html_classes({"text-danger": entry.dayStartPriceDifference < 0}) }}">{% if entry.dayStartPriceDifference > 0 %}+{% endif %}{{ entry.dayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</span><br/>
                                 <span class="{{ html_classes({"text-danger": entry.totalDayStartPriceDifference < 0}) }}">{% if entry.totalDayStartPriceDifference > 0 %}+{% endif %}{{ entry.totalDayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</span>
                             </td>
@@ -172,14 +174,35 @@
 
                 <tfoot>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="text-end">{{ watchList.total.count|format_number(locale="de") }}</td>
-                        <td class="text-end">{{ watchList.total.price|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
-                        <td class="text-end">{{ watchList.total.currentPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.currentTotalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
-                        <td class="text-end">{{ watchList.total.priceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
-                        <td class="text-end">{{ watchList.total.dayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ watchList.total.totalDayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
+                        <td colspan="3">
+                            <span class="text-muted">Percentage</span><br/>
+                            <span class="text-muted">Price</span><br/>
+                            <span class="text-muted">Total</span>
+                        </td>
+                        <td class="text-end">
+                            <br/>
+                            <br/>
+                            {{ watchList.total.count|format_number(locale="de") }}
+                        </td>
+                        <td class="text-end">
+                            <br/>
+                            {{ watchList.total.price|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>
+                            {{ watchList.total.totalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}
+                        </td>
+                        <td class="text-end">
+                            <br/>
+                            {{ watchList.total.currentPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>
+                            {{ watchList.total.currentTotalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
+                        <td class="text-end">
+                            {{ watchList.total.priceDifferencePercentage|format_percent_number({max_fraction_digit: 2}, locale="de") }}<br/>
+                            {{ watchList.total.priceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>
+                            {{ watchList.total.totalPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}
+                        </td>
+                        <td class="text-end">
+                            <br/>
+                            {{ watchList.total.dayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>
+                            {{ watchList.total.totalDayStartPriceDifference|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}
+                        </td>
                         <td></td>
                         <td>{% if watchList.total.minDate %}{{ watchList.total.minDate.diffNow.days }} days{% endif %}</td>
                         <td></td>

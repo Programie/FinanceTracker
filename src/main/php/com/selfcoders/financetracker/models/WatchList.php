@@ -199,6 +199,12 @@ class WatchList
             }
         }
 
+        $priceDifferencePercentage = 0;
+
+        if ($price > 0) {
+            $priceDifferencePercentage = ($currentPrice / $price) - 1;
+        }
+
         return [
             "count" => $count,
             "price" => $price,
@@ -206,6 +212,7 @@ class WatchList
             "currentPrice" => $currentPrice,
             "currentTotalPrice" => $currentTotalPrice,
             "priceDifference" => $priceDifference,
+            "priceDifferencePercentage" => $priceDifferencePercentage,
             "totalPriceDifference" => $totalPriceDifference,
             "dayStartPriceDifference" => $dayStartPriceDifference,
             "totalDayStartPriceDifference" => $totalDayStartPriceDifference,

@@ -431,6 +431,16 @@ class WatchListEntry implements JsonSerializable
         return $currentPrice - $this->price;
     }
 
+    public function getPriceDifferencePercentage(): ?float
+    {
+        $currentPrice = $this->getCurrentPrice();
+        if ($currentPrice === null) {
+            return null;
+        }
+
+        return ($currentPrice / $this->price) - 1;
+    }
+
     public function getTotalPriceDifference(): ?float
     {
         $difference = $this->getPriceDifference();
@@ -490,6 +500,21 @@ class WatchListEntry implements JsonSerializable
         }
 
         return $currentPrice - $dayStartPrice;
+    }
+
+    public function getDayStartPriceDifferencePercentage(): ?float
+    {
+        $currentPrice = $this->getCurrentPrice();
+        if ($currentPrice === null) {
+            return null;
+        }
+
+        $dayStartPrice = $this->getDayStartPrice();
+        if ($dayStartPrice === null) {
+            return null;
+        }
+
+        return 1 - ($dayStartPrice / $currentPrice);
     }
 
     public function getTotalDayStartPriceDifference(): ?float
