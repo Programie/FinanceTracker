@@ -110,46 +110,48 @@ class Controller
         }
     }
 
-    public function updateEntry(array $params)
+    public function createEntry(array $params)
     {
         $entityManager = Database::getEntityManager();
 
         $watchListRepository = $entityManager->getRepository(WatchList::class);
-        $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
         $stateRepository = $entityManager->getRepository(State::class);
 
-        $watchListEntry = $watchListEntryRepository->findByListAndIsin($params["name"], $params["isin"]);
+        $watchListEntry = new WatchListEntry;
 
-        if ($watchListEntry === null) {
-            $watchListEntry = new WatchListEntry;
+        $watchList = $watchListRepository->findByName($params["name"]);
 
-            $watchList = $watchListRepository->findByName($params["name"]);
+        $watchListEntry->updateFromData($_POST);
 
-            $watchListEntry->setIsin($params["isin"]);
-            $watchListEntry->setWatchList($watchList);
-            $watchListEntry->setState($stateRepository->findByIsinAndPriceType($params["isin"], $watchList->getPriceType()));
-        }
-
-        $fetcher = BaseFetcher::getFetcher($params["isin"]);
-        $fetcher->add($params["isin"], null);
-        $responseDataList = $fetcher->execute(true);
-        $responseData = reset($responseDataList);
-        if ($responseData instanceof ResponseData) {
-            $watchListEntry->setWkn($responseData->wkn);
-        }
-
-        $watchListEntry->setName($_POST["name"]);
-        $watchListEntry->setCount(floatval($_POST["count"] ?? 0));
-        $watchListEntry->setPrice(floatval($_POST["price"] ?? 0));
-        $watchListEntry->setDate(new DateTime($_POST["date"]));
-        $watchListEntry->setLimitEnabled(filter_var($_POST["limitEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
-        $watchListEntry->setLowLimit(floatval($_POST["lowLimit"] ?? 0));
-        $watchListEntry->setHighLimit(floatval($_POST["highLimit"] ?? 0));
-        $watchListEntry->setFastUpdateIntervalEnabled(filter_var($_POST["fastUpdateIntervalEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
-        $watchListEntry->setNewsEnabled(filter_var($_POST["newsEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
+        $watchListEntry->setWatchList($watchList);
+        $watchListEntry->setState($stateRepository->findByIsinAndPriceType($watchListEntry->getIsin(), $watchList->getPriceType()));
 
         $entityManager->persist($watchListEntry);
         $entityManager->flush();
+
+        header("Content-Type: text/plain");
+        echo $watchListEntry->getId();
+    }
+
+    public function updateEntry(array $params)
+    {
+        $entityManager = Database::getEntityManager();
+
+        $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
+
+        $watchListEntry = $watchListEntryRepository->findByListAndId($params["name"], (int)$params["id"]);
+        if ($watchListEntry === null) {
+            http_response_code(404);
+            return;
+        }
+
+        $watchListEntry->updateFromData($_POST);
+
+        $entityManager->persist($watchListEntry);
+        $entityManager->flush();
+
+        header("Content-Type: text/plain");
+        echo $watchListEntry->getId();
     }
 
     public function removeEntry(array $params)
@@ -158,8 +160,7 @@ class Controller
 
         $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
 
-        $watchListEntry = $watchListEntryRepository->findByListAndIsin($params["name"], $params["isin"]);
-
+        $watchListEntry = $watchListEntryRepository->findByListAndId($params["name"], (int)$params["id"]);
         if ($watchListEntry === null) {
             http_response_code(404);
             return;
@@ -175,8 +176,7 @@ class Controller
 
         $watchListEntryRepository = $entityManager->getRepository(WatchListEntry::class);
 
-        $watchListEntry = $watchListEntryRepository->findByListAndIsin($params["name"], $params["isin"]);
-
+        $watchListEntry = $watchListEntryRepository->findByListAndId($params["name"], (int)$params["id"]);
         if ($watchListEntry === null) {
             http_response_code(404);
             return;

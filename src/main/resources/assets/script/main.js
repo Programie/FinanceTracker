@@ -18,23 +18,14 @@ function parseBool(string) {
     return regex.test(string);
 }
 
-function getIdByIsin(isin) {
-    return isin.replaceAll(":", "-");
-}
-
-function getDataTableRowByIsin(isin) {
-    var id = getIdByIsin(isin);
-
-    return dataTable.row(`#isin-${id}`);
-}
-
-function editEntry(isin, newValues) {
+function editEntry(id, newValues) {
     var modal = $("#edit-modal");
 
     modal.find("#edit-form")[0].reset();
 
     newValues["date"] = (new Date()).toISOString().split("T")[0];
 
+    var isin = newValues["isin"] || "";
     var name = newValues["name"] || "";
     var count = newValues["count"] || 1;
     var price = newValues["price"] || "";
@@ -47,12 +38,13 @@ function editEntry(isin, newValues) {
 
     var isEdit = false;
 
-    if (isin) {
-        modal.find("#edit-isin").val(isin);
+    if (id) {
+        modal.find("#edit-id").val(id);
 
-        var entry = $(`.entry[data-isin="${isin}"]`);
+        var entry = $(`.entry[data-id="${id}"]`);
 
         if (entry.length) {
+            isin = entry.data("isin");
             name = entry.data("name");
             count = entry.data("count");
             price = entry.data("price");
@@ -73,6 +65,7 @@ function editEntry(isin, newValues) {
         modal.find(".modal-title").text("Add entry");
     }
 
+    modal.find("#edit-isin").val(isin);
     modal.find("#edit-name").val(name);
     modal.find("#edit-count").val(count);
     modal.find("#edit-price").val(price);
@@ -89,14 +82,12 @@ function editEntry(isin, newValues) {
     modal.modal("show");
 }
 
-function highlightEntry(isin) {
+function highlightEntry(id) {
     $("tr.entry").removeClass("highlight");
 
-    var id = isin.replaceAll(":", "-");
+    dataTable.row(`#entry-${id}`).show();
 
-    getDataTableRowByIsin(isin).show();
-
-    var tableRow = $(`#isin-${id}`);
+    var tableRow = $(`#entry-${id}`);
     tableRow.addClass("highlight");
 
     var element = tableRow[0] || null;
@@ -176,13 +167,13 @@ function loadHash() {
 
     switch (hash[0]) {
         case "edit":
-            editEntry(parameterMap["isin"] || null, parameterMap);
+            editEntry(parameterMap["id"] || null, parameterMap);
             break;
         case "search":
             dataTable.search(parameterMap["query"] || null).draw();
             break;
         case "show":
-            highlightEntry(parameterMap["isin"] || null);
+            highlightEntry(parameterMap["id"] || null);
             break;
     }
 }
@@ -206,11 +197,13 @@ $(function() {
     });
 
     tbody.on("click", "#search-add-entry", function() {
-        editEntry(dataTable.search(), getHashParameterMap());
+        var parameterMap = getHashParameterMap();
+        parameterMap["isin"] = dataTable.search();
+        editEntry(null, parameterMap);
     });
 
     tbody.on("click", ".edit-entry", function() {
-        editEntry($(this).closest(".entry").data("isin"), {});
+        editEntry($(this).closest(".entry").data("id"), {});
     });
 
     $("#edit-refresh-name").click(function() {
@@ -257,14 +250,19 @@ $(function() {
 
         var form = $(this);
         var watchlist = $("#edit-watchlist").val();
-        var isin = $("#edit-isin").val();
+        var id = $("#edit-id").val();
+        var url = `/watchlist/${watchlist}`;
+
+        if (id) {
+            url = `/watchlist/${watchlist}/${id}`;
+        }
 
         $.ajax({
-            url: `/watchlist/${watchlist}/${isin}`,
+            url: url,
             method: "POST",
             data: form.serialize(),
-            success: function() {
-                document.location = `/watchlist/${watchlist}#show&isin=${isin}`
+            success: function(id) {
+                document.location = `/watchlist/${watchlist}#show&id=${id}`
                 document.location.reload();
             },
             error: function() {
@@ -277,8 +275,7 @@ $(function() {
         var entry = $(this).closest(".entry");
         var modal = $("#delete-modal");
 
-        modal.data("isin", entry.data("isin"));
-        modal.data("name", entry.data("name"));
+        modal.data("id", entry.data("id"));
 
         modal.find(".modal-body .isin").text(entry.data("isin"));
         modal.find(".modal-body .name").text(entry.data("name"));
@@ -287,10 +284,10 @@ $(function() {
     });
 
     tbody.on("click", ".reset-notify", function() {
-        var isin = $(this).closest(".entry").data("isin");
+        var id = $(this).closest(".entry").data("id");
 
         $.ajax({
-            url: `/watchlist/${listName}/${isin}/reset-notified`,
+            url: `/watchlist/${listName}/${id}/reset-notified`,
             method: "POST",
             success: function() {
                 document.location.reload();
@@ -320,10 +317,10 @@ $(function() {
     });
 
     $("#delete-entry-confirm").click(function() {
-        var isin = $("#delete-modal").data("isin");
+        var id = $("#delete-modal").data("id");
 
         $.ajax({
-            url: `/watchlist/${listName}/${isin}`,
+            url: `/watchlist/${listName}/${id}`,
             method: "DELETE",
             success: function() {
                 document.location.reload();

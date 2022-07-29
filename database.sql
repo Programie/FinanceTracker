@@ -46,7 +46,6 @@ CREATE TABLE `watchlistentries`
     `notificationDate`          datetime              DEFAULT NULL,
     `notificationType`          enum ('low', 'high')  DEFAULT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `watchListId_isin` (`watchListId`, `isin`),
     KEY `isin` (`isin`),
     KEY `stateId` (`stateId`)
 ) ENGINE = InnoDB

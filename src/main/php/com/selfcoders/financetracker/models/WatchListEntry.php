@@ -3,6 +3,8 @@ namespace com\selfcoders\financetracker\models;
 
 use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\DateTime;
+use com\selfcoders\financetracker\fetcher\BaseFetcher;
+use com\selfcoders\financetracker\fetcher\ResponseData;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -108,6 +110,14 @@ class WatchListEntry implements JsonSerializable
     {
         $this->watchList = $watchList;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -608,6 +618,28 @@ class WatchListEntry implements JsonSerializable
         $highLimitPercentage = $this->getHighLimitPercentage();
 
         return max($lowLimitPercentage, $highLimitPercentage);
+    }
+
+    public function updateFromData(array $data)
+    {
+        $fetcher = BaseFetcher::getFetcher($data["isin"]);
+        $fetcher->add($data["isin"], null);
+        $responseDataList = $fetcher->execute(true);
+        $responseData = reset($responseDataList);
+        if ($responseData instanceof ResponseData) {
+            $this->setWkn($responseData->wkn);
+        }
+
+        $this->setIsin($data["isin"]);
+        $this->setName($data["name"]);
+        $this->setCount(floatval($data["count"] ?? 0));
+        $this->setPrice(floatval($data["price"] ?? 0));
+        $this->setDate(new DateTime($data["date"]));
+        $this->setLimitEnabled(filter_var($data["limitEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
+        $this->setLowLimit(floatval($data["lowLimit"] ?? 0));
+        $this->setHighLimit(floatval($data["highLimit"] ?? 0));
+        $this->setFastUpdateIntervalEnabled(filter_var($data["fastUpdateIntervalEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
+        $this->setNewsEnabled(filter_var($data["newsEnabled"] ?? false, FILTER_VALIDATE_BOOLEAN));
     }
 
     public function jsonSerialize(): array

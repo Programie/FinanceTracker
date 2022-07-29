@@ -22,17 +22,17 @@ class WatchListEntryRepository extends EntityRepository
 
     /**
      * @param string $watchList
-     * @param string $isin
+     * @param int $id
      * @return WatchListEntry|null
      */
-    public function findByListAndIsin(string $watchList, string $isin): ?WatchListEntry
+    public function findByListAndId(string $watchList, int $id): ?WatchListEntry
     {
         return $this->createQueryBuilder("entry")
             ->leftJoin("entry.watchList", "watchList")
             ->where("watchList.name = :name")
-            ->andWhere("entry.isin = :isin")
+            ->andWhere("entry.id = :id")
             ->setParameter("name", $watchList)
-            ->setParameter("isin", $isin)
+            ->setParameter("id", $id)
             ->getQuery()
             ->getOneOrNullResult();
     }

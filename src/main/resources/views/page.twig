@@ -75,7 +75,7 @@
 
                 <tbody>
                     {% for entry in watchList.entries %}
-                        <tr id="isin-{{ entry.isin|replace({":": "-"}) }}" class="entry" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-fast-update-interval-enabled="{{ entry.fastUpdateIntervalEnabled }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
+                        <tr id="entry-{{ entry.id }}" class="entry" data-id="{{ entry.id }}" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-fast-update-interval-enabled="{{ entry.fastUpdateIntervalEnabled }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
                             <td data-order="{{ entry.isin }}">{{ entry.isin }}</a></td>
                             <td data-order="{{ entry.name }}">{{ entry.name }}</td>
@@ -153,9 +153,7 @@
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="Add to list"><i class="fas fa-copy"></i></button>
                                         <ul class="dropdown-menu">
                                             {% for thisWatchList in watchLists %}
-                                                {% if thisWatchList.name != watchList.name %}
-                                                    <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#edit&isin={{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}</a></li>
-                                                {% endif %}
+                                                <li><a class="dropdown-item" href="/watchlist/{{ thisWatchList.name }}#edit&isin={{ entry.isin }}&name={{ entry.name }}&count={{ entry.count }}&price={{ entry.price }}&date={{ entry.date.format("Y-m-d") }}">{{ thisWatchList.name }}{% if thisWatchList.name == watchList.name %} <span class="badge bg-primary">current</span>{% endif %}</a></li>
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -221,6 +219,8 @@
                     </div>
                     <div class="modal-body">
                         <form class="row g-3" id="edit-form">
+                            <input type="hidden" id="edit-id" name="id"/>
+
                             <div class="col-12">
                                 <label for="edit-watchlist" class="form-label">Watchlist</label>
                                 <select class="form-select" id="edit-watchlist">
@@ -231,7 +231,7 @@
                             </div>
                             <div class="col-12">
                                 <label for="edit-isin" class="form-label">ISIN</label>
-                                <input type="text" class="form-control" id="edit-isin"/>
+                                <input type="text" class="form-control" id="edit-isin" name="isin"/>
                             </div>
                             <div class="col-12">
                                 <label for="edit-name" class="form-label">Name</label>
