@@ -347,6 +347,34 @@ $(function() {
         });
     });
 
+    $(".tax-calculator-input").bind("input", function() {
+        var gross_value = parseFloat($("#tax-calculator-gross-value").val());
+        var tax_exemption = parseFloat($("#tax-calculator-exemption-value").val());
+
+        var gross_with_exemption = gross_value - tax_exemption;
+
+        if (gross_with_exemption < 0) {
+            gross_with_exemption = 0;
+        }
+
+        var tax = 0;
+
+        switch (true) {
+            case $("#tax-calculator-type-stock").is(":checked"):
+                tax = gross_with_exemption * 0.26375;
+                break;
+            case $("#tax-calculator-type-etf").is(":checked"):
+                tax = gross_with_exemption * 0.7 * 0.26375;
+                break;
+        }
+
+        var net_value = gross_value - tax;
+
+        $("#tax-calculator-gross-tax-base-value").val(gross_with_exemption.toFixed(2));
+        $("#tax-calculator-tax-value").val(tax.toFixed(2));
+        $("#tax-calculator-net-value").val(net_value.toFixed(2));
+    });
+
     $(window).on("hashchange", loadHash);
     loadHash();
 });

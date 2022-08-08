@@ -43,6 +43,12 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tools</a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a class="dropdown-item" id="tools-item-tax-calculator" data-bs-toggle="modal" data-bs-target="#tax-calculator-modal" role="button">Tax calculator</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ watchList.name }}</a>
                         <ul class="dropdown-menu dropdown-menu-right" style="right: 0; left: auto;">
                             {% for thisWatchList in watchLists %}
@@ -337,6 +343,72 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="tax-calculator-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tax calculator</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3">
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input tax-calculator-input" name="tax-calculator-type" id="tax-calculator-type-stock" checked/>
+                                    <label class="form-check-label" for="tax-calculator-type-stock">Stock</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input tax-calculator-input" name="tax-calculator-type" id="tax-calculator-type-etf"/>
+                                    <label class="form-check-label" for="tax-calculator-type-etf">ETF</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="tax-calculator-exemption-value">Tax exemption</label>
+                                <div class="input-group mt-2">
+                                    <input type="number" class="form-control tax-calculator-input" id="tax-calculator-exemption-value" min="0" step="0.01" value="801"/>
+                                    <span class="input-group-text">EUR</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="tax-calculator-gross-value">Gross</label>
+                                <div class="input-group mt-2">
+                                    <input type="number" class="form-control tax-calculator-input" id="tax-calculator-gross-value" min="0" step="0.01"/>
+                                    <span class="input-group-text">EUR</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="tax-calculator-gross-tax-base-value">Tax base</label>
+                                <div class="input-group mt-2">
+                                    <input type="text" class="form-control" id="tax-calculator-gross-tax-base-value" readonly/>
+                                    <span class="input-group-text">EUR</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="tax-calculator-tax-value">Tax</label>
+                                <div class="input-group mt-2">
+                                    <input type="text" class="form-control" id="tax-calculator-tax-value" readonly/>
+                                    <span class="input-group-text">EUR</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="tax-calculator-net-value">Net</label>
+                                <div class="input-group mt-2">
+                                    <input type="text" class="form-control" id="tax-calculator-net-value" readonly/>
+                                    <span class="input-group-text">EUR</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
