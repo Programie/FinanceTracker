@@ -61,10 +61,9 @@
         </nav>
 
         <div class="container mt-3">
-            <table class="table table-striped" id="table" data-search-highlight="true" data-order='[[2, "asc"]]' data-page-length="-1" data-length-menu='[[10, 25, 50, -1], [10, 25, 50, "All"]]'>
+            <table class="table table-striped" id="table" data-search-highlight="true" data-order='[[1, "asc"]]' data-page-length="-1" data-length-menu='[[10, 25, 50, -1], [10, 25, 50, "All"]]'>
                 <thead class="table-light">
                     <tr class="text-nowrap">
-                        <th data-orderable="false" data-searchable="false"></th>
                         <th>#</th>
                         <th>Name</th>
                         <th>Count</th>
@@ -82,15 +81,19 @@
                 <tbody>
                     {% for entry in watchList.entries %}
                         <tr id="entry-{{ entry.id }}" class="entry" data-id="{{ entry.id }}" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-fast-update-interval-enabled="{{ entry.fastUpdateIntervalEnabled }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
-                            <td class="align-middle">
-                                {% if "CRYPTO:" not in entry.isin and "CMC:" not in entry.isin %}
-                                    <img src="https://assets.traderepublic.com/img/logos/{{ entry.isin }}/dark.svg" class="rounded-circle entry-icon"/>
-                                {% endif %}
-                            </td>
                             <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
                             <td data-order="{{ entry.name }}">
-                                {{ entry.name }}<br/>
-                                <small class="text-muted">{{ entry.isin }}</small>
+                                <div class="row">
+                                    <div class="col entry-icon">
+                                        {% if "CRYPTO:" not in entry.isin and "CMC:" not in entry.isin %}
+                                            <img src="https://assets.traderepublic.com/img/logos/{{ entry.isin }}/dark.svg" class="rounded-circle"/>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col">
+                                        {{ entry.name }}<br/>
+                                        <small class="text-muted">{{ entry.isin }}</small>
+                                    </div>
+                                </div>
                             </td>
                             <td data-order="{{ entry.count }}" class="text-end">{{ entry.count|format_number(locale="de") }}</td>
                             <td data-order="{{ entry.price }}" class="text-end">{{ entry.price|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
@@ -185,7 +188,7 @@
 
                 <tfoot>
                     <tr>
-                        <td colspan="3">
+                        <td colspan="2">
                             <span class="text-muted">Percentage</span><br/>
                             <span class="text-muted">Price</span><br/>
                             <span class="text-muted">Total</span>
