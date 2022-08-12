@@ -1,6 +1,7 @@
 .idea
 /httpdocs/assets/
 /node_modules/
+/src/main/resources/coinmap.bin
 /vendor/
 webpack.assets.json
 docker-compose.local.yml

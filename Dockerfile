@@ -45,5 +45,9 @@ COPY bin /app/bin
 COPY httpdocs /app/httpdocs
 COPY src /app/src
 
+RUN curl -o /tmp/coin_map.json https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/coin_map.json && \
+    /app/bin/update-coinmap.php /tmp/coin_map.json && \
+    rm /tmp/coin_map.json
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["frontend"]

@@ -85,8 +85,8 @@
                             <td data-order="{{ entry.name }}">
                                 <div class="row">
                                     <div class="col entry-icon">
-                                        {% if "CRYPTO:" not in entry.isin and "CMC:" not in entry.isin %}
-                                            <img src="https://assets.traderepublic.com/img/logos/{{ entry.isin }}/dark.svg" class="rounded-circle"/>
+                                        {% if entry.iconUrl %}
+                                            <img src="{{ entry.iconUrl }}" class="rounded-circle"/>
                                         {% endif %}
                                     </div>
                                     <div class="col">

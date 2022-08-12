@@ -5,6 +5,7 @@ use com\selfcoders\financetracker\Date;
 use com\selfcoders\financetracker\DateTime;
 use com\selfcoders\financetracker\fetcher\BaseFetcher;
 use com\selfcoders\financetracker\fetcher\ResponseData;
+use com\selfcoders\financetracker\IconHelper;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -618,6 +619,11 @@ class WatchListEntry implements JsonSerializable
         $highLimitPercentage = $this->getHighLimitPercentage();
 
         return max($lowLimitPercentage, $highLimitPercentage);
+    }
+
+    public function getIconUrl(): string
+    {
+        return IconHelper::getIcon($this->getIsin());
     }
 
     public function updateFromData(array $data)
