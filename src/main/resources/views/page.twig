@@ -61,12 +61,11 @@
         </nav>
 
         <div class="container mt-3">
-            <table class="table table-striped" id="table" data-search-highlight="true" data-order='[[3, "asc"]]' data-page-length="-1" data-length-menu='[[10, 25, 50, -1], [10, 25, 50, "All"]]'>
+            <table class="table table-striped" id="table" data-search-highlight="true" data-order='[[2, "asc"]]' data-page-length="-1" data-length-menu='[[10, 25, 50, -1], [10, 25, 50, "All"]]'>
                 <thead class="table-light">
                     <tr class="text-nowrap">
                         <th data-orderable="false" data-searchable="false"></th>
                         <th>#</th>
-                        <th>ISIN</th>
                         <th>Name</th>
                         <th>Count</th>
                         <th>Price</th>
@@ -89,8 +88,10 @@
                                 {% endif %}
                             </td>
                             <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
-                            <td data-order="{{ entry.isin }}">{{ entry.isin }}</a></td>
-                            <td data-order="{{ entry.name }}">{{ entry.name }}</td>
+                            <td data-order="{{ entry.name }}">
+                                {{ entry.name }}<br/>
+                                <small class="text-muted">{{ entry.isin }}</small>
+                            </td>
                             <td data-order="{{ entry.count }}" class="text-end">{{ entry.count|format_number(locale="de") }}</td>
                             <td data-order="{{ entry.price }}" class="text-end">{{ entry.price|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}<br/>{{ entry.totalPrice|format_currency("EUR", {max_fraction_digit: 10}, locale="de") }}</td>
                             <td data-order="{{ entry.currentPrice }}" class="text-end">
@@ -184,7 +185,7 @@
 
                 <tfoot>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="3">
                             <span class="text-muted">Percentage</span><br/>
                             <span class="text-muted">Price</span><br/>
                             <span class="text-muted">Total</span>
