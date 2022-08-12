@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    image: registry.selfcoders.org/finance-tracker
+    image: git.selfcoders.org/programie/finance-tracker
     command: frontend
     build: .
     ports:
@@ -13,7 +13,7 @@ services:
       DATABASE_USERNAME: finance_tracker
       DATABASE_PASSWORD: "password-for-user"
   backend:
-    image: registry.selfcoders.org/finance-tracker
+    image: git.selfcoders.org/programie/finance-tracker
     command: backend
     build: .
     ports:
