@@ -83,7 +83,7 @@
                         <tr id="entry-{{ entry.id }}" class="entry" data-id="{{ entry.id }}" data-isin="{{ entry.isin }}" data-name="{{ entry.name }}" data-count="{{ entry.count }}" data-price="{{ entry.price }}" data-limit-enabled="{{ entry.limitEnabled }}" data-limit-low="{{ entry.lowLimit }}" data-limit-high="{{ entry.highLimit }}" data-fast-update-interval-enabled="{{ entry.fastUpdateIntervalEnabled }}" data-date="{{ entry.date.format("Y-m-d") }}" data-news-enabled="{{ entry.newsEnabled }}">
                             <td data-order="{{ loop.index }}" class="text-end">{{ loop.index }}</td>
                             <td data-order="{{ entry.name }}">
-                                <div class="row">
+                                <div class="row flex-nowrap">
                                     <div class="col entry-icon">
                                         {% if entry.iconUrl %}
                                             <img src="{{ entry.iconUrl }}" class="rounded-circle"/>
