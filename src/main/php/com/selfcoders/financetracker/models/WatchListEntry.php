@@ -628,6 +628,8 @@ class WatchListEntry implements JsonSerializable
 
     public function updateFromData(array $data)
     {
+        $data = array_map("trim", $data);
+
         $fetcher = BaseFetcher::getFetcher($data["isin"]);
         $fetcher->add($data["isin"], null);
         $responseDataList = $fetcher->execute(true);
