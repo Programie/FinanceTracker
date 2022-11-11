@@ -79,7 +79,7 @@ class LSFetcher extends BaseFetcher
             $responseData->askDate = $date;
 
             if ($responseData->isin === null or $responseData->bidPrice === null or $responseData->askPrice === null) {
-                fwrite(STDERR, sprintf("[%s] Error while getting data from LS watchlist entry: %s\n", date("r"), $tableRow->nodeValue));
+                Utils::logStdErr(sprintf("[%s] Error while getting data from LS watchlist entry: %s\n", date("r"), $tableRow->nodeValue));
                 continue;
             }
 

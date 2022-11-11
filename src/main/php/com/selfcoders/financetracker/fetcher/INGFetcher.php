@@ -2,6 +2,7 @@
 namespace com\selfcoders\financetracker\fetcher;
 
 use com\selfcoders\financetracker\DateTime;
+use com\selfcoders\financetracker\Utils;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
@@ -53,7 +54,7 @@ class INGFetcher extends BaseFetcher
                 $responseDataList[$isin] = $responseData;
             },
             "rejected" => function (Exception $reason, string $isin) {
-                fwrite(STDERR, sprintf("[%s] Error while getting data from ING API for %s: %s\n", date("r"), $isin, $reason->getMessage()));
+                Utils::logStdErr(sprintf("[%s] Error while getting data from ING API for %s: %s\n", date("r"), $isin, $reason->getMessage()));
             }
         ]);
 
