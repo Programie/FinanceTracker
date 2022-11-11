@@ -32,5 +32,10 @@ if ($match === false) {
 
     $controller = new Controller;
 
-    $controller->{$target}($match["params"]);
+    $params = [];
+    foreach ($match["params"] as $key => $value) {
+        $params[$key] = trim($value);
+    }
+
+    $controller->{$target}($params);
 }
