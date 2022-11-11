@@ -29,13 +29,9 @@ if ($match === false) {
     http_response_code(404);
 } else {
     $target = $match["target"];
+    $params = array_map("trim", $match["params"]);
 
     $controller = new Controller;
-
-    $params = [];
-    foreach ($match["params"] as $key => $value) {
-        $params[$key] = trim($value);
-    }
 
     $controller->{$target}($params);
 }
