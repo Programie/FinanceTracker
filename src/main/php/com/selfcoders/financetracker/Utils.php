@@ -12,6 +12,6 @@ class Utils
 
     public static function logStdErr(string $string)
     {
-        file_put_contents("php://stderr", $string . "\n");
+        file_put_contents("php://stderr", $string);
     }
 }
