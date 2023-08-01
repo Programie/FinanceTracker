@@ -145,7 +145,9 @@
                                                 <li><a class="dropdown-item" target="_blank" href="/coinmarketcap/{{ entry.isin|split(":", 2)[1]|lower }}">CoinMarketCap</a></li>
                                             {% else %}
                                                 <li><a class="dropdown-item" target="_blank" href="https://wertpapiere.ing.de/Investieren/Aktie/{{ entry.isin }}">ING</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://extraetf.com/de/etf-profile/{{ entry.isin }}">extraETF</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://www.finanzen.net/suchergebnis.asp?_search={{ entry.isin }}">finanzen.net</a></li>
+                                                <li><a class="dropdown-item" target="_blank" href="https://www.justetf.com/de/etf-profile.html?isin={{ entry.isin }}">justETF</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://www.ls-tc.de/de/aktie/{{ entry.isin }}">Lang & Schwarz</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://www.gettex.de/suche/?tx_indexedsearch[sword]={{ entry.isin }}">gettex</a></li>
                                                 <li><a class="dropdown-item" target="_blank" href="https://de.scalable.capital/broker/security?isin={{ entry.isin }}">Scalable Capital</a></li>
