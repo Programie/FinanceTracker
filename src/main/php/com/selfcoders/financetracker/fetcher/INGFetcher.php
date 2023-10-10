@@ -48,8 +48,8 @@ class INGFetcher extends BaseFetcher
                 $responseData->name = $json["name"] ?? null;
                 $responseData->bidPrice = $json["bid"] ?? $json["price"] ?? null;
                 $responseData->askPrice = $json["ask"] ?? $json["price"] ?? null;
-                $responseData->bidDate = $this->dateOrNull($json["bidDate"] ?? null);
-                $responseData->askDate = $this->dateOrNull($json["askDate"] ?? null);
+                $responseData->bidDate = $this->dateOrNull($json["bidDate"] ?? $json["priceChangeDate"] ?? null);
+                $responseData->askDate = $this->dateOrNull($json["askDate"] ?? $json["priceChangeDate"] ?? null);
 
                 $responseDataList[$isin] = $responseData;
             },
