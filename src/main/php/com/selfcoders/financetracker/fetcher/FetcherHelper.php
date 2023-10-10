@@ -12,7 +12,7 @@ class FetcherHelper
     {
         $cryptoFetcher = new CryptoFetcher;
         $coinMarketCapFetcher = new CoinMarketCapFetcher;
-        $lsFetcher = new LSFetcher;
+        $defaultFetcher = new INGFetcher;
 
         foreach ($isinWknList as $isinWknEntry) {
             list($isin, $wkn) = $isinWknEntry;
@@ -22,10 +22,10 @@ class FetcherHelper
             } elseif (str_starts_with($isin, BaseFetcher::ISIN_PREFIX_COINMARKETCAP)) {
                 $coinMarketCapFetcher->add($isin, $wkn);
             } else {
-                $lsFetcher->add($isin, $wkn);
+                $defaultFetcher->add($isin, $wkn);
             }
         }
 
-        return array_merge($cryptoFetcher->execute($force), $coinMarketCapFetcher->execute($force), $lsFetcher->execute($force));
+        return array_merge($cryptoFetcher->execute($force), $coinMarketCapFetcher->execute($force), $defaultFetcher->execute($force));
     }
 }

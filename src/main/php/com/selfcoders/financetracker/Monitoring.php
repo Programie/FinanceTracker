@@ -30,7 +30,7 @@ class Monitoring
         /**
          * @var $fetcherClass Fetcher
          */
-        $fetcherClass = BaseFetcher::getFetcherClass($watchListEntry->getIsin(), BaseFetcher::DATASOURCE_LS);
+        $fetcherClass = BaseFetcher::getFetcherClass($watchListEntry->getIsin(), BaseFetcher::DATASOURCE_ING);
 
         if ($fetcherClass === null or $fetcherClass::shouldUpdate(0)) {
             /**
