@@ -12,27 +12,22 @@ RUN npm run build
 
 FROM composer AS composer
 
+WORKDIR /app
+
 COPY composer.* /app/
+RUN composer install --no-dev --ignore-platform-reqs
+
+
+FROM ghcr.io/programie/dockerimages/php
+
+ENV WEB_ROOT=/app/httpdocs
 
 WORKDIR /app
 
-RUN composer install --no-dev --ignore-platform-reqs && \
-    rm /app/composer.json /app/composer.lock
-
-
-FROM php:8.0-apache
-
-WORKDIR /app
-
-RUN sed -ri -e 's!/var/www/html!/app/httpdocs!g' /etc/apache2/sites-available/*.conf && \
-    sed -ri -e 's!/var/www/!/app/httpdocs!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf && \
-    echo "ServerTokens Prod" > /etc/apache2/conf-enabled/z-server-tokens.conf && \
-    a2enmod rewrite && \
-    apt-get -y update && \
-    apt-get install -y libicu-dev gosu && \
-    docker-php-ext-configure intl && \
-    docker-php-ext-install intl pdo_mysql && \
-    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN apt-get update && \
+    apt-get install -y curl ca-certificates gosu && \
+    install-php 8.0 dom intl pdo-mysql && \
+    a2enmod rewrite
 
 COPY --from=composer /app/vendor /app/vendor
 COPY --from=webpack /app/httpdocs/assets /app/httpdocs/assets
