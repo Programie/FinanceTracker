@@ -4,7 +4,6 @@ services:
   frontend:
     image: programie/financetracker
     command: frontend
-    build: .
     ports:
       - 80:80
     environment:
@@ -15,7 +14,6 @@ services:
   backend:
     image: programie/financetracker
     command: backend
-    build: .
     ports:
       - 80:80
     environment:
