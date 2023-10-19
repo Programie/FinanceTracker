@@ -20,4 +20,5 @@ jobs:
     with:
       path: /app
       zip_name: FinanceTracker
+      additional_files: database.sql
     secrets: inherit
