@@ -18,7 +18,7 @@ COPY composer.* /app/
 RUN composer install --no-dev --ignore-platform-reqs
 
 
-FROM ghcr.io/programie/dockerimages/php
+FROM ghcr.io/programie/php
 
 ENV WEB_ROOT=/app/httpdocs
 
