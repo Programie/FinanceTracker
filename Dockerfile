@@ -26,7 +26,7 @@ WORKDIR /app
 
 RUN apt-get update && \
     apt-get install -y curl ca-certificates gosu && \
-    install-php 8.0 dom intl pdo-mysql && \
+    install-php 8.2 dom intl pdo-mysql && \
     a2enmod rewrite
 
 COPY --from=composer /app/vendor /app/vendor
