@@ -13,6 +13,8 @@ Have a look at the [docker-compose.sample.yml](docker-compose.sample.yml) to see
 
 Create a new database and import the [database.sql](database.sql) into it.
 
+To also update the news, you have to execute `bin/update-news.php` regularly (i.e. by using a cronjob executing something like `docker exec finance-tracker-backend /app/bin/update-news.php`, depending on your backend container name).
+
 ### Manual
 
 For the manual installation method, you need a webserver running at least PHP 8.0.
@@ -22,3 +24,7 @@ Download the [latest release](https://github.com/Programie/FinanceTracker/releas
 As of now, it is only possible to use environment variables to configure the application. Have a look into the [docker-compose.sample.yml](docker-compose.sample.yml) for a list of all environment variables.
 
 Create a new database and import the [database.sql](database.sql) into it.
+
+The updater (`bin/updater.php`) should run all the time in order to update the data visible in the frontend. You might archive that by creating a new systemd service which executes the updater script.
+
+To also update the news, you have to execute `bin/update-news.php` regularly (i.e. by using a cronjob).
