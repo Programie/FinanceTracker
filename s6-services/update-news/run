@@ -1,0 +1,6 @@
+#! /bin/bash
+
+while true; do
+    gosu www-data /app/bin/update-news.php
+    sleep ${UPDATE_NEWS_INTERVAL:-600}
+done

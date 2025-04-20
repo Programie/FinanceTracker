@@ -1,19 +1,8 @@
 version: '3.8'
 
 services:
-  frontend:
+  app:
     image: programie/financetracker
-    command: frontend
-    ports:
-      - 80:80
-    environment:
-      DATABASE_HOST: my.db.host
-      DATABASE_NAME: finance_tracker
-      DATABASE_USERNAME: finance_tracker
-      DATABASE_PASSWORD: "password-for-user"
-  backend:
-    image: programie/financetracker
-    command: backend
     ports:
       - 80:80
     environment:
@@ -27,3 +16,4 @@ services:
       SMTP_PASSWORD: "password-for-user"
       MAIL_FROM: my-user@mail.host
       PUSHOVER_TOKEN: my-pushover-token
+      UPDATE_NEWS_INTERVAL: 600

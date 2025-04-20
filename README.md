@@ -13,8 +13,6 @@ Have a look at the [docker-compose.sample.yml](docker-compose.sample.yml) to see
 
 Create a new database and import the [database.sql](database.sql) into it.
 
-To also update the news, you have to execute `bin/update-news.php` regularly (i.e. by using a cronjob executing something like `docker exec finance-tracker-backend /app/bin/update-news.php`, depending on your backend container name).
-
 ### Manual
 
 For the manual installation method, you need a webserver running at least PHP 8.0.

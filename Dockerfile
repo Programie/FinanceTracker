@@ -20,20 +20,25 @@ RUN composer install --no-dev --ignore-platform-reqs
 
 FROM ghcr.io/programie/php-docker
 
+ARG S6_OVERLAY_VERSION=3.2.0.2
+
 ENV WEB_ROOT=/app/httpdocs
+ENV S6_KEEP_ENV=1
 
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y curl ca-certificates gosu && \
+    apt-get install -y curl ca-certificates gosu xz-utils && \
     install-php 8.2 dom intl pdo-mysql && \
-    a2enmod rewrite
+    a2enmod rewrite && \
+    curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz | tar -C / -Jxp && \
+    curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz | tar -C / -Jxp
 
 COPY --from=composer /app/vendor /app/vendor
 COPY --from=webpack /app/httpdocs/assets /app/httpdocs/assets
 COPY --from=webpack /app/webpack.assets.json /app/webpack.assets.json
 
-COPY docker-entrypoint.sh /entrypoint.sh
+COPY s6-services /etc/services.d
 COPY bootstrap.php /app/bootstrap.php
 COPY cli-config.php /app/cli-config.php
 COPY bin /app/bin
@@ -44,5 +49,5 @@ RUN curl -o /tmp/coin_map.json https://raw.githubusercontent.com/ErikThiart/cryp
     /app/bin/update-coinmap.php /tmp/coin_map.json && \
     rm /tmp/coin_map.json
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["frontend"]
+ENTRYPOINT ["/init"]
+CMD ["apache2-foreground"]

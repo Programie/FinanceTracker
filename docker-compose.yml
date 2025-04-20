@@ -1,9 +1,8 @@
 version: '3.8'
 
 services:
-  frontend:
+  app:
     image: programie/financetracker
-    command: frontend
     build: .
     ports:
       - 8080:80
@@ -15,18 +14,7 @@ services:
       DATABASE_NAME: finance_tracker
       DATABASE_USERNAME: finance_tracker
       DATABASE_PASSWORD: finance_tracker
-  backend:
-    image: programie/financetracker
-    command: backend
-    build: .
-    links:
-      - mysql
-    environment:
-      TZ: Europe/Berlin
-      DATABASE_HOST: mysql
-      DATABASE_NAME: finance_tracker
-      DATABASE_USERNAME: finance_tracker
-      DATABASE_PASSWORD: finance_tracker
+
   mysql:
     image: mariadb
     volumes:
