@@ -202,7 +202,7 @@ class WatchList
         $priceDifferencePercentage = 0;
 
         if ($price > 0) {
-            $priceDifferencePercentage = ($currentPrice / $price) - 1;
+            $priceDifferencePercentage = ($currentTotalPrice / $totalPrice) - 1;
         }
 
         return [
