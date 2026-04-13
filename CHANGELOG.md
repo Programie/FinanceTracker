@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.0] - 2026-04-13
+
+* Fixed broken ING Fetcher (#10)
+
 ## [1.2.0] - 2025-09-21
 
 * Fixed not using total prices for total percentage calculations

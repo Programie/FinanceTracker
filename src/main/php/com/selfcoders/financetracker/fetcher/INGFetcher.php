@@ -18,14 +18,14 @@ class INGFetcher extends BaseFetcher
     public function __construct()
     {
         $this->client = new Client([
-            "base_uri" => "https://component-api.wertpapiere.ing.de/api/v1/components/instrumentheader/",
+            "base_uri" => "https://component-api.wertpapiere.ing.de/api/v1/",
             RequestOptions::TIMEOUT => 5
         ]);
     }
 
     public function add(string $isin, ?string $wkn): void
     {
-        $this->requests[$isin] = new Request("GET", $isin);
+        $this->requests[$isin] = new Request("GET", sprintf("instrument-header?isinOrSearchTerm=%s&isKnownIsin=true", $isin));
     }
 
     public function execute(bool $force = false): array
