@@ -11,7 +11,7 @@
     "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.1",
     "bootswatch": "^5.0.1",
-    "datatables.net": "^1.13.7",
+    "datatables.net": "^1.13.8",
     "datatables.net-bs": "^1.10.24",
     "jquery": "^3.6.0"
   },
